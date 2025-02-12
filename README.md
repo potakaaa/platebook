@@ -81,8 +81,8 @@ This project is licensed under the MIT License.
 ---
 
 ## 🔗 Connect
-- **Potakaaa's GitHub:** [yourusername](https://github.com/potakaaa)
-- **hans d's GitHub:** [yourusername](https://github.com/hdmGOAT)
-- **aya's GitHub:** [yourusername](https://github.com/unripelo)
+- **potaka's GitHub:** [potaka](https://github.com/potakaaa)
+- **hans d's GitHub:** [hans d](https://github.com/hdmGOAT)
+- **aya's GitHub:** [aya](https://github.com/unripelo)
 
 
