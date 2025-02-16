@@ -45,16 +45,34 @@ export const authOptions: NextAuthOptions = {
       return false;
     },
 
-    async jwt({ token, user, account }) {
+    async jwt({
+      token,
+      user,
+      account,
+      profile,
+      isNewUser,
+    }: {
+      token: JWT;
+      user: AuthUser;
+      account: any;
+      profile?: any;
+      isNewUser?: boolean;
+    }) {
       if (user) {
-        token.accessToken = (user as AuthUser).accessToken;
+        token.accessToken = user.accessToken;
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
       } else if (account) {
         token.accessToken = account.access_token;
       }
-      console.log("JWT Callback Params:", { token, user, account });
+      console.log("JWT Callback Params:", {
+        token,
+        user,
+        account,
+        profile,
+        isNewUser,
+      });
       return token;
     },
 
