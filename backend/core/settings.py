@@ -73,10 +73,16 @@ SOCIALACCOUNT_PROVIDERS = {
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 SOCIALACCOUNT_EMAIL_REQUIRED = False
 
+# re enable when implementing email verification
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+
 SITE_ID = 1
 REST_USE_JWT = True
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000 "]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -105,8 +111,10 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = "accounts.CustomUserModel"
 
 REST_AUTH_SERIALIZERS = {
-    "USER_DETAILS_SERIALIZER": "auth.serializers.CustomUserModelSerializer",
+    "USER_DETAILS_SERIALIZER": "accounts.serializers.CustomUserModelSerializer",
 }
+
+
 
 REST_FRAMEWORK = {
     
