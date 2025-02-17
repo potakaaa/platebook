@@ -41,9 +41,9 @@ export function SignUpForm({
                   id="email"
                   type="email"
                   placeholder="platebook@example.com"
-                  required
                 />
               </LabelInputContainer>
+
               <LabelInputContainer>
                 <Label htmlFor="username">Username</Label>
                 <Input
