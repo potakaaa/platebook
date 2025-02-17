@@ -27,7 +27,7 @@ export function LoginForm({
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome!</h1>
-                <p className="text-balance text-muted-foreground">
+                <p className="text-balance text-muted-foreground text-sm md:text-base">
                   Login to your Platebook account
                 </p>
               </div>
