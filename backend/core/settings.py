@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-from .secrets import DJANGO_SECRET_KEY, JWT_SECRET_KEY, TWIITER_CLIENT_ID, TWITTER_CLIENT_SECRET, TWITTER_CLIENT_ID
+from .secrets import DJANGO_SECRET_KEY, JWT_SECRET_KEY
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    "allauth.socialaccount.providers.twitter",
+    
     
     #local apps
     "accounts",
@@ -69,11 +71,10 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     },
     "twitter": {
-        "APP": {
-            "client_id": TWIITER_CLIENT_ID,  
-            "secret": TWITTER_CLIENT_SECRET, 
-        }
+        "APP": None, #store in database like in google
+        "VERIFIED_EMAIL": False
     }
+    
 }
 
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
