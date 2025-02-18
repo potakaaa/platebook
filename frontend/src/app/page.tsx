@@ -5,7 +5,9 @@ import React from "react";
 const LandingPage = () => {
   return (
     <div className="w-full">
-      <Navbar />
+      <section className="absolute top-0 left-0 w-full">
+        <Navbar />
+      </section>
     </div>
   );
 };

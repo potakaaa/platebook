@@ -2,11 +2,6 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Open and Split Terminal",
-            "command": "${command:workbench.action.terminal.new} && ${command:workbench.action.terminal.split}",
-            "type": "shell"
-        },
-        {
             "label": "Split Terminal",
             "command": "${command:workbench.action.terminal.split}",
             "type": "shell"
@@ -50,7 +45,20 @@
               "reveal": "always",
               "panel": "shared"
             }
-          }
+        },
+        {
+            "label": "Git Pull from Main",
+            "type": "shell",
+            "command": "git pull origin main",
+            "group": {
+              "kind": "build",
+              "isDefault": true
+            },
+            "presentation": {
+              "reveal": "always",
+              "panel": "shared"
+            }
+        }
         
         
 

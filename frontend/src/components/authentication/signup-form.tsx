@@ -10,11 +10,9 @@ import Link from "next/link";
 import { LabelInputContainer } from "../ui/label-input-container";
 import { Apple, AppleIcon } from "lucide-react";
 import {
-  IconBrandApple,
   IconBrandAppleFilled,
-  IconBrandGoogle,
   IconBrandGoogleFilled,
-  IconBrandMeta,
+  IconBrandX,
 } from "@tabler/icons-react";
 import { BottomGradient } from "../ui/bottom-gradient";
 import { BottomGradientPrimary } from "../ui/bottom-gradient-primary";
@@ -81,8 +79,8 @@ export function SignUpForm({
                   <BottomGradient />
                 </Button>
                 <Button variant="outline" className="w-full relative group/btn">
-                  <IconBrandMeta size={24} />
-                  <span className="sr-only">Login with Meta</span>
+                  <IconBrandX size={24} />
+                  <span className="sr-only">Login with X</span>
                   <BottomGradient />
                 </Button>
               </div>
