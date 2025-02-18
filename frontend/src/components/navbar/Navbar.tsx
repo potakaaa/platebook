@@ -22,7 +22,11 @@ const Navbar = () => {
           <Button variant={"ghost"}>Search Recipe</Button>
           <Button variant={"ghost"}>About Us</Button>
           <Button variant={"ghost"}>Help</Button>
-          <Button variant={"outline"} className="border-primary text-primary">
+          <Button
+            variant={"outline"}
+            className="border-primary text-primary"
+            onClick={() => router.push("/signup")}
+          >
             Sign Up
           </Button>
         </div>
