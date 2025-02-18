@@ -1,16 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { JSX } from "react";
 import HomeLogo from "./nav/HomeLogo";
 import { Button } from "../ui/button";
 import {
   AlignJustify,
-  CircleChevronDown,
-  CircleChevronDownIcon,
-  List,
-  PanelBottomClose,
-  PanelBottomOpen,
-  SquareChevronDown,
+  HelpCircleIcon,
+  InfoIcon,
+  LogInIcon,
+  PencilLine,
+  SearchIcon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -20,43 +19,96 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
   DropdownMenuGroup,
-  DropdownMenuShortcut,
 } from "../ui/dropdown-menu";
-import { easeInOut, easeOut, motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { IconMessageChatbot } from "@tabler/icons-react";
+
+type navButton = {
+  name: string;
+  icon: JSX.Element;
+  id: string;
+  onClick: () => void;
+};
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const router = useRouter();
 
-  React.useEffect(() => {
-    console.log("isOpen", isOpen);
-  }, [isOpen]);
+  const navButtonStyles = "text-xs sm:text-sm justify-between";
+  const navButtonIconStyles = "text-primary size-10";
+
+  const navButtons: navButton[] = [
+    {
+      name: "Sign Up",
+      icon: <PencilLine className={navButtonIconStyles} />,
+      id: "signup",
+      onClick: () => router.push("/signup"),
+    },
+    {
+      name: "Search Recipe",
+      icon: <SearchIcon className={navButtonIconStyles} />,
+      id: "search-recipe",
+      onClick: () => router.push("/search-recipe"),
+    },
+    {
+      name: "Ask `chatbot`",
+      icon: <IconMessageChatbot className={navButtonIconStyles} />,
+      id: "ask-chatbot",
+      onClick: () => router.push("/ask-chatbot"),
+    },
+    {
+      name: "About Us",
+      icon: <InfoIcon className={navButtonIconStyles} />,
+      id: "about-us",
+      onClick: () => router.push("/about-us"),
+    },
+    {
+      name: "Help",
+      icon: <HelpCircleIcon className={navButtonIconStyles} />,
+      id: "help",
+      onClick: () => router.push("/help"),
+    },
+  ];
 
   return (
-    <div className="flex justify-between items-start w-full p-4">
+    <div className="flex justify-between items-start w-full p-4 md:p-6 xl:p-7 transition-all duration-200">
       <HomeLogo />
-      <section className="flex gap-2 items-center">
-        <Button variant={"default"} className="h-8 shadow text-xs">
-          Log In
+      <section className="flex gap-2 sm:gap-4 items-center">
+        <Button
+          variant={"default"}
+          className="h-8 sm:h-10 sm:w-24 shadow text-xs sm:text-sm"
+          onClick={() => router.push("/login")}
+        >
+          <LogInIcon size={15} />
+          <span>Log In</span>
         </Button>
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
           <DropdownMenuTrigger asChild className="mx-2">
-            <motion.div
-              onClick={(e) => (e.preventDefault(), setIsOpen(!isOpen))}
-              animate={{ rotate: isOpen ? 180 : 0 }} // Rotate the icon based on isOpen state
-              transition={{ duration: 0.3, ease: easeOut }} // Set the transition duration for rotation
-            >
-              <AlignJustify size={22} className="text-primary drop-shadow-md" />
-            </motion.div>
+            <div onClick={() => setIsOpen(!isOpen)}>
+              <AlignJustify className="text-primary drop-shadow-md size-6 sm:size-7" />
+            </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-36 my-2">
-            <DropdownMenuLabel className="text-xs text-center">
+          <DropdownMenuContent className="w-36 sm:w-44 my-2 sm:my-3">
+            <DropdownMenuLabel className="text-xs sm:text-sm text-center">
               Navigation
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+
             <DropdownMenuGroup>
-              <DropdownMenuItem className="text-xs justify-center">
-                <span>Sign Up</span>
-              </DropdownMenuItem>
+              {navButtons.map((button, index) => (
+                <div key={index}>
+                  <DropdownMenuItem
+                    key={index}
+                    id={button.id}
+                    className={navButtonStyles}
+                    onClick={button.onClick}
+                  >
+                    <span>{button.name}</span>
+                    {button.icon}
+                  </DropdownMenuItem>
+                  {index === 2 && <DropdownMenuSeparator />}
+                </div>
+              ))}
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -66,86 +118,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-{
-  /* <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User />
-            <span>Profile</span>
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <CreditCard />
-            <span>Billing</span>
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings />
-            <span>Settings</span>
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Keyboard />
-            <span>Keyboard shortcuts</span>
-            <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Users />
-            <span>Team</span>
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <UserPlus />
-              <span>Invite users</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>
-                  <Mail />
-                  <span>Email</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <MessageSquare />
-                  <span>Message</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <PlusCircle />
-                  <span>More...</span>
-                </DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-          <DropdownMenuItem>
-            <Plus />
-            <span>New Team</span>
-            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Github />
-          <span>GitHub</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <LifeBuoy />
-          <span>Support</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem disabled>
-          <Cloud />
-          <span>API</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <LogOut />
-          <span>Log out</span>
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent> */
-}

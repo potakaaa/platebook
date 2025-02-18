@@ -12,7 +12,7 @@ const HomeLogo = () => {
       className="px-0 mx-0 hover:bg-opacity-0"
       onClick={() => router.push("/")}
     >
-      <section className="flex font-black text-base sm:text-lg md:text-xl lg:text-2xl">
+      <section className="flex font-black text-base sm:text-lg md:text-xl md:mx-2 xl:mx-4 lg:text-2xl">
         <h1 className="text-primary drop-shadow-sm">Plate</h1>
         <h1 className="drop-shadow-sm">Book</h1>
       </section>
