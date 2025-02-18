@@ -10,7 +10,7 @@ type navButton = {
   onClick: () => void;
 };
 
-export const navButtonStyles = "text-xs sm:text-sm justify-between";
+export const navButtonDropStyles = "text-xs sm:text-sm justify-between";
 export const navButtonIconStyles = "text-primary size-10";
 
 export const getNavButtons = (

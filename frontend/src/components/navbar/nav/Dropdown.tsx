@@ -9,7 +9,7 @@ import {
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
-import { getNavButtons, navButtonStyles } from "./NavButtons";
+import { getNavButtons, navButtonDropStyles } from "./NavButtons";
 import { AlignJustify } from "lucide-react";
 
 const Dropdown = () => {
@@ -35,7 +35,7 @@ const Dropdown = () => {
               <DropdownMenuItem
                 key={index}
                 id={button.id}
-                className={navButtonStyles}
+                className={navButtonDropStyles}
                 onClick={button.onClick}
               >
                 <span>{button.name}</span>
