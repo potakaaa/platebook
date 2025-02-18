@@ -3,6 +3,7 @@ import { AuthUser } from "@/lib/types/authTypes";
 import NextAuth, { NextAuthOptions, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
+import TwitterProvider from "next-auth/providers/twitter";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -16,6 +17,10 @@ export const authOptions: NextAuthOptions = {
           access_type: "offline",
         },
       },
+    }),
+    TwitterProvider({
+      clientId: process.env.TWITTER_CLIENT_ID || "",
+      clientSecret: process.env.TWITTER_CLIENT_SECRET || "",
     }),
   ],
   callbacks: {
@@ -49,6 +54,36 @@ export const authOptions: NextAuthOptions = {
           return false;
         }
       }
+
+      if (account?.provider === "twitter") {
+        const { oauth_token, oauth_token_secret } = account;
+
+        if (!oauth_token || !oauth_token_secret) {
+          console.error("No OAuth token found for Twitter");
+          return false;
+        }
+
+        try {
+          const response = await axiosClient.post("social/login/twitter/", {
+            oauth_token,
+            oauth_token_secret,
+          });
+
+          const apiAccessToken =
+            response.data.access_token || response.data.key;
+          if (!apiAccessToken) {
+            console.error("No access token found in response");
+            return false;
+          }
+
+          (user as AuthUser).accessToken = apiAccessToken;
+          return true;
+        } catch (error) {
+          console.error("Error signing in with Twitter", error);
+          return false;
+        }
+      }
+
       return false;
     },
 
