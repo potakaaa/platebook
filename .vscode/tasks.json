@@ -1,0 +1,44 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Open and Split Terminal",
+            "command": "${command:workbench.action.terminal.new} && ${command:workbench.action.terminal.split}",
+            "type": "shell"
+        },
+        {
+            "label": "Split Terminal",
+            "command": "${command:workbench.action.terminal.split}",
+            "type": "shell"
+        },
+        {
+            "label": "Activate Virtual Environment",
+            "type": "shell",
+            "command": "powershell.exe -NoExit -Command \".\\env\\Scripts\\Activate.ps1\"",
+            "presentation": {
+                "focus": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Backend Server",
+            "type": "shell",
+            "command": "cd backend; python manage.py runserver",
+            "presentation": {
+                "focus": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Frontend Server",
+            "type": "shell",
+            "command": "cd frontend; npm run dev",
+            "presentation": {
+                "focus": true
+            },
+            "problemMatcher": []
+        },
+        
+
+    ]
+}
