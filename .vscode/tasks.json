@@ -38,6 +38,20 @@
             },
             "problemMatcher": []
         },
+        {
+            "label": "Git Add, Commit, Push",
+            "type": "shell",
+            "command": "git add .; git commit -m \"$(echo -n 'Enter commit message: '; read message; echo $message)\"; git push origin main",
+            "group": {
+              "kind": "build",
+              "isDefault": true
+            },
+            "presentation": {
+              "reveal": "always",
+              "panel": "shared"
+            }
+        }
+        
         
 
     ]
