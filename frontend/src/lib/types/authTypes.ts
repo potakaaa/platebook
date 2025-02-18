@@ -5,11 +5,15 @@ export interface AuthUser extends User {
     refreshToken?: string;
 }
 
-export interface Session {
+
+declare module "next-auth" {
+  interface Session {
     user: {
-        name?: string | null;
-        email?: string | null;
-        image?: string | null;
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
     };
     accessToken: string;
+  }
 }

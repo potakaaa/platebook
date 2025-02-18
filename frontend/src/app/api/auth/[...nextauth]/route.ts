@@ -9,6 +9,13 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      authorization: {
+        params: {
+          scope: "openid email profile",
+          prompt: "consent",
+          access_type: "offline",
+        },
+      },
     }),
   ],
   callbacks: {
@@ -22,7 +29,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          const response = await axiosClient.post("/social/login/google/", {
+          const response = await axiosClient.post("social/login/google/", {
             access_token,
             refresh_token,
           });
@@ -45,34 +52,20 @@ export const authOptions: NextAuthOptions = {
       return false;
     },
 
-    async jwt({
-      token,
-      user,
-      account,
-      profile,
-      isNewUser,
-    }: {
-      token: JWT;
-      user: AuthUser;
-      account: any;
-      profile?: any;
-      isNewUser?: boolean;
-    }) {
+    async jwt({ token, user, account }) {
+      if (account) {
+        token.accessToken = account.access_token;
+        token.refreshToken = account.refresh_token;
+        token.idToken = account.id_token;
+        token.expiresAt = account.expires_at;
+      }
+
       if (user) {
-        token.accessToken = user.accessToken;
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
-      } else if (account) {
-        token.accessToken = account.access_token;
       }
-      console.log("JWT Callback Params:", {
-        token,
-        user,
-        account,
-        profile,
-        isNewUser,
-      });
+
       return token;
     },
 

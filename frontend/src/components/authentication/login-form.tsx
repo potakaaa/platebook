@@ -14,6 +14,7 @@ import {
   IconBrandMeta,
 } from "@tabler/icons-react";
 import { BottomGradient } from "../ui/bottom-gradient";
+import { signIn } from "next-auth/react";
 
 export function LoginForm({
   className,
@@ -66,7 +67,12 @@ export function LoginForm({
                   <span className="sr-only">Login with Apple</span>
                   <BottomGradient />
                 </Button>
-                <Button variant="outline" className="w-full relative group/btn">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full relative group/btn"
+                  onClick={() => signIn("google")}
+                >
                   <IconBrandGoogleFilled size={24} />
                   <span className="sr-only">Login with Google</span>
                   <BottomGradient />
