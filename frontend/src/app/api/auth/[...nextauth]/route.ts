@@ -4,9 +4,38 @@ import NextAuth, { NextAuthOptions, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
 import TwitterProvider from "next-auth/providers/twitter";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    CredentialsProvider({
+      name: "Email",
+      credentials: {
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "you@example.com",
+        },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials: any) {
+        try {
+          const response = await axiosClient.post("/auth/login/", {
+            email: credentials.email,
+            password: credentials.password,
+          });
+
+          const user = response.data;
+          if (user) {
+            return user;
+          }
+        } catch (error) {
+          console.error("Login failed:", error);
+          return null;
+        }
+      },
+    }),
+
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
