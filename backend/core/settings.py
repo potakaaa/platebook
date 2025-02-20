@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-from .secrets import DJANGO_SECRET_KEY, JWT_SECRET_KEY
+from .secrets import DJANGO_SECRET_KEY, JWT_SECRET_KEY, CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'django.contrib.sites',
+    'cloudinary',
+    'cloudinary_storage', # image hosts
     
     #auth
     'dj_rest_auth',
@@ -58,6 +60,7 @@ INSTALLED_APPS = [
     
     #local apps
     "accounts",
+    "recipes",
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -90,6 +93,15 @@ REST_USE_JWT = True
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
+#CLOUDINARY
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
+    'API_KEY':  CLOUDINARY_API_KEY,
+    'API_SECRET': CLOUDINARY_API_SECRET,
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from uuid import uuid4
+from cloudinary.models import CloudinaryField
 
 
 # Create your models here.
@@ -33,6 +34,8 @@ class CustomUserModel(AbstractBaseUser, PermissionsMixin):
   userId    = models.CharField(max_length = 16, default = uuid4, primary_key = True, editable = False)
   username  = models.CharField(max_length = 16, unique = True, null = False, blank = False)
   email     = models.EmailField(max_length = 100, unique = True, null = False, blank = False)
+
+  pfp = CloudinaryField('profile_pictures', blank=True, null=True)
 
   USERNAME_FIELD = "username"
   REQUIRED_FIELDS = ["email"]
