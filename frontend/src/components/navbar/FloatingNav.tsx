@@ -13,24 +13,18 @@ import Image from "next/image";
 const links = [
   {
     title: "Home",
-    icon: (
-      <IconHome className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-    ),
+    icon: <IconHome className="h-full w-full text-secondary" />,
     href: "#",
   },
 
   {
     title: "Products",
-    icon: (
-      <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-    ),
+    icon: <IconTerminal2 className="h-full w-full text-secondary" />,
     href: "#",
   },
   {
     title: "Components",
-    icon: (
-      <IconNewSection className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-    ),
+    icon: <IconNewSection className="h-full w-full text-secondary" />,
     href: "#",
   },
   {
@@ -47,24 +41,18 @@ const links = [
   },
   {
     title: "Changelog",
-    icon: (
-      <IconExchange className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-    ),
+    icon: <IconExchange className="h-full w-full text-secondary" />,
     href: "#",
   },
 
   {
     title: "Twitter",
-    icon: (
-      <IconBrandX className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-    ),
+    icon: <IconBrandX className="h-full w-full text-secondary" />,
     href: "#",
   },
   {
     title: "GitHub",
-    icon: (
-      <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-    ),
+    icon: <IconBrandGithub className="h-full w-full text-secondary" />,
     href: "#",
   },
 ];
