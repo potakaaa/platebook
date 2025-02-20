@@ -24,4 +24,5 @@ urlpatterns = [
     path('api/social/login/', include('accounts.urls')),
     path('', include('recipes.urls')),
     path('', include('interactions.urls')),
+    path('', include('cook_list.urls')),
 ]

@@ -45,8 +45,10 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'django.contrib.sites',
+    
+    # image hosts
     'cloudinary',
-    'cloudinary_storage', # image hosts
+    'cloudinary_storage', 
     
     #auth
     'dj_rest_auth',
@@ -61,6 +63,8 @@ INSTALLED_APPS = [
     #local apps
     "accounts",
     "recipes",
+    "interactions",
+    "cook_list",
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
