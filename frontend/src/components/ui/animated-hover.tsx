@@ -10,6 +10,13 @@ export type buttonType = {
   name: string;
   onClick?: () => void;
   buttonClassName: string;
+  variant?:
+    | "link"
+    | "default"
+    | "outline"
+    | "destructive"
+    | "secondary"
+    | "ghost";
 };
 
 const AnimatedHover = ({
@@ -22,35 +29,47 @@ const AnimatedHover = ({
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   return (
     <motion.div className="flex gap-3">
-      {buttons.map((button, index) => (
-        <Link
-          className={cn("relative group block", button.buttonClassName)}
-          href="#"
-          onMouseEnter={() => setHoveredIndex(index)}
-          onMouseLeave={() => setHoveredIndex(null)}
-        >
-          <AnimatePresence>
-            {hoveredIndex === index && (
-              <motion.span
-                className="absolute inset-0 h-full w-full bg-amber-500 bg-opacity-60 block  rounded-lg p-2"
-                layoutId="hoverBackground"
-                initial={{ opacity: 0 }}
-                animate={{
-                  opacity: 1,
-                  transition: { duration: 0.15 },
-                }}
-                exit={{
-                  opacity: 0,
-                  transition: { duration: 0.15, delay: 0.2 },
-                }}
-              />
-            )}
-          </AnimatePresence>
-          <div className="p-4">
-            <Button className="relative z-50">{button.name}</Button>
-          </div>
-        </Link>
-      ))}
+      {buttons.map((button, index) => {
+        const { variant = "default" } = button;
+
+        return (
+          <Link
+            className={cn("relative group block")}
+            href="#"
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+          >
+            <AnimatePresence>
+              {hoveredIndex === index && (
+                <motion.span
+                  className="absolute inset-0 h-full w-full bg-neutral-200 bg-opacity-60 block  rounded-lg p-2"
+                  layoutId="hoverBackground"
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    opacity: 1,
+                    transition: { duration: 0.15 },
+                  }}
+                  exit={{
+                    opacity: 0,
+                    transition: { duration: 0.15, delay: 0.2 },
+                  }}
+                />
+              )}
+            </AnimatePresence>
+            <div className="p-1">
+              <Button
+                className={cn(
+                  "relative z-50 hover:bg-transparent",
+                  button.buttonClassName
+                )}
+                variant={variant}
+              >
+                {button.name}
+              </Button>
+            </div>
+          </Link>
+        );
+      })}
     </motion.div>
   );
 };
