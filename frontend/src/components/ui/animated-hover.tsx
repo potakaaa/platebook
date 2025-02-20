@@ -32,7 +32,7 @@ const AnimatedHover = ({
           <AnimatePresence>
             {hoveredIndex === index && (
               <motion.span
-                className="absolute inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800/[0.8] block  rounded-3xl"
+                className="absolute inset-0 h-full w-full bg-amber-500 bg-opacity-60 block  rounded-lg p-2"
                 layoutId="hoverBackground"
                 initial={{ opacity: 0 }}
                 animate={{
@@ -46,7 +46,9 @@ const AnimatedHover = ({
               />
             )}
           </AnimatePresence>
-          <span>{button.name}</span>
+          <div className="p-4">
+            <Button className="relative z-50">{button.name}</Button>
+          </div>
         </Link>
       ))}
     </motion.div>
