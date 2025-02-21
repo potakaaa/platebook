@@ -9,5 +9,5 @@ router.register(r'comments', CommentViewSet, basename='comment')
 router.register(r'follows', FollowViewSet, basename='follow')
 
 urlpatterns = [
-    path('api/', include(router.urls)),  # Include all interaction routes
+    path('', include(router.urls)),  # Include all interaction routes
 ]

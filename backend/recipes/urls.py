@@ -11,6 +11,6 @@ recipes_router.register(r'steps', StepViewSet, basename='recipe-steps')
 recipes_router.register(r'images', RecipeImageViewSet, basename='recipe-images')
 
 urlpatterns = [
-    path('api/', include(router.urls)),
-    path('api/', include(recipes_router.urls)),
+    path('', include(router.urls)),
+    path('', include(recipes_router.urls)),
 ]
