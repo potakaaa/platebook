@@ -43,7 +43,7 @@ const AnimatedHover = ({
             <AnimatePresence>
               {hoveredIndex === index && (
                 <motion.span
-                  className="absolute inset-0 h-full w-full bg-neutral-200 bg-opacity-60 block  rounded-lg p-2 shadow"
+                  className="absolute inset-0 h-full w-full bg-gradient-to-r from-secondary bg-opacity-60 block  rounded-lg p-2 shadow"
                   layoutId="hoverBackground"
                   initial={{ opacity: 0 }}
                   animate={{
@@ -60,7 +60,7 @@ const AnimatedHover = ({
             <div className="p-1">
               <Button
                 className={cn(
-                  "relative z-50 hover:bg-transparent",
+                  "relative z-50 hover:bg-transparent hover:text-primary transition duration-300",
                   button.buttonClassName
                 )}
                 variant={variant}

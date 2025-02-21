@@ -16,7 +16,7 @@ const LandingPage = () => {
       </section>
       <div className="flex flex-col items-center justify-center mx-28 my-10 h-screen">
         <section id="hero" className="flex flex-row justify-around w-full ">
-          <section className="flex flex-col space-y-2">
+          <section className="flex flex-col space-y-3">
             <section className="font-bold break-words text-7xl">
               <h1>Eat. Cook</h1>
               <LinkPreview

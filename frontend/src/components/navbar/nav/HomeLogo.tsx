@@ -34,7 +34,7 @@ const HomeLogo = () => {
         </section>
       </Button>
       <motion.span
-        className="w-32 h-10 inset-3 sm:w-36 md:w-[165px] md:inset-4 md:h-[45px] lg:w-[180px] xl:inset-4 xl:w-[188px] 2xl:w-48 2xl:h-12 bg-accent shadow flex rounded-lg absolute  z-0"
+        className="w-32 h-10 inset-3 sm:w-36 md:w-[165px] md:inset-4 md:h-[45px] lg:w-[180px] xl:inset-4 xl:w-[188px] 2xl:w-48 2xl:h-12 bg-gradient-to-r from-secondary shadow flex rounded-lg absolute  z-0"
         initial={{ opacity: 0, scaleX: 0 }}
         animate={{
           opacity: 1,
