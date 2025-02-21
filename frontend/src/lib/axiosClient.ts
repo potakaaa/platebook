@@ -1,11 +1,6 @@
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
 
-declare module 'next-auth' {
-    interface Session {
-        accessToken?: string;
-    }
-}
 
 export const axiosClient = axios.create({
     baseURL: process.env.DJANGO_API_URL,
