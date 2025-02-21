@@ -8,89 +8,141 @@ import { Label } from "@/components/ui/label";
 import SideImage from "./side-image";
 import Link from "next/link";
 import { LabelInputContainer } from "../ui/label-input-container";
-import {
-  IconBrandAppleFilled,
-  IconBrandGoogleFilled,
-  IconBrandX,
-} from "@tabler/icons-react";
-import { BottomGradient } from "../ui/bottom-gradient";
+import OauthButtons from "./oauth-buttons";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
+
+const loginSchema = z.object({
+  email: z
+    .string()
+    .email({ message: "Invalid email format" })
+    .min(1, "Email is required"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const form = useForm({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = async (data: any) => {
+    const response = await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    });
+
+    console.log("Login Response:", response);
+
+    if (response?.error) {
+      form.setError("root", { type: "server", message: response.error });
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden shadow-md">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Welcome!</h1>
-                <p className="text-balance text-muted-foreground text-sm md:text-base">
-                  Login to your Platebook account
-                </p>
-              </div>
-              <LabelInputContainer>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="platebook@example.com"
-                  required
-                />
-              </LabelInputContainer>
-              <LabelInputContainer>
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto text-[11px] underline-offset-2 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
+          <Form {...form}>
+            <form
+              noValidate
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="p-6 md:p-8"
+            >
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col items-center text-center">
+                  <h1 className="text-2xl font-bold">Welcome!</h1>
+                  <p className="text-balance text-muted-foreground text-sm md:text-base">
+                    Login to your Platebook account
+                  </p>
                 </div>
-                <Input id="password" type="password" required />
-              </LabelInputContainer>
-              <Button type="submit" className="w-full">
-                Login
-              </Button>
-              <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                <span className="relative z-10 bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                <Button variant="outline" className="w-full relative group/btn">
-                  <IconBrandAppleFilled size={24} />
-                  <span className="sr-only">Login with Apple</span>
-                  <BottomGradient />
+
+                <FormItem>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <LabelInputContainer>
+                        <Label htmlFor="email">Email</Label>
+                        <FormControl>
+                          <Input
+                            id="email"
+                            type="email"
+                            placeholder="platebook@example.com"
+                            required
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </LabelInputContainer>
+                    )}
+                  />
+                </FormItem>
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <LabelInputContainer>
+                        <div className="flex items-center">
+                          <Label htmlFor="password">Password</Label>
+                          <a
+                            href="#"
+                            className="ml-auto text-[11px] underline-offset-2 hover:underline"
+                          >
+                            Forgot your password?
+                          </a>
+                        </div>
+                        <FormControl>
+                          <Input
+                            id="password"
+                            type="password"
+                            required
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </LabelInputContainer>
+                    </FormItem>
+                  )}
+                />
+
+                <Button type="submit" className="w-full">
+                  Login
                 </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full relative group/btn"
-                  onClick={() => signIn("google")}
-                >
-                  <IconBrandGoogleFilled size={24} />
-                  <span className="sr-only">Login with Google</span>
-                  <BottomGradient />
-                </Button>
-                <Button variant="outline" className="w-full relative group/btn">
-                  <IconBrandX size={24} />
-                  <span className="sr-only">Login with X</span>
-                  <BottomGradient />
-                </Button>
+                <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+                  <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                    Or continue with
+                  </span>
+                </div>
+                <OauthButtons />
+
+                <div className="text-center text-sm">
+                  Don&apos;t have an account?{" "}
+                  <Link href="/signup" className="underline underline-offset-4">
+                    Sign up
+                  </Link>
+                </div>
               </div>
-              <div className="text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <Link href="/signup" className="underline underline-offset-4">
-                  Sign up
-                </Link>
-              </div>
-            </div>
-          </form>
+            </form>
+          </Form>
           <SideImage />
         </CardContent>
       </Card>

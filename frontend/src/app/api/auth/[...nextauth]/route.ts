@@ -1,4 +1,4 @@
-import { axiosClient } from "@/lib/axiosClient";
+import { axiosClient } from "@/lib/services/axiosClient";
 import { AuthUser } from "@/lib/types/authTypes";
 import NextAuth, { NextAuthOptions, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
@@ -29,9 +29,9 @@ export const authOptions: NextAuthOptions = {
           if (user) {
             return user;
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error("Login failed:", error);
-          return null;
+          throw error.response?.data || new Error("An unknown error occurred");
         }
       },
     }),

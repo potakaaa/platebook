@@ -8,90 +8,199 @@ import { Label } from "@/components/ui/label";
 import SideImage from "./side-image";
 import Link from "next/link";
 import { LabelInputContainer } from "../ui/label-input-container";
-import { Apple, AppleIcon } from "lucide-react";
+import OauthButtons from "./oauth-buttons";
+
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  IconBrandAppleFilled,
-  IconBrandGoogleFilled,
-  IconBrandX,
-} from "@tabler/icons-react";
-import { BottomGradient } from "../ui/bottom-gradient";
-import { BottomGradientPrimary } from "../ui/bottom-gradient-primary";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
+import { SignUpFormData } from "@/lib/types/authTypes";
+import { signUp } from "@/lib/services/api/accountServices";
+
+const signUpSchema = z
+  .object({
+    email: z
+      .string()
+      .email({ message: "Invalid email format" })
+      .min(1, "Email is required"),
+    username: z.string().min(3, "Username must be at least 3 characters"),
+    password1: z.string().min(8, "Password must be at least 8 characters"),
+    password2: z.string(),
+  })
+  .refine((data) => data.password1 === data.password2, {
+    message: "Passwords do not match",
+    path: ["password2"],
+  });
 
 export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const form = useForm({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      email: "",
+      username: "",
+      password1: "",
+      password2: "",
+    },
+  });
+
+  const onSubmit = async (data: SignUpFormData) => {
+    console.log("Submitting data:", data);
+
+    try {
+      const response = await signUp(data);
+
+      form.reset();
+    } catch (error: any) {
+      Object.entries(error).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          form.setError(key as keyof SignUpFormData, {
+            type: "server",
+            message: value.join(" • "),
+          });
+        }
+      });
+
+      if (error.non_field_errors) {
+        form.setError("root", {
+          type: "server",
+          message: error.non_field_errors.join(" • "),
+        });
+      }
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden shadow-md">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Welcome!</h1>
-                <p className="text-balance text-muted-foreground text-sm md:text-base">
-                  Login to your Platebook account
-                </p>
-              </div>
-              <LabelInputContainer>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="platebook@example.com"
-                />
-              </LabelInputContainer>
+          <Form {...form}>
+            <form
+              noValidate
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="p-6 md:p-8"
+            >
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col items-center text-center">
+                  <h1 className="text-2xl font-bold">Welcome!</h1>
+                  <p className="text-balance text-muted-foreground text-sm md:text-base">
+                    Login to your Platebook account
+                  </p>
+                </div>
 
-              <LabelInputContainer>
-                <Label htmlFor="username">Username</Label>
-                <Input
-                  id="username"
-                  type="text"
-                  placeholder="platebook123"
-                  required
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <LabelInputContainer>
+                        <Label htmlFor="email">Email</Label>
+                        <FormControl>
+                          <Input
+                            id="email"
+                            type="email"
+                            placeholder="platebook@example.com"
+                            {...field}
+                          />
+                        </FormControl>
+                      </LabelInputContainer>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </LabelInputContainer>
-              <LabelInputContainer>
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" required />
-              </LabelInputContainer>
-              <LabelInputContainer>
-                <Label htmlFor="confirm-password">Confirm Password</Label>
-                <Input id="confirm-password" type="password" required />
-              </LabelInputContainer>
-              <Button type="submit" className="w-full relative group/btn">
-                Sign Up
-              </Button>
-              <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                <span className="relative z-10 bg-background px-2 text-muted-foreground">
-                  Or sign up with
-                </span>
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                <Button variant="outline" className="w-full relative group/btn">
-                  <IconBrandAppleFilled size={24} />
-                  <span className="sr-only">Login with Apple</span>
-                  <BottomGradient />
+
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <LabelInputContainer>
+                        <Label htmlFor="username">Username</Label>
+                        <FormControl>
+                          <Input
+                            id="username"
+                            type="text"
+                            placeholder="platebook123"
+                            {...field}
+                          />
+                        </FormControl>
+                      </LabelInputContainer>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="password1"
+                  render={({ field }) => (
+                    <FormItem>
+                      <LabelInputContainer>
+                        <Label htmlFor="password">Password</Label>
+                        <FormControl>
+                          <Input
+                            id="password"
+                            type="password"
+                            required
+                            {...field}
+                          />
+                        </FormControl>
+                      </LabelInputContainer>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="password2"
+                  render={({ field }) => (
+                    <FormItem>
+                      <LabelInputContainer>
+                        <Label htmlFor="confirm-password">
+                          Confirm Password
+                        </Label>
+                        <FormControl>
+                          <Input
+                            id="confirm-password"
+                            type="password"
+                            required
+                            {...field}
+                          />
+                        </FormControl>
+                      </LabelInputContainer>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button type="submit" className="w-full relative group/btn">
+                  Sign Up
                 </Button>
-                <Button variant="outline" className="w-full relative group/btn">
-                  <IconBrandGoogleFilled size={24} />
-                  <span className="sr-only">Login with Google</span>
-                  <BottomGradient />
-                </Button>
-                <Button variant="outline" className="w-full relative group/btn">
-                  <IconBrandX size={24} />
-                  <span className="sr-only">Login with X</span>
-                  <BottomGradient />
-                </Button>
+
+                <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+                  <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                    Or sign up with
+                  </span>
+                </div>
+                <OauthButtons />
+                <div className="text-center text-sm">
+                  Already have an account?{" "}
+                  <Link href="/login" className="underlne underline-offset-4">
+                    Log In
+                  </Link>
+                </div>
               </div>
-              <div className="text-center text-sm">
-                Already have an account?{" "}
-                <Link href="/login" className="underline underline-offset-4">
-                  Log In
-                </Link>
-              </div>
-            </div>
-          </form>
+            </form>
+          </Form>
           <SideImage />
         </CardContent>
       </Card>

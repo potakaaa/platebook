@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react';
 
 
 export const axiosClient = axios.create({
-    baseURL: process.env.DJANGO_API_URL,
+    baseURL: process.env.NEXT_PUBLIC_DJANGO_API_URL,
     headers: {
         'Content-Type': 'application/json',
     },
