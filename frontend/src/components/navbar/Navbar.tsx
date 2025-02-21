@@ -43,8 +43,10 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="flex justify-between items-start w-full p-4 md:p-6 xl:p-7 transition-all duration-200">
-      <HomeLogo />
+    <div className="flex justify-between items-start w-full p-4 md:p-6 md:py-5 xl:p-7 xl:py-5 transition-all duration-200">
+      <section className="mt-0 sm:mt-1">
+        <HomeLogo />
+      </section>
       <section className="flex gap-2 sm:gap-4 lg:gap-6 items-center">
         <div className="hidden lg:block space-x-3">
           <AnimatedHover buttons={navButtons} className="" />
