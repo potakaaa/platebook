@@ -34,6 +34,7 @@ const AnimatedHover = ({
 
         return (
           <Link
+            key={index}
             className={cn("relative group block")}
             href="#"
             onMouseEnter={() => setHoveredIndex(index)}
