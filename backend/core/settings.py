@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     #3rd Party
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'corsheaders',
     'django.contrib.sites',
     
@@ -88,16 +89,35 @@ SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 SOCIALACCOUNT_EMAIL_REQUIRED = False
 
 # re enable when implementing email verification
-ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
 
 SITE_ID = 1
+
+DJ_REST_AUTH = {
+    "USE_JWT": True,
+    "JWT_AUTH_COOKIE": "access",
+    "JWT_AUTH_REFRESH_COOKIE": "refresh",
+    "JWT_AUTH_SECURE": False, # true in prod
+    "JWT_AUTH_SAMESITE": "Lax",
+    "SESSION_LOGIN": False,
+}
+
 REST_USE_JWT = True
+JWT_AUTH_COOKIE = "access"
+JWT_REFRESH_COOKIE = "refresh"
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOW_CREDENTIALS = True  
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]  
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"] 
 
-#CLOUDINARY
+SESSION_COOKIE_SAMESITE = "None"  # ✅ Required for cross-site cookies
+SESSION_COOKIE_SECURE = False  # ✅ Set to True in production with HTTPS
+CSRF_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SECURE = False
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
@@ -139,6 +159,8 @@ REST_AUTH_SERIALIZERS = {
 
 
 
+
+
 REST_FRAMEWORK = {
     
     'DEFAULT_PERMISSION_CLASSES': (
@@ -146,8 +168,6 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
     ),
 }
 
@@ -223,3 +243,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from dj_rest_auth.app_settings import api_settings
+
+api_settings.USE_JWT = True
+
+print("REST_USE_JWT:", api_settings.USE_JWT)  # ✅ Should print True
