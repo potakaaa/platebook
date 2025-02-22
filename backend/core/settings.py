@@ -10,8 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from dotenv import load_dotenv
+import dj_database_url
+import os
+load_dotenv()
+
 from pathlib import Path
-from .secrets import DJANGO_SECRET_KEY, JWT_SECRET_KEY, CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = DJANGO_SECRET_KEY
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -46,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'django.contrib.sites',
+    
     
     # image hosts
     'cloudinary',
@@ -111,18 +116,19 @@ JWT_AUTH_COOKIE = "access"
 JWT_REFRESH_COOKIE = "refresh"
 
 CORS_ALLOW_CREDENTIALS = True  
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]  
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"] 
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000"]  
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000"] 
 
-SESSION_COOKIE_SAMESITE = "None"  # ✅ Required for cross-site cookies
-SESSION_COOKIE_SECURE = False  # ✅ Set to True in production with HTTPS
-CSRF_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SAMESITE = "Lax"  # Or "None" if using cross-domain
+CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SECURE = True  # ✅ Set to True in production if using HTTPS
+SESSION_COOKIE_SECURE = True  # ✅ Set this too
+
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
-    'API_KEY':  CLOUDINARY_API_KEY,
-    'API_SECRET': CLOUDINARY_API_SECRET,
+    'CLOUD_NAME': os.getenv("CLOUDINARY_CLOUD_NAME"),
+    'API_KEY':  os.getenv("CLOUDINARY_API_KEY"),
+    'API_SECRET': os.getenv("CLOUDINARY_API_SECRET"),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
@@ -148,7 +154,7 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': True,
     "USER_ID_FIELD": "userId",
     "USER_ID_CLAIM": "user_id",
-    "SIGNING_KEY": JWT_SECRET_KEY
+    "SIGNING_KEY": os.getenv("JWT_SECRET_KEY")
 }
 
 AUTH_USER_MODEL = "accounts.CustomUserModel"
@@ -195,12 +201,17 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+DATABASE = os.getenv("DATABASE_URL")
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": dj_database_url.config(
+        default=DATABASE,
+        conn_max_age=600,
+        ssl_require=True, 
+    )
 }
+
+
 
 
 # Password validation
