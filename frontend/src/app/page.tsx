@@ -1,10 +1,13 @@
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
+import HoverMe from "@/components/hero/HoverMe";
 import SearchInput from "@/components/hero/SearchInput";
 import FloatingNavbar from "@/components/navbar/FloatingNav";
 import Navbar from "@/components/navbar/Navbar";
 import AnimatedHover, { buttonType } from "@/components/ui/animated-hover";
 import { LinkPreview } from "@/components/ui/link-preview";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { motion } from "framer-motion";
+import { ArrowDown01 } from "lucide-react";
 import React from "react";
 
 const samplePost: PostCardProps = {
@@ -53,7 +56,8 @@ const LandingPage = () => {
             id="right"
             className="w-full max-w-lg relative flex justify-center"
           >
-            <div className="w-full h-fit">
+            <div className="flex flex-col w-full h-fit">
+              <HoverMe />
               <PostCard postItems={samplePost} />
             </div>
           </section>
