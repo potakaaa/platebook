@@ -13,7 +13,10 @@ const samplePost: PostCardProps = {
   title: "Adobong Kare Kare Pinoy Style",
   description:
     "A delicious Filipino dish that combines the flavors of adobo and kare kare.",
-  image: "https://images.unsplash.com/photo-1627487294130-0b1b7f4a9a9c",
+  image1:
+    "https://cdn.apartmenttherapy.info/image/upload/f_jpg,q_auto:eco,c_fill,g_auto,w_1500,ar_4:3/k%2FPhoto%2FRecipes%2F2024-09-kare-kare%2Fkare-kare-3458",
+  image2:
+    "https://www.rappler.com/tachyon/2022/04/Bagnet-Kare-kare.jpg?fit=1024%2C720",
 };
 
 const LandingPage = () => {
