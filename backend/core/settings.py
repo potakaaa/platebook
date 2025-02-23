@@ -119,10 +119,10 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000"]  
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000"] 
 
-SESSION_COOKIE_SAMESITE = "Lax"  # Or "None" if using cross-domain
+SESSION_COOKIE_SAMESITE = "Lax"  
 CSRF_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SECURE = True  # ✅ Set to True in production if using HTTPS
-SESSION_COOKIE_SECURE = True  # ✅ Set this too
+CSRF_COOKIE_SECURE = True  
+SESSION_COOKIE_SECURE = True  
 
 
 CLOUDINARY_STORAGE = {
@@ -259,4 +259,3 @@ from dj_rest_auth.app_settings import api_settings
 
 api_settings.USE_JWT = True
 
-print("REST_USE_JWT:", api_settings.USE_JWT)  # ✅ Should print True
