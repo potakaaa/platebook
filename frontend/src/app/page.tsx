@@ -39,11 +39,11 @@ const LandingPage = () => {
             id="left"
             className="flex flex-col w-full space-y-3 lg:space-y-6 pt-10 pb-5 lg:py-20 justify-center items-center lg:items-start lg:justify-normal"
           >
-            <section className="font-bold text-5xl lg:text-6xl xl:text-7xl text-center lg:text-left">
+            <section className="font-bold text-5xl lg:text-6xl xl:text-7xl text-center lg:text-left z-10">
               <h1>Eat. Cook</h1>
               <LinkPreview
                 url="https://github.com/potakaaa"
-                className="text-primary"
+                className="text-primary dark:text-primary"
               >
                 Platebook.
               </LinkPreview>

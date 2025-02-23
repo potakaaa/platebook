@@ -18,7 +18,7 @@ const HomeLogo = () => {
     >
       <Button
         variant={"ghost"}
-        className="px-0 mx-0 hover:bg-opacity-0 flex items-center justify-center gap-1 sm:gap-2 md:gap-1 xl:gap-0 z-10"
+        className="px-0 mx-0 hover:bg-opacity-0 flex items-center justify-center gap-1 sm:gap-2 md:gap-1 xl:gap-0 z-10 relative"
         onClick={() => router.push("/")}
       >
         <Image
@@ -34,7 +34,7 @@ const HomeLogo = () => {
         </section>
       </Button>
       <motion.span
-        className="w-32 h-10 inset-3 sm:w-36 md:w-[165px] md:inset-4 md:h-[45px] lg:w-[180px] xl:inset-4 xl:w-[188px] 2xl:w-48 2xl:h-12 bg-gradient-to-r from-secondary shadow flex rounded-lg absolute  z-0"
+        className="w-32 h-10 inset-3 sm:w-36 md:w-[165px] md:inset-4 md:h-[45px] lg:w-[180px] xl:inset-4 xl:w-[188px] 2xl:left-7 2xl:w-48 2xl:h-12 bg-gradient-to-r from-secondary shadow flex rounded-lg absolute z-0"
         initial={{ opacity: 0, scaleX: 0 }}
         animate={{
           opacity: 1,

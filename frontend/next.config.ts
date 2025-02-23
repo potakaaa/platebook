@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
         hostname: "assets.aceternity.com",
       },
       {
-        protocol: "https",
+        protocol:  "https",
         hostname: "api.microlink.io",
       },
       {
@@ -24,6 +24,7 @@ const nextConfig: NextConfig = {
         hostname: "www.rappler.com",
         }
     ],
+    domains: ["api.microlink.io"],
   },
 };
 

@@ -43,7 +43,7 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="flex justify-between items-start w-full p-4 md:p-6 md:py-5 xl:p-7 xl:py-5 transition-all duration-200">
+    <div className="flex justify-between items-start w-full p-4 md:p-6 md:py-5 xl:p-7 xl:py-5 2xl:px-10 transition-all duration-200">
       <section className="mt-0 sm:mt-1">
         <HomeLogo />
       </section>
