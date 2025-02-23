@@ -25,15 +25,21 @@ const samplePost: PostCardProps = {
 const LandingPage = () => {
   return (
     <div className="w-full">
-      <section className="absolute top-0 left-0 w-full">
+      <section className="absolute inset-0 w-full">
         <Navbar />
         <div className="flex-grow" />{" "}
         {/* This ensures content can fill the space above */}
       </section>
-      <div className="flex flex-col items-center justify-center mx-28 my-5">
-        <section id="hero" className="flex flex-row justify-around w-full ">
-          <section id="left" className="flex flex-col space-y-3 py-10">
-            <section className="font-bold break-words text-7xl">
+      <div className="flex flex-col items-center justify-center mx-7 lg:mx-16 xl:mx-28 2xl:mx-52 my-5">
+        <section
+          id="hero"
+          className="flex flex-col my-10 lg:my-0 lg:flex-row  justify-around w-full "
+        >
+          <section
+            id="left"
+            className="flex flex-col w-full space-y-3 lg:space-y-6 pt-10 pb-5 lg:py-20 justify-center items-center lg:items-start lg:justify-normal"
+          >
+            <section className="font-bold text-5xl lg:text-6xl xl:text-7xl text-center lg:text-left">
               <h1>Eat. Cook</h1>
               <LinkPreview
                 url="https://github.com/potakaaa"
@@ -43,20 +49,20 @@ const LandingPage = () => {
               </LinkPreview>
               <h1>Repeat.</h1>
             </section>
-            <p className="w-full max-w-md ml-1">
+            <p className="w-full max-w-sm flex justify-center break-words lg:max-w-md ml-0 lg:ml-1 text-center lg:text-left">
               Discover, share, and savor recipes from around the world—one plate
               at a time.
             </p>
-            <div className="py-5">
+            <div className="py-5 max-w-xs sm:max-w-sm lg:max-w-sm xl:max-w-md w-full">
               <SearchInput />
             </div>
           </section>
 
           <section
             id="right"
-            className="w-full max-w-lg relative flex justify-center"
+            className="w-full sm:max-w-none lg:max-w-none relative flex justify-center"
           >
-            <div className="flex flex-col w-full h-fit">
+            <div className="flex flex-col w-full h-fit items-center justify-center">
               <HoverMe />
               <PostCard postItems={samplePost} />
             </div>

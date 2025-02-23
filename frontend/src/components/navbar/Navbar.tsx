@@ -54,7 +54,7 @@ const Navbar = () => {
         <ButtonBorder
           containerClassName="h-9 sm:h-10 w-24 sm:w-28"
           borderRadius="0.5rem"
-          className="gap-2 text-xs sm:text-sm bg-primary border-none hover:bg-transparent hover:text-zinc-800 transition duration-300 hover:font-bold"
+          className="gap-2 text-xs sm:text-sm bg-primary border-none hover:bg-transparent hover:text-zinc-900 transition duration-300 hover:font-bold"
           onClick={() => router.push("/login")}
         >
           <LogInIcon size={15} />

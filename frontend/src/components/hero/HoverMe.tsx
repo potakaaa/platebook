@@ -20,7 +20,7 @@ const HoverMe = () => {
           transition: {
             duration: 1,
             staggerChildren: 0.5,
-            ease: "easeInOut",
+            ease: [0.02, 0.6, -0.01, 0.91],
             repeat: Infinity,
             repeatType: "reverse",
             repeatDelay: 3,
