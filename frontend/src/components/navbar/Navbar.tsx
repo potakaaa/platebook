@@ -52,7 +52,7 @@ const Navbar = () => {
 
   return (
     <motion.div
-      className={`fixed top-0 left-0 w-full flex justify-between items-start p-4 md:p-6 md:py-5 xl:p-7 xl:py-5 2xl:px-10 transition-all duration-200 z-50 bg-white backdrop-filter backdrop-blur-lg bg-opacity-30`}
+      className={`fixed top-0 left-0 w-full flex justify-between items-start p-4 md:p-6 md:py-5 xl:p-7 xl:py-5 2xl:px-10 transition-all duration-200 z-50 bg-white dark:bg-transparent backdrop-filter backdrop-blur-lg bg-opacity-30`}
     >
       <section className="mt-0 sm:mt-1">
         <HomeLogo />

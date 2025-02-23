@@ -8,6 +8,11 @@ import { LinkPreview } from "@/components/ui/link-preview";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { Spotlight } from "@/components/ui/spotlight";
 import { SpotlightNew } from "@/components/ui/spotlight-new";
+import {
+  IconBowlSpoon,
+  IconBrandTabler,
+  IconMessageChatbot,
+} from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { ArrowDown01 } from "lucide-react";
 import React from "react";
@@ -32,10 +37,10 @@ const LandingPage = () => {
         <div className="flex-grow" />{" "}
         {/* This ensures content can fill the space above */}
       </section>
-      <div className="flex flex-col items-center justify-center mx-7 lg:mx-16 xl:mx-28 2xl:mx-52 my-5">
+      <div className="flex flex-col items-center justify-center mx-7 lg:mx-16 xl:mx-28 2xl:mx-48 my-5">
         <section
           id="hero"
-          className="flex flex-col my-10 lg:my-0 lg:flex-row  justify-around w-full "
+          className="flex flex-col my-10 lg:my-0 lg:flex-row  justify-around w-full pb-14 2xl:pb-28"
         >
           <SpotlightNew />
           <section
@@ -70,6 +75,65 @@ const LandingPage = () => {
               <PostCard postItems={samplePost} />
             </div>
           </section>
+        </section>
+        <section
+          id="3-features"
+          className="flex flex-col lg:flex-row space-y-10 lg:space-y-0 space-x-0 lg:space-x-5 xl:space-x-8 justify-between w-full h-full"
+        >
+          <div
+            id="feature-container-1"
+            className="flex flex-col space-y-3 justify-start items-center  text-center w-full"
+          >
+            <div
+              id="feature-head-1"
+              className="flex flex-row items-center space-x-2"
+            >
+              <IconBowlSpoon className="size-8 sm:size-9 lg:size-8 xl:size-9 text-primary drop-shadow-md" />
+              <span className="font-semibold text-sm sm:text-base lg:text-sm xl:text-base">
+                Personalized Recipe Experience
+              </span>
+            </div>
+            <p className="w-full max-w-md text-xs sm:text-sm lg:text-xs xl:text-sm 2xl:max-w-sm">
+              Easily browse, save, and share your favorite recipes. PlateBook
+              makes cooking inspiration effortless.
+            </p>
+          </div>
+          <div
+            id="feature-container-2"
+            className="flex flex-col space-y-3 justify-start items-center text-center w-full"
+          >
+            <div
+              id="feature-head-2"
+              className="flex flex-row items-center space-x-2"
+            >
+              <IconBrandTabler className="size-8 sm:size-9 lg:size-8 xl:size-9 text-primary drop-shadow-md" />
+              <span className="font-semibold text-sm sm:text-base lg:text-sm xl:text-base">
+                Aesthetic & Seamless Experience
+              </span>
+            </div>
+            <p className="w-full max-w-md text-xs sm:text-sm lg:text-xs xl:text-sm 2xl:max-w-sm">
+              Enjoy a beautifully designed platform with dark mode, real-time
+              searching, and responsive performance..
+            </p>
+          </div>
+          <div
+            id="feature-container-3"
+            className="flex flex-col space-y-3 justify-start items-center text-center w-full"
+          >
+            <div
+              id="feature-head-3"
+              className="flex flex-row items-center space-x-2"
+            >
+              <IconMessageChatbot className="size-8 sm:size-9 lg:size-8 xl:size-9 text-primary drop-shadow-md" />
+              <span className="font-semibold text-sm sm:text-base lg:text-sm xl:text-base">
+                Smart AI Recipe Assistant
+              </span>
+            </div>
+            <p className="w-full max-w-md text-xs sm:text-sm lg:text-xs xl:text-sm 2xl:max-w-sm">
+              Not sure what to cook? Our AI chatbot suggests recipes based on
+              existing posts and your preferences.
+            </p>
+          </div>
         </section>
       </div>
     </div>
