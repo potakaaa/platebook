@@ -6,6 +6,8 @@ import Navbar from "@/components/navbar/Navbar";
 import AnimatedHover, { buttonType } from "@/components/ui/animated-hover";
 import { LinkPreview } from "@/components/ui/link-preview";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { Spotlight } from "@/components/ui/spotlight";
+import { SpotlightNew } from "@/components/ui/spotlight-new";
 import { motion } from "framer-motion";
 import { ArrowDown01 } from "lucide-react";
 import React from "react";
@@ -35,6 +37,7 @@ const LandingPage = () => {
           id="hero"
           className="flex flex-col my-10 lg:my-0 lg:flex-row  justify-around w-full "
         >
+          <SpotlightNew />
           <section
             id="left"
             className="flex flex-col w-full space-y-3 lg:space-y-6 pt-10 pb-5 lg:py-20 justify-center items-center lg:items-start lg:justify-normal"

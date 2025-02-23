@@ -37,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${poppins.className} antialiased w-full min-h-screen flex items-center justify-center bg-background`}
+        className={`${poppins.className} antialiased w-full min-h-screen flex items-center justify-center bg-background overflow-x-hidden`}
       >
         <ThemeProvider
           attribute="class"
