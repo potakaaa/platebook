@@ -202,7 +202,7 @@ export function PlaceholdersAndVanishInput({
         value={value}
         type="text"
         className={cn(
-          "w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-10 pr-20",
+          "w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-5 pr-20",
           animating && "text-transparent dark:text-transparent truncate"
         )}
       />
@@ -210,10 +210,10 @@ export function PlaceholdersAndVanishInput({
       <button
         disabled={!value}
         type="submit"
-        className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-36 text-sm rounded-full flex items-center justify-center space-x-2 bg-primary text-background font-normal cursor-pointer"
+        className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-14 lg:w-36 text-sm rounded-full flex items-center justify-center space-x-2 bg-primary text-background font-normal cursor-pointer"
       >
-        <span>Search Now</span>
-        <ArrowRightCircleIcon className="size-5 text-background" />
+        <span className="hidden lg:block dark:text-foreground">Search Now</span>
+        <ArrowRightCircleIcon className="size-5 text-background dark:text-foreground text-center" />
       </button>
 
       <div className="absolute inset-0 flex items-center rounded-full pointer-events-none">
@@ -237,7 +237,7 @@ export function PlaceholdersAndVanishInput({
                 duration: 0.3,
                 ease: "linear",
               }}
-              className="dark:text-zinc-500 text-sm sm:text-base font-normal text-neutral-500 pl-5 text-left w-4/6 truncate"
+              className="dark:text-zinc-500 text-sm sm:text-base font-normal text-neutral-500 pl-5 text-left w-5/6 pr-5 lg:pr-1 lg:w-7/12 xl:w-4/6 truncate"
             >
               {placeholders[currentPlaceholder]}
             </motion.p>

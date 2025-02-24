@@ -17,3 +17,11 @@ declare module "next-auth" {
     accessToken: string;
   }
 }
+
+
+export type SignUpFormData = {
+  email: string;
+  username: string;
+  password1: string;
+  password2: string;
+};

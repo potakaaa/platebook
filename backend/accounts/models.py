@@ -12,6 +12,9 @@ class CustomUserModelManager(BaseUserManager):
             email=self.normalize_email(email)
         )
         
+        if not password:
+            raise ValueError("Users must have a password")
+        
         user.set_password(password)
         user.save(using=self._db)
         
@@ -31,14 +34,14 @@ class CustomUserModelManager(BaseUserManager):
         return user
     
 class CustomUserModel(AbstractBaseUser, PermissionsMixin):
-  userId    = models.CharField(max_length = 16, default = uuid4, primary_key = True, editable = False)
-  username  = models.CharField(max_length = 16, unique = True, null = False, blank = False)
+  userId    = models.CharField(max_length = 36, default = uuid4, primary_key = True, editable = False)
+  username  = models.CharField(max_length = 150, unique = True, null = False, blank = False)
   email     = models.EmailField(max_length = 100, unique = True, null = False, blank = False)
 
   pfp = CloudinaryField('profile_pictures', blank=True, null=True)
 
-  USERNAME_FIELD = "username"
-  REQUIRED_FIELDS = ["email"]
+  USERNAME_FIELD = "email"
+  REQUIRED_FIELDS = ["username"]
 
   active       = models.BooleanField(default = True)
   

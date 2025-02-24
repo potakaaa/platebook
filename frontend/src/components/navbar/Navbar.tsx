@@ -1,6 +1,6 @@
 "use client";
 
-import React, { JSX } from "react";
+import React, { JSX, useState } from "react";
 import HomeLogo from "./nav/HomeLogo";
 import { Button } from "../ui/button";
 import { AlignJustify, LogInIcon } from "lucide-react";
@@ -11,9 +11,17 @@ import Dropdown from "./nav/Dropdown";
 import { ButtonBorder } from "../ui/moving-border";
 import AnimatedHover, { buttonType } from "../ui/animated-hover";
 import { ModeToggle } from "../ui/mode-toggle";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 
 const Navbar = () => {
   const router = useRouter();
+  const { scrollY } = useScroll();
+  const [scrolled, setScrolled] = useState(false);
+
+  // Listen for scrollY changes and update state
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setScrolled(latest > 50);
+  });
 
   const navButtons: buttonType[] = [
     {
@@ -44,7 +52,9 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="flex justify-between items-start w-full p-4 md:p-6 md:py-5 xl:p-7 xl:py-5 transition-all duration-200">
+    <motion.div
+      className={`fixed top-0 left-0 w-full flex justify-between items-start p-4 md:p-6 md:py-5 xl:p-7 xl:py-5 2xl:px-10 transition-all duration-200 z-50 bg-white dark:bg-transparent backdrop-filter backdrop-blur-lg bg-opacity-30`}
+    >
       <section className="mt-0 sm:mt-1">
         <HomeLogo />
       </section>
@@ -56,7 +66,7 @@ const Navbar = () => {
         <ButtonBorder
           containerClassName="h-9 sm:h-10 w-24 sm:w-28"
           borderRadius="0.5rem"
-          className="gap-2 text-xs sm:text-sm bg-primary border-none hover:bg-transparent hover:text-zinc-800 transition duration-300 hover:font-bold"
+          className="gap-2 text-xs sm:text-sm bg-primary border-none hover:bg-transparent hover:text-zinc-900 transition duration-300 hover:font-bold dark:hover:text-foreground"
           onClick={() => router.push("/login")}
         >
           <LogInIcon size={15} />
@@ -66,7 +76,7 @@ const Navbar = () => {
           <Dropdown />
         </div>
       </section>
-    </div>
+    </motion.div>
   );
 };
 

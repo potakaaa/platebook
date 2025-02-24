@@ -1,4 +1,6 @@
 from rest_framework.serializers import ModelSerializer
+from dj_rest_auth.serializers import JWTSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import CustomUserModel
 from django.conf import settings
 
@@ -38,3 +40,5 @@ class CustomUserModelSerializer(ModelSerializer):
           user.set_password(password) 
           user.save()
       return user
+    
+    

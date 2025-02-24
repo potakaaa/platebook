@@ -1,4 +1,4 @@
-import { axiosClient } from "@/lib/axiosClient";
+import { axiosClient } from "@/lib/services/axiosClient";
 import { AuthUser } from "@/lib/types/authTypes";
 import NextAuth, { NextAuthOptions, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
@@ -18,21 +18,36 @@ export const authOptions: NextAuthOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials: any) {
+      async authorize(credentials) {
+        if (!credentials) return null;
+
         try {
           const response = await axiosClient.post("/auth/login/", {
             email: credentials.email,
             password: credentials.password,
           });
 
-          const user = response.data;
-          if (user) {
-            return user;
+          if (response.data) {
+            return {
+              id: response.data.user?.id || "unknown",
+              name: response.data.user?.username || null,
+              email: response.data.user?.email || null,
+              accessToken: response.data.access,
+              refreshToken: response.data.refresh,
+            };
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error("Login failed:", error);
-          return null;
+
+          throw new Error(
+            error.response?.data?.non_field_errors?.[0] ||
+              error.response?.data?.email?.[0] ||
+              error.response?.data?.password?.[0] ||
+              "Invalid email or password"
+          );
         }
+
+        return null;
       },
     }),
 
@@ -52,8 +67,17 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.TWITTER_CLIENT_SECRET || "",
     }),
   ],
+
   callbacks: {
     async signIn({ user, account, profile }): Promise<string | boolean> {
+      if (account?.provider === "credentials") {
+        if (!user) {
+          return false;
+        }
+
+        return true;
+      }
+
       if (account?.provider === "google") {
         const { access_token, refresh_token } = account;
 
@@ -68,8 +92,7 @@ export const authOptions: NextAuthOptions = {
             refresh_token,
           });
 
-          const apiAccessToken =
-            response.data.access_token || response.data.key;
+          const apiAccessToken = response.data.access_token;
 
           if (!apiAccessToken) {
             console.error("No access token found in response");

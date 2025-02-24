@@ -10,6 +10,6 @@ cooklist_router = routers.NestedDefaultRouter(router, r'cooklists', lookup='cook
 cooklist_router.register(r'items', CooklistItemViewSet, basename='cooklist-items')
 
 urlpatterns = [
-    path('api/', include(router.urls)),       
-    path('api/', include(cooklist_router.urls))
+    path('', include(router.urls)),       
+    path('', include(cooklist_router.urls))
 ]

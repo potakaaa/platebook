@@ -10,8 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from dotenv import load_dotenv
+import dj_database_url
+import os
+load_dotenv()
+
 from pathlib import Path
-from .secrets import DJANGO_SECRET_KEY, JWT_SECRET_KEY, CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = DJANGO_SECRET_KEY
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,8 +47,10 @@ INSTALLED_APPS = [
     #3rd Party
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'corsheaders',
     'django.contrib.sites',
+    
     
     # image hosts
     'cloudinary',
@@ -88,21 +94,41 @@ SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 SOCIALACCOUNT_EMAIL_REQUIRED = False
 
 # re enable when implementing email verification
-ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
 
 SITE_ID = 1
+
+DJ_REST_AUTH = {
+    "USE_JWT": True,
+    "JWT_AUTH_COOKIE": "access",
+    "JWT_AUTH_REFRESH_COOKIE": "refresh",
+    "JWT_AUTH_SECURE": False, # true in prod
+    "JWT_AUTH_SAMESITE": "Lax",
+    "SESSION_LOGIN": False,
+}
+
 REST_USE_JWT = True
+JWT_AUTH_COOKIE = "access"
+JWT_REFRESH_COOKIE = "refresh"
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOW_CREDENTIALS = True  
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000"]  
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000"] 
 
-#CLOUDINARY
+SESSION_COOKIE_SAMESITE = "Lax"  
+CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SECURE = True  
+SESSION_COOKIE_SECURE = True  
+
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
-    'API_KEY':  CLOUDINARY_API_KEY,
-    'API_SECRET': CLOUDINARY_API_SECRET,
+    'CLOUD_NAME': os.getenv("CLOUDINARY_CLOUD_NAME"),
+    'API_KEY':  os.getenv("CLOUDINARY_API_KEY"),
+    'API_SECRET': os.getenv("CLOUDINARY_API_SECRET"),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
@@ -128,7 +154,7 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': True,
     "USER_ID_FIELD": "userId",
     "USER_ID_CLAIM": "user_id",
-    "SIGNING_KEY": JWT_SECRET_KEY
+    "SIGNING_KEY": os.getenv("JWT_SECRET_KEY")
 }
 
 AUTH_USER_MODEL = "accounts.CustomUserModel"
@@ -139,6 +165,8 @@ REST_AUTH_SERIALIZERS = {
 
 
 
+
+
 REST_FRAMEWORK = {
     
     'DEFAULT_PERMISSION_CLASSES': (
@@ -146,8 +174,6 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
     ),
 }
 
@@ -175,12 +201,17 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+DATABASE = os.getenv("DATABASE_URL")
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": dj_database_url.config(
+        default=DATABASE,
+        conn_max_age=600,
+        ssl_require=True, 
+    )
 }
+
+
 
 
 # Password validation
@@ -223,3 +254,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from dj_rest_auth.app_settings import api_settings
+
+api_settings.USE_JWT = True
+
