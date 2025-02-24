@@ -1,33 +1,17 @@
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
 import HoverMe from "@/components/hero/HoverMe";
 import SearchInput from "@/components/hero/SearchInput";
-import FloatingNavbar from "@/components/navbar/FloatingNav";
+import StickyScrollFeatures from "@/components/hero/StickyScrollFeatures";
 import Navbar from "@/components/navbar/Navbar";
-import AnimatedHover, { buttonType } from "@/components/ui/animated-hover";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { LinkPreview } from "@/components/ui/link-preview";
-import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
-import { Spotlight } from "@/components/ui/spotlight";
 import { SpotlightNew } from "@/components/ui/spotlight-new";
 import {
   IconBowlSpoon,
   IconBrandTabler,
   IconMessageChatbot,
 } from "@tabler/icons-react";
-import { motion } from "framer-motion";
-import { ArrowDown01 } from "lucide-react";
-import React from "react";
-
-const samplePost: PostCardProps = {
-  userImage: "https://avatars.githubusercontent.com/u/111859181?v=4",
-  userName: "Potakaaa",
-  title: "Adobong Kare Kare Pinoy Style",
-  description:
-    "A delicious Filipino dish that combines the flavors of adobo and kare kare.",
-  image1:
-    "https://cdn.apartmenttherapy.info/image/upload/f_jpg,q_auto:eco,c_fill,g_auto,w_1500,ar_4:3/k%2FPhoto%2FRecipes%2F2024-09-kare-kare%2Fkare-kare-3458",
-  image2:
-    "https://www.rappler.com/tachyon/2022/04/Bagnet-Kare-kare.jpg?fit=1024%2C720",
-};
+import Image from "next/image";
 
 const LandingPage = () => {
   return (
@@ -135,9 +119,52 @@ const LandingPage = () => {
             </p>
           </div>
         </section>
+        <section
+          id="sticky-scroll-features"
+          className="w-full flex flex-col items-center justify-center my-20 space-y-10"
+        >
+          {stickyFeatures.map((feature, index) => (
+            <StickyScrollFeatures
+              id={index}
+              imageUrl={feature.imageUrl}
+              desc={feature.desc}
+              key={index}
+            />
+          ))}
+        </section>
       </div>
     </div>
   );
 };
 
 export default LandingPage;
+
+const samplePost: PostCardProps = {
+  userImage: "https://avatars.githubusercontent.com/u/111859181?v=4",
+  userName: "Potakaaa",
+  title: "Adobong Kare Kare Pinoy Style",
+  description:
+    "A delicious Filipino dish that combines the flavors of adobo and kare kare.",
+  image1:
+    "https://cdn.apartmenttherapy.info/image/upload/f_jpg,q_auto:eco,c_fill,g_auto,w_1500,ar_4:3/k%2FPhoto%2FRecipes%2F2024-09-kare-kare%2Fkare-kare-3458",
+  image2:
+    "https://www.rappler.com/tachyon/2022/04/Bagnet-Kare-kare.jpg?fit=1024%2C720",
+};
+
+const stickyFeatures = [
+  {
+    imageUrl:
+      "https://www.seriouseats.com/thmb/sNOqOuOaiILj05PSuunyT3FuyPY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Filipino-Features-Soups-and-Stews-1e81ba12ce10481caf3ff58981c347ab.jpg",
+    desc: "Save your favorite recipes to your Plate List and easily plan your next meal. Never lose track of what you want to cook! Keep your go-to recipes in one place and revisit them anytime.",
+  },
+  {
+    imageUrl:
+      "https://travellingfoodie.net/wp-content/uploads/2022/02/Bs-Sizzling-Kitchen-Mississauga-Travelling-Foodie.jpg",
+    desc: "Find the perfect dish faster with tags and filters like “Vegan,” “Quick & Easy,” or “High-Protein.” Discover recipes tailored to your taste! Say goodbye to endless scrolling and get exactly what you're craving in seconds.",
+  },
+  {
+    imageUrl:
+      "https://static01.nyt.com/images/2018/03/14/dining/14FIlipino1-sub/14FIlipino1-sub-articleLarge.jpg?quality=75&auto=webp&disable=upscale",
+    desc: "Like, comment, follow, and share recipes with other food lovers. Engage with the community and get inspired! Turn cooking into a shared experience by connecting with fellow home chefs and food enthusiasts.",
+  },
+];
