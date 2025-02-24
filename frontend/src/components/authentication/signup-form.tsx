@@ -96,6 +96,12 @@ export function SignUpForm({
                   </p>
                 </div>
 
+                {form.formState.errors.root && (
+                  <p className="text-destructive-500 text-sm text-center">
+                    {form.formState.errors.root.message}
+                  </p>
+                )}
+
                 <FormField
                   control={form.control}
                   name="email"

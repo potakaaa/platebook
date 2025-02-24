@@ -42,19 +42,53 @@ export function LoginForm({
   });
 
   const onSubmit = async (data: any) => {
-    const response = await signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    });
+    try {
+      form.clearErrors();
 
-    console.log("Login Response:", response);
+      const response = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
 
-    if (response?.error) {
-      form.setError("root", { type: "server", message: response.error });
+      console.log("Login Response:", response);
+
+      if (response?.error) {
+        let errorMessage = response.error;
+        try {
+          const errorData = JSON.parse(response.error);
+          console.log("Parsed Error Data:", errorData);
+
+          Object.keys(errorData).forEach((key) => {
+            if (key in data) {
+              form.setError(
+                key as "email" | "password" | `root.${string}` | "root",
+                {
+                  type: "server",
+                  message: errorData[key][0],
+                }
+              );
+            }
+          });
+
+          if (errorData.non_field_errors) {
+            errorMessage = errorData.non_field_errors[0];
+          }
+        } catch {
+          errorMessage = response.error;
+        }
+
+        form.setError("root", { type: "server", message: errorMessage });
+        return;
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      form.setError("root", {
+        type: "server",
+        message: "An unexpected error occurred. Please try again.",
+      });
     }
   };
-
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden shadow-md">
@@ -72,6 +106,12 @@ export function LoginForm({
                     Login to your Platebook account
                   </p>
                 </div>
+
+                {form.formState.errors.root && (
+                  <p className="text-destructive text-sm text-center">
+                    {form.formState.errors.root.message}
+                  </p>
+                )}
 
                 <FormItem>
                   <FormField
