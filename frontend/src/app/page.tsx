@@ -31,7 +31,7 @@ const samplePost: PostCardProps = {
 
 const LandingPage = () => {
   return (
-    <div className="w-full">
+    <div className="w-full my-5 lg:my-20">
       <section className="absolute inset-0 w-full">
         <Navbar />
         <div className="flex-grow" />{" "}

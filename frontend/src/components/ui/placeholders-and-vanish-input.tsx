@@ -210,7 +210,7 @@ export function PlaceholdersAndVanishInput({
       <button
         disabled={!value}
         type="submit"
-        className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-14 lg:w-36 text-sm rounded-full flex items-center justify-center space-x-2 bg-primary text-background font-normal cursor-pointer"
+        className="absolute right-2 top-1/2 z-40 -translate-y-1/2 h-8 w-14 lg:w-36 text-sm rounded-full flex items-center justify-center space-x-2 bg-primary text-background font-normal cursor-pointer"
       >
         <span className="hidden lg:block dark:text-foreground">Search Now</span>
         <ArrowRightCircleIcon className="size-5 text-background dark:text-foreground text-center" />

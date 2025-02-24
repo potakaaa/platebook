@@ -11,6 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 import { getNavButtons, navButtonDropStyles } from "./NavButtons";
 import { AlignJustify } from "lucide-react";
+import { SpotlightNew } from "@/components/ui/spotlight-new";
 
 const Dropdown = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -25,6 +26,7 @@ const Dropdown = () => {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-36 sm:w-44 my-2 sm:my-3">
+        <SpotlightNew />
         <DropdownMenuLabel className="text-xs sm:text-sm text-center">
           Navigation
         </DropdownMenuLabel>
