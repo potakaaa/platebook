@@ -62,5 +62,12 @@ class CustomLoginView(LoginView):
             }
         
         return response 
+    
+    
+from dj_rest_auth.registration.views import RegisterView
+from .serializers import CustomUserModelSerializer
+
+class CustomRegisterView(RegisterView):
+    serializer_class = CustomUserModelSerializer
 
     
