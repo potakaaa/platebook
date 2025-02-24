@@ -10,6 +10,7 @@ import { getNavButtons } from "./nav/NavButtons";
 import Dropdown from "./nav/Dropdown";
 import { ButtonBorder } from "../ui/moving-border";
 import AnimatedHover, { buttonType } from "../ui/animated-hover";
+import { ModeToggle } from "../ui/mode-toggle";
 
 const Navbar = () => {
   const router = useRouter();
@@ -48,6 +49,7 @@ const Navbar = () => {
         <HomeLogo />
       </section>
       <section className="flex gap-2 sm:gap-4 lg:gap-6 items-center">
+        <ModeToggle />
         <div className="hidden lg:block space-x-3">
           <AnimatedHover buttons={navButtons} className="" />
         </div>

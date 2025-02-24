@@ -30,7 +30,7 @@ const HomeLogo = () => {
         />
         <section className="relative flex font-black text-base sm:text-lg md:text-xl md:mx-2 xl:mx-4 lg:text-2xl z-10 ">
           <h1 className="text-primary drop-shadow-sm">Plate</h1>
-          <h1 className="drop-shadow-sm">Book</h1>
+          <h1 className="drop-shadow-sm text-foreground">Book</h1>
         </section>
       </Button>
       <motion.span
