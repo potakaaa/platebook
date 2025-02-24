@@ -50,7 +50,7 @@ const LandingPage = () => {
             <section className="font-bold text-5xl lg:text-6xl xl:text-7xl text-center lg:text-left z-10">
               <h1>Eat. Cook</h1>
               <LinkPreview
-                url="https://github.com/potakaaa"
+                url="https://platebook.vercel.app"
                 className="text-primary dark:text-primary"
               >
                 Platebook.
