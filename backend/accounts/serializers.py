@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, CharField, ValidationError
 from dj_rest_auth.serializers import JWTSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 import cloudinary.uploader
@@ -12,20 +12,35 @@ from io import BytesIO
 
 class CustomUserModelSerializer(ModelSerializer): 
 
+  password1 = CharField(write_only=True)
+  password2 = CharField(write_only=True)
+
   class Meta:
     model = CustomUserModel
     fields = [
       "userId",
       "username",
       "email",
-      "password", "pfp",
+      "password1","password2", "pfp",
     ]
     extra_kwargs = {
-            "password": {"write_only": True},
             "pfp": {"required": False}
-        }
+    }
+    
+  def validate(self, data):
+    password1 = data.get("password1")
+    password2 = data.get("password2")
+
+    if password1 != password2:
+        raise ValidationError({"password2": ["Passwords do not match."]})
+        
+    return data
+
 
   def create(self, validated_data):
+    
+    validated_data.pop("password2")  
+    password = validated_data.pop("password1")
     
     if CustomUserModel.objects.filter(email=validated_data["email"]).exists():
       raise serializers.ValidationError({"email": ["This email is already in use."]})
@@ -38,14 +53,9 @@ class CustomUserModelSerializer(ModelSerializer):
       user = CustomUserModel.objects.create_user(
         username=validated_data["username"],
         email=validated_data["email"],
-        password=validated_data.get("password"),
+        password=password,
       )
       
-      if pfp_url and pfp_url.startswith("http"):
-            cloudinary_image = self.upload_image_from_url(pfp_url)
-            if cloudinary_image:
-                user.pfp = cloudinary_image 
-                user.save()
     
       return user
     
@@ -63,39 +73,31 @@ class CustomUserModelSerializer(ModelSerializer):
   
 
   def update(self, instance, validated_data):
-      password = validated_data.pop("password", None)
-      user = super().update(instance, validated_data)
-      if password:
-          user.set_password(password) 
-          user.save()
-      return user
+        password = validated_data.pop("password1", None)
+        validated_data.pop("password2", None)  
+
+        user = super().update(instance, validated_data)
+
+        if password:
+            user.set_password(password)  
+            user.save()
+        return user
+      
+  def save(self, request):
+        user = CustomUserModel.objects.create_user(
+            username=self.validated_data["username"],
+            email=self.validated_data["email"],
+            password=self.validated_data["password1"],
+        )
+        pfp = self.validated_data.get("pfp", None)
+        if pfp:  
+          user.pfp = pfp
+        user.save()
+        return user
     
 
 
-  def upload_image_from_url(self, image_url):
-      try:
-          # Fetch the image from the URL
-          response = requests.get(image_url)
-          response.raise_for_status()  # Raise an error for bad responses
 
-          print("IMAGE URL", image_url)
-          print("RESPONSE", response)
-          
-          # Upload the image to Cloudinary
-          upload_result = cloudinary.uploader.upload(
-              BytesIO(response.content),  # Use BytesIO to upload the image content
-              folder="profile_pictures",   # Specify the folder in Cloudinary
-              resource_type="image"        # Specify the resource type
-          )
-
-          return upload_result["secure_url"]  # Return the secure URL of the uploaded image
-
-      except requests.exceptions.RequestException as e:
-          print(f"Error fetching image from URL: {e}")
-          return None
-      except Exception as e:
-          print(f"Cloudinary upload error: {e}")
-          return None
 
 
     

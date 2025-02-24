@@ -37,7 +37,7 @@ class Step(models.Model):
     
     
 class RecipeImage(models.Model):
-    image = CloudinaryField('image', blank=True, null=True)
+    image = CloudinaryField('image', folder='recipe_images')
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
