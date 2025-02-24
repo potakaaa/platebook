@@ -2,9 +2,9 @@ import PostCard, { PostCardProps } from "@/components/cards/PostCard";
 import HoverMe from "@/components/hero/HoverMe";
 import SearchInput from "@/components/hero/SearchInput";
 import Features from "@/components/landing/Features";
-import InfiniteCard from "@/components/landing/InfiniteCard";
 import StickyScrollFeatures from "@/components/landing/StickyScrollFeatures";
 import Navbar from "@/components/navbar/Navbar";
+import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
@@ -104,8 +104,31 @@ const LandingPage = () => {
             )
           )}
         </section>
-        <section id="testimonials" className="my-10 w-full overflow-x-hidden ">
-          <InfiniteCard />
+        <section
+          id="testimonials"
+          className="my-10 w-full h-full overflow-x-hidden "
+        >
+          <InfiniteMovingCards
+            items={plateBookReviews}
+            direction="right"
+            speed="slow"
+          />
+        </section>
+        <section
+          id="meet-the-team"
+          className="w-full mt-32 mb-14 flex flex-col items-center justify-center space-y-8"
+        >
+          <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted">
+            Meet the Team
+          </span>
+          <div className="flex items-center">
+            <AnimatedTooltip items={people} />
+          </div>
+        </section>
+        <section id="footer" className="mt-10">
+          <p className="text-muted-foreground">
+            © 2025 PlateBook. All rights reserved.
+          </p>
         </section>
       </div>
     </div>
@@ -222,5 +245,29 @@ const plateBookReviews = [
       "Cooking has never been this interactive and fun! PlateBook makes sharing recipes an absolute delight.",
     name: "James Wilson",
     title: "Amateur Cook",
+  },
+];
+
+const people = [
+  {
+    id: 1,
+    name: "Gerald Helbiro Jr.",
+    designation: "Frontend Developer",
+    image:
+      "https://scontent.fcgm1-1.fna.fbcdn.net/v/t39.30808-6/459627604_3861877484137152_1136108887581876872_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGcnZsW21rZitB8BPv30xLs_lwC21-sVWX-XALbX6xVZRAaBA2PDDGWv83S78hZBgmHpMRKx2KvLgIZ-XgFdxDU&_nc_ohc=zUayjEpQ4X4Q7kNvgFxrxln&_nc_oc=AdhZlsJoWOkyN-L2pKAoTlVEvWBHZ_1fSAQYG34Te-Ubeo1mTGCDX4JnEQG-UqadM0E&_nc_zt=23&_nc_ht=scontent.fcgm1-1.fna&_nc_gid=AZXTs9ag9hvrOzwEtEhhXya&oh=00_AYAl9RNi7sGoALAJGqGUBlfak1hWgTGllv-stQ0MSzQoGQ&oe=67C2872A",
+  },
+  {
+    id: 2,
+    name: "Ira Chloie Narisma.",
+    designation: "UI/UX Designer",
+    image:
+      "https://scontent.fcgm1-1.fna.fbcdn.net/v/t39.30808-1/391519071_292977133548604_1008644212740598061_n.jpg?stp=dst-jpg_s100x100_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeE1q-7aGg4n7oTzCyBuv8dgSswdRUez6fxKzB1FR7Pp_GkLhEj4wwjSrvXCy4nY-V5aam9nHA8b59qWj2yWeoum&_nc_ohc=xon6crvsBA0Q7kNvgG20NWx&_nc_oc=AdiAddbOsvZc4KAD1erwm1DGj5bI0veTuaklJW2Ea78Pkn0eW2eGnwpOyQepIYor4yg&_nc_zt=24&_nc_ht=scontent.fcgm1-1.fna&_nc_gid=AH02_lP39I8SoCu85yOK-zJ&oh=00_AYDFoUKZt0wiHJeS8mFl3AIUS94ZP0S8lG2Cv33qM1QMLQ&oe=67C267B6",
+  },
+  {
+    id: 3,
+    name: "Hans Matthew Del Mundo",
+    designation: "Backend Developer",
+    image:
+      "https://scontent.fcgm1-1.fna.fbcdn.net/v/t39.30808-6/472253317_598424639227106_4134908177380016141_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEKqNm3MnzVVPldDCb3WYT3HLMpEX2iOKUcsykRfaI4pWMMCV0AHMg57yLxihGRhba82URFclfKUpvIkoNwDR0r&_nc_ohc=KmoQE681I_EQ7kNvgGkZB7b&_nc_oc=AdgYmJv_piiR7jYtxqSIZopyYsUh3Ev12n2pTnwO2OrG_YqfidG9Q9PAqcffNLul_UI&_nc_zt=23&_nc_ht=scontent.fcgm1-1.fna&_nc_gid=AzYfFdchD6eMaaXPIrL32kb&oh=00_AYCEpFoKDvG5zbl-193NU0avj0MorvHnWsCBHXVp8FaK2Q&oe=67C26811",
   },
 ];
