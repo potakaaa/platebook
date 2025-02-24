@@ -46,7 +46,7 @@ const Navbar = () => {
       name: "Sign Up",
       onClick: () => router.push("/signup"),
       buttonClassName:
-        "hover:text-primary border-primary hover:bg-transparent transition duration-200",
+        "hover:text-primary border-primary hover:bg-transparent dark:bg-transparent transition duration-200",
       variant: "outline",
     },
   ];
