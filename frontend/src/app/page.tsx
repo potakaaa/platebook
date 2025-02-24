@@ -1,9 +1,13 @@
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
 import HoverMe from "@/components/hero/HoverMe";
 import SearchInput from "@/components/hero/SearchInput";
-import StickyScrollFeatures from "@/components/hero/StickyScrollFeatures";
+import Features from "@/components/landing/Features";
+import InfiniteCard from "@/components/landing/InfiniteCard";
+import StickyScrollFeatures from "@/components/landing/StickyScrollFeatures";
 import Navbar from "@/components/navbar/Navbar";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { BackgroundBeams } from "@/components/ui/background-beams";
+import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { LinkPreview } from "@/components/ui/link-preview";
 import { SpotlightNew } from "@/components/ui/spotlight-new";
 import {
@@ -54,83 +58,54 @@ const LandingPage = () => {
             id="right"
             className="w-full sm:max-w-none lg:max-w-none relative flex justify-center"
           >
-            <div className="flex flex-col w-full h-fit items-center justify-center">
+            <div className="flex flex-col w-full h-fit items-center justify-center z-40">
               <HoverMe />
               <PostCard postItems={samplePost} />
             </div>
           </section>
+          <BackgroundBeams />
         </section>
         <section
           id="3-features"
-          className="flex flex-col lg:flex-row space-y-10 lg:space-y-0 space-x-0 lg:space-x-5 xl:space-x-8 justify-between w-full h-full"
+          className="flex flex-col lg:flex-row space-y-10 lg:space-y-0 space-x-0 lg:space-x-5 xl:space-x-8 justify-between w-full h-full lg:my-10"
         >
-          <div
-            id="feature-container-1"
-            className="flex flex-col space-y-3 justify-start items-center  text-center w-full"
-          >
-            <div
-              id="feature-head-1"
-              className="flex flex-row items-center space-x-2"
-            >
-              <IconBowlSpoon className="size-8 sm:size-9 lg:size-8 xl:size-9 text-primary drop-shadow-md" />
-              <span className="font-semibold text-sm sm:text-base lg:text-sm xl:text-base">
-                Personalized Recipe Experience
-              </span>
-            </div>
-            <p className="w-full max-w-md text-xs sm:text-sm lg:text-xs xl:text-sm 2xl:max-w-sm">
-              Easily browse, save, and share your favorite recipes. PlateBook
-              makes cooking inspiration effortless.
-            </p>
-          </div>
-          <div
-            id="feature-container-2"
-            className="flex flex-col space-y-3 justify-start items-center text-center w-full"
-          >
-            <div
-              id="feature-head-2"
-              className="flex flex-row items-center space-x-2"
-            >
-              <IconBrandTabler className="size-8 sm:size-9 lg:size-8 xl:size-9 text-primary drop-shadow-md" />
-              <span className="font-semibold text-sm sm:text-base lg:text-sm xl:text-base">
-                Aesthetic & Seamless Experience
-              </span>
-            </div>
-            <p className="w-full max-w-md text-xs sm:text-sm lg:text-xs xl:text-sm 2xl:max-w-sm">
-              Enjoy a beautifully designed platform with dark mode, real-time
-              searching, and responsive performance..
-            </p>
-          </div>
-          <div
-            id="feature-container-3"
-            className="flex flex-col space-y-3 justify-start items-center text-center w-full"
-          >
-            <div
-              id="feature-head-3"
-              className="flex flex-row items-center space-x-2"
-            >
-              <IconMessageChatbot className="size-8 sm:size-9 lg:size-8 xl:size-9 text-primary drop-shadow-md" />
-              <span className="font-semibold text-sm sm:text-base lg:text-sm xl:text-base">
-                Smart AI Recipe Assistant
-              </span>
-            </div>
-            <p className="w-full max-w-md text-xs sm:text-sm lg:text-xs xl:text-sm 2xl:max-w-sm">
-              Not sure what to cook? Our AI chatbot suggests recipes based on
-              existing posts and your preferences.
-            </p>
-          </div>
-        </section>
-        <section
-          id="sticky-scroll-features"
-          className="w-full flex flex-col items-center justify-center my-20 space-y-10"
-        >
-          {stickyFeatures.map((feature, index) => (
-            <StickyScrollFeatures
+          {threeFeatures.map((feature, index) => (
+            <Features
               id={index}
-              imageUrl={feature.imageUrl}
+              title={feature.title}
               desc={feature.desc}
+              icon={feature.icon}
               key={index}
             />
           ))}
+        </section>
+        <section
+          id="sticky-scroll-features"
+          className="w-full flex flex-col items-center justify-center my-20 space-y-10 h-full bg-background dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative"
+        >
+          <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+          {stickyFeatures.map((feature, index) =>
+            index === 1 ? (
+              <StickyScrollFeatures
+                id={index}
+                imageUrl={feature.imageUrl}
+                desc={feature.desc}
+                key={index}
+                containerClassName="sm:flex-row-reverse"
+              />
+            ) : (
+              <StickyScrollFeatures
+                id={index}
+                imageUrl={feature.imageUrl}
+                desc={feature.desc}
+                key={index}
+                containerClassName="sm:flex-row"
+              />
+            )
+          )}
+        </section>
+        <section id="testimonials" className="my-10 w-full overflow-x-hidden ">
+          <InfiniteCard />
         </section>
       </div>
     </div>
@@ -155,16 +130,97 @@ const stickyFeatures = [
   {
     imageUrl:
       "https://www.seriouseats.com/thmb/sNOqOuOaiILj05PSuunyT3FuyPY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Filipino-Features-Soups-and-Stews-1e81ba12ce10481caf3ff58981c347ab.jpg",
-    desc: "Save your favorite recipes to your Plate List and easily plan your next meal. Never lose track of what you want to cook! Keep your go-to recipes in one place and revisit them anytime.",
+    desc: "Save your favorite recipes to your Plate List and easily plan your next meal.",
   },
   {
     imageUrl:
       "https://travellingfoodie.net/wp-content/uploads/2022/02/Bs-Sizzling-Kitchen-Mississauga-Travelling-Foodie.jpg",
-    desc: "Find the perfect dish faster with tags and filters like “Vegan,” “Quick & Easy,” or “High-Protein.” Discover recipes tailored to your taste! Say goodbye to endless scrolling and get exactly what you're craving in seconds.",
+    desc: "Find the perfect dish faster with tags and filters like “Vegan,” “Quick & Easy,” or “High-Protein.” Discover recipes tailored to your taste!",
   },
   {
     imageUrl:
       "https://static01.nyt.com/images/2018/03/14/dining/14FIlipino1-sub/14FIlipino1-sub-articleLarge.jpg?quality=75&auto=webp&disable=upscale",
-    desc: "Like, comment, follow, and share recipes with other food lovers. Engage with the community and get inspired! Turn cooking into a shared experience by connecting with fellow home chefs and food enthusiasts.",
+    desc: "Like, comment, follow, and share recipes with other food lovers. Engage with the community and get inspired!",
+  },
+];
+
+const threeFeatures = [
+  {
+    title: "Personalized Recipe Experience",
+    desc: "Easily browse, save, and share your favorite recipes. PlateBook makes cooking inspiration effortless.",
+    icon: IconBowlSpoon,
+  },
+  {
+    title: "Aesthetic & Seamless Experience",
+    desc: "Enjoy a beautifully designed platform with dark mode, real-time searching, and responsive performance.",
+    icon: IconBrandTabler,
+  },
+  {
+    title: "Smart AI Recipe Assistant",
+    desc: "Not sure what to cook? Our AI chatbot suggests recipes based on existing posts and your preferences.",
+    icon: IconMessageChatbot,
+  },
+];
+
+const plateBookReviews = [
+  {
+    quote:
+      "PlateBook has completely transformed the way I cook! Finding and saving recipes has never been easier.",
+    name: "Sophia Carter",
+    title: "Home Chef",
+  },
+  {
+    quote:
+      "I love the Plate List feature! It helps me plan my meals effortlessly and keeps my favorite recipes in one place.",
+    name: "Daniel Thompson",
+    title: "Food Enthusiast",
+  },
+  {
+    quote:
+      "The search filters are a game changer! Now I can quickly find vegan and gluten-free recipes that fit my diet.",
+    name: "Emma Rodriguez",
+    title: "Nutritionist",
+  },
+  {
+    quote:
+      "Finally, a food community where I can share my creations and connect with other passionate cooks!",
+    name: "Liam Mitchell",
+    title: "Aspiring Chef",
+  },
+  {
+    quote:
+      "PlateBook’s AI recipe suggestions have helped me make the most out of my pantry ingredients. So convenient!",
+    name: "Olivia Bennett",
+    title: "Busy Mom",
+  },
+  {
+    quote:
+      "I never realized how fun it could be to interact with other home cooks! The comment and like features make it feel like a true community.",
+    name: "Ethan Walker",
+    title: "Food Blogger",
+  },
+  {
+    quote:
+      "The dark mode is a great touch! I can browse recipes at night without straining my eyes.",
+    name: "Ava Richardson",
+    title: "Nighttime Baker",
+  },
+  {
+    quote:
+      "From quick weeknight dinners to elaborate meals, PlateBook has recipes for every occasion. I’m obsessed!",
+    name: "Noah Harris",
+    title: "Culinary Student",
+  },
+  {
+    quote:
+      "The ability to follow my favorite chefs and discover new recipes daily keeps me inspired in the kitchen.",
+    name: "Mia Anderson",
+    title: "Food Lover",
+  },
+  {
+    quote:
+      "Cooking has never been this interactive and fun! PlateBook makes sharing recipes an absolute delight.",
+    name: "James Wilson",
+    title: "Amateur Cook",
   },
 ];

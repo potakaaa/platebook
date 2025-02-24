@@ -9,7 +9,7 @@ const SideImage = () => {
         width={500}
         height={700}
         alt="Filipino Adobo"
-        className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+        className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:contrast-[0.8] dark:grayscale-[0.9]"
       />
     </div>
   );

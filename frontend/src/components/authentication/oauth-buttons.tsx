@@ -1,10 +1,14 @@
-'use client';
+"use client";
 
-import React from 'react'
-import { Button } from '../ui/button';
-import { IconBrandAppleFilled, IconBrandGoogleFilled, IconBrandX } from '@tabler/icons-react';
-import { BottomGradient } from '../ui/bottom-gradient';
-import { signIn } from 'next-auth/react';
+import React from "react";
+import { Button } from "../ui/button";
+import {
+  IconBrandAppleFilled,
+  IconBrandGoogleFilled,
+  IconBrandX,
+} from "@tabler/icons-react";
+import { BottomGradient } from "../ui/bottom-gradient";
+import { signIn } from "next-auth/react";
 import { sign } from "crypto";
 
 const OauthButtons = () => {
@@ -12,7 +16,7 @@ const OauthButtons = () => {
     <div className="grid grid-cols-3 gap-4">
       <Button
         variant="outline"
-        className="w-full relative group/btn"
+        className="w-full relative group/btn dark:bg-transparent"
         type="button"
       >
         <IconBrandAppleFilled size={24} />
@@ -22,7 +26,7 @@ const OauthButtons = () => {
       <Button
         type="button"
         variant="outline"
-        className="w-full relative group/btn"
+        className="w-full relative group/btn dark:bg-transparent"
         onClick={() => signIn("google")}
       >
         <IconBrandGoogleFilled size={24} />
@@ -31,7 +35,7 @@ const OauthButtons = () => {
       </Button>
       <Button
         variant="outline"
-        className="w-full relative group/btn"
+        className="w-full relative group/btn dark:bg-transparent"
         type="button"
         onClick={() => signIn("twitter")}
       >
@@ -43,4 +47,4 @@ const OauthButtons = () => {
   );
 };
 
-export default OauthButtons
+export default OauthButtons;

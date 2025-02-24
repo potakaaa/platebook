@@ -12,7 +12,7 @@ const HomeLogo = () => {
 
   return (
     <motion.div
-      className="w-full max-w-fit flex items-center justify-center"
+      className="w-full flex items-center justify-center"
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
@@ -21,6 +21,16 @@ const HomeLogo = () => {
         className="px-0 mx-0 hover:bg-opacity-0 flex items-center justify-center gap-1 sm:gap-2 md:gap-1 xl:gap-0 z-10 relative"
         onClick={() => router.push("/")}
       >
+        <motion.span
+          className="size-full bg-gradient-to-r from-secondary shadow flex rounded-lg absolute z-0 p-6"
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{
+            opacity: 1,
+            scaleX: isHovered ? 1 : 0,
+            transformOrigin: "left",
+            transition: { duration: 0.3, ease: "easeInOut" },
+          }}
+        />
         {/* <Image
           src="/platebook-logo-png.png"
           alt={"Platebook"}
@@ -33,16 +43,6 @@ const HomeLogo = () => {
           <h1 className="drop-shadow-sm text-foreground">Book</h1>
         </section>
       </Button>
-      <motion.span
-        className="w-32 h-10 inset-3 sm:w-36 md:w-[165px] md:inset-4 md:h-[45px] lg:w-[180px] xl:inset-4 xl:w-[188px] 2xl:left-7 2xl:w-48 2xl:h-12 bg-gradient-to-r from-secondary shadow flex rounded-lg absolute z-0"
-        initial={{ opacity: 0, scaleX: 0 }}
-        animate={{
-          opacity: 1,
-          scaleX: isHovered ? 1 : 0,
-          transformOrigin: "left",
-          transition: { duration: 0.3, ease: "easeInOut" },
-        }}
-      ></motion.span>
     </motion.div>
   );
 };
