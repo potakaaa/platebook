@@ -100,7 +100,7 @@ export function LoginForm({
               className="p-6 md:p-8"
             >
               <div className="flex flex-col gap-6">
-                <div className="flex flex-col items-center text-center">
+                <div className="flex flex-col items-center text-center z-20">
                   <h1 className="text-2xl font-bold">Welcome!</h1>
                   <p className="text-balance text-muted-foreground text-sm md:text-base">
                     Login to your Platebook account
@@ -176,7 +176,10 @@ export function LoginForm({
 
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}
-                  <Link href="/signup" className="underline underline-offset-4">
+                  <Link
+                    href="/signup"
+                    className="underline underline-offset-4 hover:text-primary"
+                  >
                     Sign up
                   </Link>
                 </div>

@@ -23,9 +23,7 @@ const StickyScrollFeatures = ({
         containerClassName
       )}
     >
-      <div className="absolute inset-0 bg-background backdrop-filter z-0 rounded-xl shadow-[0px_0px_34px_0px_rgba(255,140,46,0.2)] overflow-hidden">
-        <SpotlightNew />
-      </div>
+      <div className="absolute inset-0 bg-background backdrop-filter z-0 rounded-xl shadow-[0px_0px_34px_0px_rgba(255,140,46,0.2)] overflow-hidden"></div>
 
       <div className="w-full h-full relative">
         {/* 16:9 Aspect Ratio for small screens */}
