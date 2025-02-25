@@ -111,7 +111,6 @@ export const InfiniteMovingCards = ({
                 </span>
               </div>
             </blockquote>
-            <Meteors number={2} />
           </li>
         ))}
       </ul>

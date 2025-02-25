@@ -20,13 +20,12 @@ const Dropdown = () => {
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger asChild className="mx-2">
+      <DropdownMenuTrigger asChild className="mx-2 cursor-pointer">
         <div onClick={() => setIsOpen(!isOpen)}>
           <AlignJustify className="text-primary drop-shadow-md size-6 sm:size-7" />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-36 sm:w-44 my-2 sm:my-3">
-        <SpotlightNew />
+      <DropdownMenuContent className="w-36 sm:w-44 my-2 sm:my-3 bg-background">
         <DropdownMenuLabel className="text-xs sm:text-sm text-center">
           Navigation
         </DropdownMenuLabel>
