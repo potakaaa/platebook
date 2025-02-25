@@ -27,11 +27,13 @@ class CustomUserModelSerializer(ModelSerializer):
     ]
     extra_kwargs = {
             "pfp": {"required": False, "write_only": True},
-            "pfp_url": {"read_only": True},
+            "pfp_url": {"required": False, "read_only": True},
     }
     
   def get_pfp_url(self, obj):
-    return obj.pfp.url if obj.pfp else None
+    if hasattr(obj, "pfp") and obj.pfp:  
+        return obj.pfp.url
+    return None
     
   def validate(self, data):
     password1 = data.get("password1")
