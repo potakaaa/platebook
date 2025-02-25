@@ -2,10 +2,12 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions, serializers
 from .models import Cooklist, CooklistItem
 from .serializers import CooklistSerializer, CooklistItemSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class CooklistViewSet(viewsets.ModelViewSet):
     serializer_class = CooklistSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
         return Cooklist.objects.filter(owner=self.request.user)
@@ -24,7 +26,6 @@ class CooklistViewSet(viewsets.ModelViewSet):
         instance.delete()
 
 
-# ✅ CooklistItem ViewSet (Nested)
 class CooklistItemViewSet(viewsets.ModelViewSet):
     serializer_class = CooklistItemSerializer
     permission_classes = [permissions.IsAuthenticated]

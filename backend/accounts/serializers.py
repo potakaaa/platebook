@@ -14,6 +14,7 @@ class CustomUserModelSerializer(ModelSerializer):
 
   password1 = CharField(write_only=True)
   password2 = CharField(write_only=True)
+  pfp_url = serializers.SerializerMethodField()
 
   class Meta:
     model = CustomUserModel
@@ -22,10 +23,15 @@ class CustomUserModelSerializer(ModelSerializer):
       "username",
       "email",
       "password1","password2", "pfp",
+      "pfp_url",
     ]
     extra_kwargs = {
-            "pfp": {"required": False}
+            "pfp": {"required": False, "write_only": True},
+            "pfp_url": {"read_only": True},
     }
+    
+  def get_pfp_url(self, obj):
+    return obj.pfp.url if obj.pfp else None
     
   def validate(self, data):
     password1 = data.get("password1")

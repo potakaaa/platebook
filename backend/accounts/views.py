@@ -61,7 +61,7 @@ class GoogleLogin(SocialLoginView):
               resource_type="image"        
           )
 
-          return upload_result.get("secure_url") 
+          return upload_result["public_id"]
 
       except requests.exceptions.RequestException as e:
           print(f"Error fetching image from URL: {e}")
