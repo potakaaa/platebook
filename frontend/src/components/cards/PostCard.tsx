@@ -12,8 +12,7 @@ export type PostCardProps = {
   userName: string;
   title: string;
   description: string;
-  image1: string;
-  image2: string;
+  images: string[];
   likeCount?: number;
   commentCount?: number;
   shareCount?: number;
@@ -26,8 +25,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
     userName,
     title,
     description,
-    image1,
-    image2,
+    images,
     likeCount,
     commentCount,
     shareCount,
@@ -63,7 +61,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             <CardItem className="w-full" translateX={-5} translateZ={50}>
               <AspectRatio ratio={1 / 1}>
                 <Image
-                  src={image1}
+                  src={images[0]}
                   alt={title}
                   fill
                   className="size-full rounded-lg object-cover shadow-xl"
@@ -73,7 +71,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             <CardItem className="w-full" translateX={5} translateZ={50}>
               <AspectRatio ratio={1 / 1}>
                 <Image
-                  src={image2}
+                  src={images[1]}
                   alt={title}
                   fill
                   className="size-full rounded-lg object-cover shadow-xl"

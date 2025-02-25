@@ -38,6 +38,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "scontent.fcgm1-1.fna.fbcdn.net"
+      },
+      {
+        protocol: "https",
+        hostname: "makeyourasia.com"
       }
     ],
     domains: ["api.microlink.io"],

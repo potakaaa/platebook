@@ -1,10 +1,10 @@
 import {
-  IconBrandGithub,
-  IconBrandX,
-  IconExchange,
+  IconDisc,
   IconHome,
-  IconNewSection,
-  IconTerminal2,
+  IconLogout,
+  IconSearch,
+  IconSquareRoundedPlus,
+  IconUserCircle,
 } from "@tabler/icons-react";
 import React from "react";
 import { FloatingDock } from "@/components/ui/floating-dock";
@@ -13,46 +13,49 @@ import Image from "next/image";
 const links = [
   {
     title: "Home",
-    icon: <IconHome className="h-full w-full text-secondary" />,
+    icon: <IconHome className="h-full w-full text-primary" />,
+    href: "#",
+  },
+  {
+    title: "Post Recipe",
+    icon: <IconSquareRoundedPlus className="h-full w-full text-primary" />,
+    href: "#",
+  },
+  {
+    title: "Search",
+    icon: <IconSearch className="h-full w-full text-primary" />,
     href: "#",
   },
 
   {
-    title: "Products",
-    icon: <IconTerminal2 className="h-full w-full text-secondary" />,
-    href: "#",
-  },
-  {
-    title: "Components",
-    icon: <IconNewSection className="h-full w-full text-secondary" />,
-    href: "#",
-  },
-  {
-    title: "Aceternity UI",
+    title: "Platebook",
     icon: (
-      <Image
-        src="https://assets.aceternity.com/logo-dark.png"
-        width={20}
-        height={20}
-        alt="Aceternity Logo"
-      />
+      <div className="bg-secondary-foreground p-2 rounded-md">
+        <Image
+          src="/platebook-logo-monotone.png"
+          width={17}
+          height={17}
+          className="drop-shadow-md"
+          alt="Platebook Logo"
+        />
+      </div>
     ),
-    href: "#",
+    href: "/",
   },
   {
-    title: "Changelog",
-    icon: <IconExchange className="h-full w-full text-secondary" />,
+    title: "Plate List",
+    icon: <IconDisc className="h-full w-full text-primary" />,
     href: "#",
   },
 
   {
-    title: "Twitter",
-    icon: <IconBrandX className="h-full w-full text-secondary" />,
+    title: "User Profile",
+    icon: <IconUserCircle className="h-full w-full text-primary" />,
     href: "#",
   },
   {
-    title: "GitHub",
-    icon: <IconBrandGithub className="h-full w-full text-secondary" />,
+    title: "Log Out",
+    icon: <IconLogout className="h-full w-full text-primary" />,
     href: "#",
   },
 ];
@@ -60,7 +63,7 @@ const links = [
 const FloatingNavbar = () => {
   return (
     <FloatingDock
-      mobileClassName="translate-y-20 fixed right-10 bottom-10 mb-14"
+      mobileClassName="translate-y-20 fixed right-5 bottom-10 mb-14"
       desktopClassName="fixed bottom-10 bg-primary" // only for demo, remove for production
       items={links}
     />
