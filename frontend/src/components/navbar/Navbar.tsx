@@ -59,6 +59,7 @@ const Navbar = () => {
         <HomeLogo />
       </section>
       <section className="flex gap-2 sm:gap-4 lg:gap-6 items-center">
+        <ModeToggle />
         <div className="hidden lg:block space-x-3">
           <AnimatedHover buttons={navButtons} className="" />
         </div>
