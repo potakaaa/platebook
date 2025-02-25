@@ -5,12 +5,21 @@ class LikeSerializer(ModelSerializer):
     class Meta:
         model = Like
         fields = "__all__"
+        extra_kwargs = {
+            "user": {"read_only": True},
+            "recipe": {"read_only": True},
+        }
+        
         
         
 class ShareSerializer(ModelSerializer):
     class Meta:
         model = Share
         fields = "__all__"
+        extra_kwargs = {
+            "user": {"read_only": True},
+            "recipe": {"read_only": True},
+        }
         
 
 class CommentSerializer(ModelSerializer):
