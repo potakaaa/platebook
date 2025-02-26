@@ -1,4 +1,4 @@
-import { PostCardProps } from "@/components/cards/PostCard";
+import PostCard, { PostCardProps } from "@/components/cards/PostCard";
 import FloatingNavbar from "@/components/navbar/FloatingNav";
 import HomeLogo from "@/components/navbar/nav/HomeLogo";
 import UserNav from "@/components/navbar/UserNav";
@@ -9,22 +9,23 @@ import Image from "next/image";
 
 const page = () => {
   return (
-    <div className="flex w-full items-center justify-center px-2 py-5">
+    <div className="flex flex-col w-full justify-center items-center px-5 py-5 overflow-y-hidden bg-background dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative">
+      <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
       <UserNav />
       <SpotlightNew />
       <section
         id="header"
-        className="flex w-full max-w-lg flex-col justify-start items-center space-y-4 px-5 fixed top-16 my-5"
+        className="flex w-full max-w-lg lg:max-w-xl xl:max-w-2xl flex-col justify-center items-center self-center space-y-4 my-12 sm:my-14 z-10"
       >
         <div className="flex w-full justify-start flex-col space-y-1 ">
-          <h1 className="text-primary text-xl font-semibold text-left">
+          <h1 className="text-primary text-xl sm:text-2xl lg:text-3xl font-bold text-left">
             Want to Cook Something?
           </h1>
-          <p className="text-foreground text-xs text-left">
+          <p className="text-foreground text-xs sm:text-sm lg:text-base text-left">
             Discover delicious recipes here!
           </p>
         </div>
-        <AspectRatio ratio={16 / 8} className="justify-start">
+        <AspectRatio ratio={10 / 3} className="justify-start">
           <Image
             src={
               "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg"
@@ -35,7 +36,14 @@ const page = () => {
           />
         </AspectRatio>
       </section>
-      <section></section>
+      <section
+        id="posts"
+        className="flex flex-col max-w-lg lg:max-w-xl xl:max-w-2xl justify-center self-center w-full space-y-5"
+      >
+        {posts.map((post, index) => (
+          <PostCard key={index} postItems={post} />
+        ))}
+      </section>
       <FloatingNavbar />
     </div>
   );
@@ -43,7 +51,7 @@ const page = () => {
 
 export default page;
 
-const samplePost: PostCardProps[] = [
+const posts: PostCardProps[] = [
   {
     userImage: "https://avatars.githubusercontent.com/u/111859181?v=4",
     userName: "Potakaaa",
@@ -77,7 +85,7 @@ const samplePost: PostCardProps[] = [
       "https://www.chefspencil.com/wp-content/uploads/2021/04/Pancit.jpg",
     ],
   },
-  {
+  /* {
     userImage: "https://example.com/avatars/filipino_foodie.jpg",
     userName: "Filipino Foodie",
     title: "Sinigang na Baboy",
@@ -109,5 +117,5 @@ const samplePost: PostCardProps[] = [
       "https://pagkaing-filipino.blogspot.com/2012/03/halo-halo-seasonal-flavor-of-summer.jpg",
       "https://www.chefspencil.com/wp-content/uploads/2021/04/Halo-Halo.jpg",
     ],
-  },
+  }, */
 ];

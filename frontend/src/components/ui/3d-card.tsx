@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import React, {
   createContext,
   useState,
@@ -9,6 +10,7 @@ import React, {
   useRef,
   useEffect,
 } from "react";
+// import { undefined } from "zod"; // Remove this line
 
 const MouseEnterContext = createContext<
   [boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined
@@ -25,6 +27,8 @@ export const CardContainer = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMouseEntered, setIsMouseEntered] = useState(false);
+
+  const path = usePathname();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
@@ -58,9 +62,9 @@ export const CardContainer = ({
       >
         <div
           ref={containerRef}
-          onMouseEnter={handleMouseEnter}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
+          onMouseEnter={path === "/" ? handleMouseEnter : undefined}
+          onMouseMove={path === "/" ? handleMouseMove : undefined}
+          onMouseLeave={path === "/" ? handleMouseLeave : undefined}
           className={cn(
             "flex items-center justify-center relative transition-all duration-200 ease-linear",
             className

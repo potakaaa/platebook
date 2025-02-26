@@ -6,12 +6,12 @@ const UserNav = () => {
   return (
     <section
       id="nav-for-user"
-      className="fixed w-full flex flex-row justify-between inset-0"
+      className="absolute w-full flex flex-row justify-between inset-0 p-3 px-4 sm:px-7 sm:p-4 lg:p-6 lg:px-8"
     >
-      <div className="absolute left-4 top-4">
+      <div className="relative">
         <HomeLogo />
       </div>
-      <div className="absolute right-4 top-4">
+      <div className="relative">
         <ModeToggle />
       </div>
     </section>

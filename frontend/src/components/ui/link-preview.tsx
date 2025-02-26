@@ -126,7 +126,7 @@ export const LinkPreview = ({
                   },
                 }}
                 exit={{ opacity: 0, y: 20, scale: 0.6 }}
-                className="shadow-xl rounded-xl"
+                className="shadow-xl rounded-xl z-50"
                 style={{
                   x: translateX,
                 }}

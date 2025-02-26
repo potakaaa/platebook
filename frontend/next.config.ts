@@ -42,6 +42,22 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "makeyourasia.com"
+      },
+      {
+        protocol: "https",
+        hostname: "www.allchickenrecipes.com"
+      },
+      {
+        protocol: "https",
+        hostname: "www.thespruceeats.com"
+      },
+      {
+        protocol: "https",
+        hostname: "www.chefspencil.com"
+      },
+      {
+        protocol: "https",
+        hostname: "filrecipes101.blogspot.com"
       }
     ],
     domains: ["api.microlink.io"],

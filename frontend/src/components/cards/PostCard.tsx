@@ -17,6 +17,7 @@ export type PostCardProps = {
   commentCount?: number;
   shareCount?: number;
   atPlateList?: boolean;
+  forHero?: boolean;
 };
 
 const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
@@ -30,10 +31,17 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
     commentCount,
     shareCount,
     atPlateList,
+    forHero = false,
   } = postItems;
   return (
     <CardContainer className="inter-var h-full w-full">
-      <CardBody className="flex flex-col h-full w-full border border-neutral-200 px-5 py-4 sm:px-6 sm:py-5 lg:py-6 lg:px-7 rounded-xl space-y-4 shadow-[0px_0px_64px_10px_rgba(247,141,95,0.2)]">
+      <CardBody
+        className={`flex flex-col h-full w-full border border-neutral-200/20 px-5 py-4 sm:px-6 sm:py-5 lg:py-6 lg:px-7 rounded-xl space-y-4 ${
+          forHero
+            ? "shadow-[0px_0px_64px_10px_rgba(247,141,95,0.2)] bg-background/75"
+            : "shadow-lg bg-background"
+        }`}
+      >
         <CardItem
           id="profile"
           className="flex flex-row items-center space-x-2"
@@ -41,7 +49,9 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
         >
           <Avatar className="size-6 sm:size-7 lg:size-8 drop-shadow-md">
             <AvatarImage src={userImage} alt={userName} />
-            <AvatarFallback>{userName}</AvatarFallback>
+            <AvatarFallback className="text-foreground bg-primary size-full text-center flex items-center justify-center self-center">
+              {userName[0]}
+            </AvatarFallback>
           </Avatar>
           <p className="text-xs sm:text-sm lg:text-base font-semibold">
             {userName}
