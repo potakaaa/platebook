@@ -118,7 +118,7 @@ const LandingPage = () => {
           id="meet-the-team"
           className="w-full mt-32 mb-14 flex flex-col items-center justify-center space-y-8"
         >
-          <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted">
+          <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-zinc-600 dark:bg-gradient-to-b dark:from-foreground dark:to-muted">
             Meet the Team
           </span>
           <div className="flex items-center">
@@ -259,7 +259,7 @@ const people = [
   },
   {
     id: 2,
-    name: "Ira Chloie Narisma.",
+    name: "Ira Chloie Narisma",
     designation: "UI/UX Designer",
     image:
       "https://scontent.fcgm1-1.fna.fbcdn.net/v/t39.30808-1/391519071_292977133548604_1008644212740598061_n.jpg?stp=dst-jpg_s100x100_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeE1q-7aGg4n7oTzCyBuv8dgSswdRUez6fxKzB1FR7Pp_GkLhEj4wwjSrvXCy4nY-V5aam9nHA8b59qWj2yWeoum&_nc_ohc=xon6crvsBA0Q7kNvgG20NWx&_nc_oc=AdiAddbOsvZc4KAD1erwm1DGj5bI0veTuaklJW2Ea78Pkn0eW2eGnwpOyQepIYor4yg&_nc_zt=24&_nc_ht=scontent.fcgm1-1.fna&_nc_gid=AH02_lP39I8SoCu85yOK-zJ&oh=00_AYDFoUKZt0wiHJeS8mFl3AIUS94ZP0S8lG2Cv33qM1QMLQ&oe=67C267B6",

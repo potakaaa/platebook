@@ -38,7 +38,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
       <CardBody
         className={`flex flex-col h-full w-full border border-neutral-200/20 px-5 py-4 sm:px-6 sm:py-5 lg:py-6 lg:px-7 rounded-xl space-y-4 ${
           forHero
-            ? "shadow-[0px_0px_64px_10px_rgba(247,141,95,0.2)] bg-background/75"
+            ? "shadow-[0px_0px_64px_10px_rgba(247,141,95,0.2)] bg-background/60"
             : "shadow-lg bg-background"
         }`}
       >
@@ -74,7 +74,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
                   src={images[0]}
                   alt={title}
                   fill
-                  className="size-full rounded-lg object-cover shadow-xl"
+                  className="size-full rounded-lg object-cover shadow-md sm:shadow-lg lg:shadow-xl"
                 />
               </AspectRatio>
             </CardItem>

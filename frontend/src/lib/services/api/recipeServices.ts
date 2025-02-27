@@ -1,8 +1,10 @@
+import { SubmitRecipe } from "@/lib/types/recipeTypes";
 import { axiosClient } from "../axiosClient";
+import exp from "constants";
 
 //FETCHES 15 POSTS AT A TIME, ADD INFINITE SCROLL EFFECT 
 
-const fetchFeed = async (page = 1) => {
+export const fetchFeed = async (page = 1) => {
   try {
     const response = await axiosClient.get(`/feed/?page=${page}`);
     return response.data;
