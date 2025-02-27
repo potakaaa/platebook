@@ -94,14 +94,6 @@ def search_view(request):
         Q(origin_country__icontains=search) 
     ).distinct()
 
-    results_data = [{
-        'title': recipe.title,
-        'description': recipe.description,
-        'chef': recipe.chef.username,  
-        ''
-        'origin_country': recipe.origin_country,
-    } for recipe in results]
-
     serializer = RecipeListSerializer(results, many=True)
 
     return JsonResponse ({
