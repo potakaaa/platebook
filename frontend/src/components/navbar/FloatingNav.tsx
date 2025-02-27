@@ -64,7 +64,7 @@ const FloatingNavbar = () => {
   return (
     <FloatingDock
       mobileClassName="translate-y-20 fixed right-5 bottom-10 mb-14"
-      desktopClassName="fixed bottom-7 shadow-lg bg-gray-50 dark:bg-neutral-900" // only for demo, remove for production
+      desktopClassName="fixed bottom-7 shadow-lg bg-gray-50 dark:bg-neutral-900 md:hidden" // only for demo, remove for production
       items={links}
     />
   );

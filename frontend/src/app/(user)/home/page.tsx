@@ -1,41 +1,48 @@
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
 import HomeImageSlider from "@/components/home/HomeImageSlider";
+import LeftNav from "@/components/home/LeftNav";
 import FloatingNavbar from "@/components/navbar/FloatingNav";
-import HomeLogo from "@/components/navbar/nav/HomeLogo";
 import UserNav from "@/components/navbar/UserNav";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { ModeToggle } from "@/components/ui/mode-toggle";
 import { SpotlightNew } from "@/components/ui/spotlight-new";
-import Image from "next/image";
 
 const page = () => {
   return (
-    <div className="flex flex-col w-full justify-center items-center px-5 py-5 md:py-8 lg:py-12 xl:py-16 overflow-y-hidden bg-background dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative">
+    <div className="flex flex-row w-full justify-center items-center px-5 py-5 md:py-8 lg:py-12 xl:py-14 overflow-y-hidden bg-background dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative">
       <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
-      <UserNav />
       <SpotlightNew />
-      <section
-        id="header"
-        className="flex w-full max-w-lg lg:max-w-xl xl:max-w-2xl flex-col justify-center items-center self-center space-y-4 my-12 sm:my-14 z-10"
-      >
-        <div className="flex w-full justify-start flex-col space-y-1 ">
-          <h1 className="text-primary text-xl sm:text-2xl lg:text-3xl font-bold text-left">
-            Want to Cook Something?
-          </h1>
-          <p className="text-foreground text-xs sm:text-sm lg:text-base text-left">
-            Discover delicious recipes here!
-          </p>
-          <HomeImageSlider />
-        </div>
-      </section>
-      <section
-        id="posts"
-        className="flex flex-col max-w-lg lg:max-w-xl xl:max-w-2xl justify-center self-center w-full space-y-5"
-      >
-        {posts.map((post, index) => (
-          <PostCard key={index} postItems={post} />
-        ))}
-      </section>
+      <UserNav />
+      <div className="flex flex-row md:grid md:grid-cols-5 w-full justify-center items-start my-12 sm:my-14">
+        <section
+          id="left-nav"
+          className="w-full flex-[1] self-center h-full mx-0 hidden md:flex"
+        >
+          <LeftNav />
+        </section>
+        <section id="feed" className="flex flex-col w-full col-span-3">
+          <section
+            id="header"
+            className="flex w-full max-w-md lg:max-w-xl xl:max-w-2xl flex-col justify-center items-center self-center space-y-4 z-10 mb-12 sm:mb-14"
+          >
+            <div className="flex w-full justify-start flex-col space-y-1 ">
+              <h1 className="text-primary text-xl sm:text-2xl lg:text-3xl font-bold text-left">
+                Want to Cook Something?
+              </h1>
+              <p className="text-foreground text-xs sm:text-sm lg:text-base text-left">
+                Discover delicious recipes here!
+              </p>
+              <HomeImageSlider />
+            </div>
+          </section>
+          <section
+            id="posts"
+            className="flex flex-col max-w-md lg:max-w-xl xl:max-w-2xl justify-center self-center w-full space-y-5"
+          >
+            {posts.map((post, index) => (
+              <PostCard key={index} postItems={post} />
+            ))}
+          </section>
+        </section>
+      </div>
       <FloatingNavbar />
     </div>
   );
