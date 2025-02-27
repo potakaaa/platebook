@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { InputAnimated } from "@/components/ui/input-animated";
 import { Label } from "@/components/ui/label";
 import SideImage from "./side-image";
 import Link from "next/link";
@@ -121,7 +121,7 @@ export function LoginForm({
                       <LabelInputContainer>
                         <Label htmlFor="email">Email</Label>
                         <FormControl>
-                          <Input
+                          <InputAnimated
                             id="email"
                             type="email"
                             placeholder="platebook@example.com"
@@ -151,7 +151,7 @@ export function LoginForm({
                           </a>
                         </div>
                         <FormControl>
-                          <Input
+                          <InputAnimated
                             id="password"
                             type="password"
                             required

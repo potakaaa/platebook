@@ -74,7 +74,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
                   src={images[0]}
                   alt={title}
                   fill
-                  className="size-full rounded-lg object-cover shadow-xl"
+                  className="size-full rounded-lg object-cover shadow-md sm:shadow-lg lg:shadow-xl"
                 />
               </AspectRatio>
             </CardItem>
