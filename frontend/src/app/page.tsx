@@ -118,7 +118,7 @@ const LandingPage = () => {
           id="meet-the-team"
           className="w-full mt-32 mb-14 flex flex-col items-center justify-center space-y-8"
         >
-          <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted">
+          <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-zinc-600 dark:bg-gradient-to-b dark:from-foreground dark:to-muted">
             Meet the Team
           </span>
           <div className="flex items-center">

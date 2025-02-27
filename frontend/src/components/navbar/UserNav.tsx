@@ -1,8 +1,6 @@
 import React from "react";
 import { ModeToggle } from "../ui/mode-toggle";
 import HomeLogo from "./nav/HomeLogo";
-import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input-hero";
-import SearchInput from "../hero/SearchInput";
 import SearchBar from "../home/SearchBar";
 
 const UserNav = () => {
