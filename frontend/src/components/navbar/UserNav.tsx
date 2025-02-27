@@ -11,13 +11,13 @@ const UserNav = () => {
       id="nav-for-user"
       className="absolute w-full flex flex-row justify-between inset-0 p-3 px-4 sm:px-7 sm:p-4 lg:p-6 lg:px-8 space-x-3"
     >
-      <div className="relative h-full">
+      <div className="relative">
         <HomeLogo />
       </div>
-      <div id="search" className="relative h-full">
+      <div id="search" className="relative">
         <SearchBar />
       </div>
-      <div className="relative h-full">
+      <div className="relative">
         <ModeToggle />
       </div>
     </section>
