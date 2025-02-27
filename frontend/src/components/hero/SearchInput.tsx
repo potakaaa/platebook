@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
+import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input-hero";
 
 const placeholders = [
   "Adobong Kare Kare Pinoy Style",
