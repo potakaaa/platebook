@@ -1,14 +1,13 @@
 from rest_framework.serializers import ModelSerializer, CharField, ValidationError
-from dj_rest_auth.serializers import JWTSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
-import cloudinary.uploader
 from .models import CustomUserModel
 from django.db import IntegrityError
-from django.core.files.base import ContentFile
 from rest_framework import serializers
-import requests
-import cloudinary.uploader
-from io import BytesIO
+from django_otp.plugins.otp_email.models import EmailDevice
+from django.utils import timezone
+from datetime import timedelta
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 class CustomUserModelSerializer(ModelSerializer): 
 
@@ -104,8 +103,52 @@ class CustomUserModelSerializer(ModelSerializer):
         return user
     
 
+class OTPSerializer(serializers.Serializer):
+   email = serializers.EmailField()
 
+   def validate_email(self, value):
+      try:
+         user = CustomUserModel.objects.get(email=value)
+      except CustomUserModel.DoesNotExist:
+         raise serializers.ValidationError("Email Not Found")
 
+      device, created = CustomEmailDevice.objects.get_or_create(user=user)
+      otp = device.generate_challenge()
+
+      device.valid_until = timezone.now() + timedelta(minutes=5) 
+
+      return value
+   
+
+class CustomEmailDevice (EmailDevice):
+   def generate_challenge(self, extra_context=None):
+    try:
+        self.generate_token()
+        self.save()
+
+        subject = "Your PlateBook Password Reset Code"
+        
+        context = {
+            "username": self.user.username,
+            "otp": self.token,
+        }
+
+        html_message = render_to_string("emails/otp-email.html", context)
+        plain_message = strip_tags(html_message)
+
+        sender_email = "platebook123@gmail.com"
+        recipient_list = [self.user.email]
+
+        email = EmailMultiAlternatives(subject, plain_message, sender_email, recipient_list)
+        email.attach_alternative(html_message, "text/html")
+
+        email.send()
+
+        return "A reset code has been sent"
+
+    except Exception as e:
+        print(f"Error generating OTP email: {e}")
+        raise serializers.ValidationError(f"An error occurred while sending the OTP: {str(e)}")
 
 
     

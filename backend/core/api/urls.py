@@ -16,15 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import CustomLoginView, CustomRegisterView
+from accounts.views import CustomLoginView, CustomRegisterView, OTPPasswordResetView, VerifyOTPAndResetPasswordView
 from dj_rest_auth.views import PasswordResetConfirmView, PasswordResetView
 
 urlpatterns = [
     path('auth/login/', CustomLoginView.as_view(), name='custom_login'),
     path('auth/', include('dj_rest_auth.urls')),
-    path('auth/password/reset/', PasswordResetView.as_view(), name='password_reset'),
-    path('auth/password/reset/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('auth/registration/', CustomRegisterView.as_view(), name='custom_register'),
+    path('auth/otp-reset/', OTPPasswordResetView.as_view()),
+    path('auth/verify-otp/', VerifyOTPAndResetPasswordView.as_view()),
     path('social/login/', include('accounts.urls')),
     path('', include('recipes.urls')),
     path('', include('interactions.urls')),

@@ -64,7 +64,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     "allauth.socialaccount.providers.twitter",
-    
+    'django_otp',
+    'django_otp.plugins.otp_email',
     
     #local apps
     "accounts",
@@ -194,7 +195,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-          BASE_DIR / 'templates',
+          os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
