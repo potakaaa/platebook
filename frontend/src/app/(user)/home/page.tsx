@@ -10,7 +10,7 @@ import Image from "next/image";
 
 const page = () => {
   return (
-    <div className="flex flex-col w-full justify-center items-center px-5 py-5 overflow-y-hidden bg-background dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative">
+    <div className="flex flex-col w-full justify-center items-center px-5 py-5 md:py-8 lg:py-12 xl:py-16 overflow-y-hidden bg-background dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative">
       <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
       <UserNav />
       <SpotlightNew />
@@ -25,8 +25,8 @@ const page = () => {
           <p className="text-foreground text-xs sm:text-sm lg:text-base text-left">
             Discover delicious recipes here!
           </p>
+          <HomeImageSlider />
         </div>
-        <HomeImageSlider />
       </section>
       <section
         id="posts"
