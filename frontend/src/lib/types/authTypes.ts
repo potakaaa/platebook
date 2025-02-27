@@ -25,3 +25,10 @@ export type SignUpFormData = {
   password1: string;
   password2: string;
 };
+
+
+export type BasicUser = {
+  userId: string;
+  username: string;
+  pfp_url: string;
+};
