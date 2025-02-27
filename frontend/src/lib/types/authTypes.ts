@@ -27,7 +27,7 @@ export type SignUpFormData = {
 };
 
 
-export type User = {
+export type BasicUser = {
   userId: string;
   username: string;
   pfp_url: string;

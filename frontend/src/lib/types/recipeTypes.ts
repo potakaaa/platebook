@@ -1,4 +1,4 @@
-import { User } from "./authTypes";
+import { BasicUser } from "./authTypes";
 
 export type SubmitRecipe = {
   title: string;
@@ -24,8 +24,21 @@ export type ListRecipe = {
   title: string;
   description: string;
   origin_country: string;
-  images: string[];
-  chef: User;
+  images: RecipeImage[];
+  chef: BasicUser;
 };
 
-export type FullRecipe = {};
+export type RecipeImage = {
+  image_url: string;
+};
+
+export type FullRecipe = {
+  id: number;
+  title: string;
+  description: string;
+  origin_country: string;
+  images: RecipeImage[];
+  chef: BasicUser;
+  steps: Step[];
+  ingredients: Ingredient[];
+};
