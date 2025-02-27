@@ -154,3 +154,20 @@ const postRecipeIngredients = async (id: number, ingredients: Ingredient[]) => {
     throw new Error("An unknown error occurred.");
   }
 };
+
+
+const searchRecipe = async (search: string) => {
+  try {
+    const response = await axiosClient.get(`/search/?search=${search}`)
+
+    if (response.status === 200){
+      return response
+    } else {
+      console.error("Error: Unexpected response status", response.status);
+    }
+  } catch (err){
+    console.error("Error while searching recipes:", err);
+
+    return [];
+  }
+}
