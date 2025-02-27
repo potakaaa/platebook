@@ -256,6 +256,7 @@ const people = [
     designation: "Frontend Developer",
     image:
       "https://scontent.fcgm1-1.fna.fbcdn.net/v/t39.30808-6/459627604_3861877484137152_1136108887581876872_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGcnZsW21rZitB8BPv30xLs_lwC21-sVWX-XALbX6xVZRAaBA2PDDGWv83S78hZBgmHpMRKx2KvLgIZ-XgFdxDU&_nc_ohc=zUayjEpQ4X4Q7kNvgFxrxln&_nc_oc=AdhZlsJoWOkyN-L2pKAoTlVEvWBHZ_1fSAQYG34Te-Ubeo1mTGCDX4JnEQG-UqadM0E&_nc_zt=23&_nc_ht=scontent.fcgm1-1.fna&_nc_gid=AZXTs9ag9hvrOzwEtEhhXya&oh=00_AYAl9RNi7sGoALAJGqGUBlfak1hWgTGllv-stQ0MSzQoGQ&oe=67C2872A",
+    link: "https://github.com/potakaaa",
   },
   {
     id: 2,
@@ -263,6 +264,7 @@ const people = [
     designation: "UI/UX Designer",
     image:
       "https://scontent.fcgm1-1.fna.fbcdn.net/v/t39.30808-1/391519071_292977133548604_1008644212740598061_n.jpg?stp=dst-jpg_s100x100_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeE1q-7aGg4n7oTzCyBuv8dgSswdRUez6fxKzB1FR7Pp_GkLhEj4wwjSrvXCy4nY-V5aam9nHA8b59qWj2yWeoum&_nc_ohc=xon6crvsBA0Q7kNvgG20NWx&_nc_oc=AdiAddbOsvZc4KAD1erwm1DGj5bI0veTuaklJW2Ea78Pkn0eW2eGnwpOyQepIYor4yg&_nc_zt=24&_nc_ht=scontent.fcgm1-1.fna&_nc_gid=AH02_lP39I8SoCu85yOK-zJ&oh=00_AYDFoUKZt0wiHJeS8mFl3AIUS94ZP0S8lG2Cv33qM1QMLQ&oe=67C267B6",
+    link: "https://github.com/unripelo",
   },
   {
     id: 3,
@@ -270,5 +272,6 @@ const people = [
     designation: "Backend Developer",
     image:
       "https://scontent.fcgm1-1.fna.fbcdn.net/v/t39.30808-6/472253317_598424639227106_4134908177380016141_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEKqNm3MnzVVPldDCb3WYT3HLMpEX2iOKUcsykRfaI4pWMMCV0AHMg57yLxihGRhba82URFclfKUpvIkoNwDR0r&_nc_ohc=KmoQE681I_EQ7kNvgGkZB7b&_nc_oc=AdgYmJv_piiR7jYtxqSIZopyYsUh3Ev12n2pTnwO2OrG_YqfidG9Q9PAqcffNLul_UI&_nc_zt=23&_nc_ht=scontent.fcgm1-1.fna&_nc_gid=AzYfFdchD6eMaaXPIrL32kb&oh=00_AYCEpFoKDvG5zbl-193NU0avj0MorvHnWsCBHXVp8FaK2Q&oe=67C26811",
+    link: "https://github.com/hdmGOAT",
   },
 ];

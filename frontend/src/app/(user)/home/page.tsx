@@ -1,4 +1,5 @@
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
+import HomeImageSlider from "@/components/home/HomeImageSlider";
 import FloatingNavbar from "@/components/navbar/FloatingNav";
 import HomeLogo from "@/components/navbar/nav/HomeLogo";
 import UserNav from "@/components/navbar/UserNav";
@@ -25,16 +26,7 @@ const page = () => {
             Discover delicious recipes here!
           </p>
         </div>
-        <AspectRatio ratio={10 / 3} className="justify-start">
-          <Image
-            src={
-              "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg"
-            }
-            alt="Home Cover Photo"
-            fill
-            className="rounded-xl shadow-lg object-cover"
-          />
-        </AspectRatio>
+        <HomeImageSlider />
       </section>
       <section
         id="posts"

@@ -12,7 +12,7 @@ const UserNav = () => {
       <div className="relative h-full">
         <HomeLogo />
       </div>
-      <div id="search" className="relative h-full">
+      <div id="search" className="relative h-full w-full">
         <SearchBar />
       </div>
       <div className="relative h-full">

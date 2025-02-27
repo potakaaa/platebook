@@ -8,6 +8,7 @@ import {
   useMotionValue,
   useSpring,
 } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export const AnimatedTooltip = ({
   items,
@@ -17,6 +18,7 @@ export const AnimatedTooltip = ({
     name: string;
     designation: string;
     image: string;
+    link: string;
   }[];
 }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -45,6 +47,9 @@ export const AnimatedTooltip = ({
           key={item.name}
           onMouseEnter={() => setHoveredIndex(item.id)}
           onMouseLeave={() => setHoveredIndex(null)}
+          onClick={() => {
+            window.location.href = item.link;
+          }}
         >
           <AnimatePresence mode="popLayout">
             {hoveredIndex === item.id && (
