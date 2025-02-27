@@ -8,10 +8,10 @@ import { Card, CardContent } from "../ui/card";
 
 const HomeImageSlider = () => {
   return (
-    <div className="size-full py-3">
+    <div className="size-full py-3 lg:py-6 xl:py-8">
       <AspectRatio ratio={10 / 3} className="justify-start">
         <Carousel
-          className="size-full max-w-lg"
+          className="size-full max-w-lg lg:max-w-xl xl:max-w-2xl"
           plugins={[
             Autoplay({
               delay: 3000,
@@ -21,7 +21,7 @@ const HomeImageSlider = () => {
           <CarouselContent className="">
             {images.map((image, index) => (
               <CarouselItem key={index} className="">
-                <Card className="w-full relative">
+                <Card className="w-full relative rounded-xl overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10" />
                   <CardContent className="p-0 ">
                     <AspectRatio ratio={10 / 4}>
@@ -31,16 +31,17 @@ const HomeImageSlider = () => {
                         }
                         alt="Home Cover Photo"
                         fill
+                        priority
                         className="rounded-xl shadow-lg object-cover"
                       />
                     </AspectRatio>
-                    <div className="absolute bottom-12 right-3 z-30 drop-shadow-md">
-                      <p className="font-semibold text-white/90 dark:text-secondary-foreground/80 flex">
+                    <div className="absolute bottom-12 md:bottom-14 right-3 z-30 drop-shadow-md">
+                      <p className="font-semibold text-white/90 dark:text-secondary-foreground/85 flex md:text-xl xl:text-3xl">
                         {image.title}
                       </p>
                     </div>
-                    <div className="absolute bottom-4 right-3  w-52 text-right z-20">
-                      <p className="font-light text-xs text-white/90 dark:text-secondary-foreground/80 drop-shadow-md ">
+                    <div className="absolute bottom-4 xl:bottom-8 right-3  w-52 md:w-72 xl:w-96 text-right z-20">
+                      <p className="font-light text-xs text-white/90 dark:text-secondary-foreground/80 drop-shadow-md md:text-base md:leading-tight">
                         {image.description}
                       </p>
                     </div>
@@ -59,8 +60,8 @@ export default HomeImageSlider;
 
 const images = [
   {
-    title: "Adobo",
-    description: "Tender pork or chicken in a savory marinade.",
+    title: "Adobong Manok",
+    description: "Tender chicken in a savory marinade.",
     image: "image_1_url",
   },
   {
