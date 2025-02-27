@@ -9,6 +9,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.pagination import PageNumberPagination
 from django.http import JsonResponse
 from rest_framework.generics import ListAPIView
+from django.db.models import Q
 
 # Create your views here.
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -83,5 +84,27 @@ class RecipeFeedView(ListAPIView):
         print(f"Active permission classes: {self.permission_classes}")
         return super().dispatch(request, *args, **kwargs)  
 
+def search_view(request):
+    search =  request.GET.get('search', '')
+    results = Recipe.objects.filter(
+        Q(title__icontains=search) | 
+        Q(description__icontains=search) |
+        Q(chef__username__icontains=search) |
+        Q(ingredient__name__icontains=search) |
+        Q(origin_country__icontains=search) 
+    ).distinct()
 
+    results_data = [{
+        'title': recipe.title,
+        'description': recipe.description,
+        'chef': recipe.chef.username,  
+        ''
+        'origin_country': recipe.origin_country,
+    } for recipe in results]
 
+    serializer = RecipeListSerializer(results, many=True)
+
+    return JsonResponse ({
+        'search': search,
+        'results': serializer.data
+    })
