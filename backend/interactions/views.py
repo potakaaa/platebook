@@ -1,8 +1,12 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions, serializers
 from .models import Like, Share, Comment, Follow
+from accounts.models import CustomUserModel
+from rest_framework.response import Response
+from rest_framework import status
 from recipes.models import Recipe
 from .serializers import LikeSerializer, ShareSerializer, CommentSerializer, FollowSerializer
+from rest_framework.views import APIView
 
 # Create your views here.
 class LikeViewSet(viewsets.ModelViewSet):
@@ -67,3 +71,43 @@ class FollowViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError({"message": "Unfollowed user."})
 
         serializer.save(follower=self.request.user)
+        
+        
+
+class FollowingView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_pk):  
+        user = get_object_or_404(CustomUserModel, pk=user_pk)  
+        following = Follow.objects.filter(follower=user).select_related("followed")
+        serializer = FollowSerializer(following, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class FollowersView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_pk):  
+        user = get_object_or_404(CustomUserModel, pk=user_pk)  
+        followers = Follow.objects.filter(followed=user).select_related("follower")
+        serializer = FollowSerializer(followers, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class UserLikesView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_pk):  
+        user = get_object_or_404(CustomUserModel, pk=user_pk)  
+        likes = Like.objects.filter(user=user).select_related("recipe")
+        serializer = LikeSerializer(likes, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
+class UserSharesView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_pk):  
+        user = get_object_or_404(CustomUserModel, pk=user_pk)  
+        shares = Share.objects.filter(user=user).select_related("recipe")
+        serializer = ShareSerializer(shares, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
