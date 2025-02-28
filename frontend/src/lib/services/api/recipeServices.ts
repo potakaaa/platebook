@@ -156,18 +156,34 @@ const postRecipeIngredients = async (id: number, ingredients: Ingredient[]) => {
 };
 
 
-const searchRecipe = async (search: string) => {
+export const searchRecipe = async (search: string) => {
   try {
-    const response = await axiosClient.get(`/search/?search=${search}`)
+    const response = await axiosClient.get(`/search/?search=${search}`);
 
-    if (response.status === 200){
-      return response
+    if (response.status === 200) {
+      return response;
     } else {
       console.error("Error: Unexpected response status", response.status);
     }
-  } catch (err){
+  } catch (err) {
     console.error("Error while searching recipes:", err);
 
     return [];
   }
-}
+};
+
+export const fetchRecipe = async (id: number) => {
+  try {
+    const response = await axiosClient.get(`/recipes/${id}/`);
+
+    if (response.status === 200) {
+      return response;
+    } else {
+      console.error("Error: Unexpected response status", response.status);
+    }
+  } catch (err) {
+    console.error("Error while fetching recipe:", err);
+
+    return [];
+  }
+};

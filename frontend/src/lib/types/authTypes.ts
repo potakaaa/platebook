@@ -32,3 +32,10 @@ export type BasicUser = {
   username: string;
   pfp_url: string;
 };
+
+
+export type ResetPasswordFormData = {
+  otp: string;
+  password1: string;
+  password2: string;
+};
