@@ -9,7 +9,7 @@ import SideImage from "./side-image";
 import Link from "next/link";
 import { LabelInputContainer } from "../ui/label-input-container";
 import OauthButtons from "./oauth-buttons";
-
+import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -52,6 +52,8 @@ export function SignUpForm({
     },
   });
 
+  const router = useRouter();
+
   const onSubmit = async (data: SignUpFormData) => {
     console.log("Submitting data:", data);
 
@@ -59,6 +61,8 @@ export function SignUpForm({
       const response = await signUp(data);
 
       form.reset();
+
+      router.push("/login");
     } catch (error: any) {
       Object.entries(error).forEach(([key, value]) => {
         if (Array.isArray(value)) {

@@ -5,6 +5,7 @@ import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
 import TwitterProvider from "next-auth/providers/twitter";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { redirect } from "next/navigation";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -32,6 +33,7 @@ export const authOptions: NextAuthOptions = {
               id: response.data.user?.id || "unknown",
               name: response.data.user?.username || null,
               email: response.data.user?.email || null,
+              image: response.data.user?.pfp_url || null,
               accessToken: response.data.access,
               refreshToken: response.data.refresh,
             };
@@ -62,10 +64,6 @@ export const authOptions: NextAuthOptions = {
           access_type: "offline",
         },
       },
-    }),
-    TwitterProvider({
-      clientId: process.env.TWITTER_CLIENT_ID || "",
-      clientSecret: process.env.TWITTER_CLIENT_SECRET || "",
     }),
   ],
 
@@ -99,40 +97,11 @@ export const authOptions: NextAuthOptions = {
             console.error("No access token found in response");
             return false;
           }
-
+          (user as AuthUser).image = response.data.user?.pfp_url || null;
           (user as AuthUser).accessToken = apiAccessToken;
           return true;
         } catch (error) {
           console.error("Error signing in with Google", error);
-          return false;
-        }
-      }
-
-      if (account?.provider === "twitter") {
-        const { oauth_token, oauth_token_secret } = account;
-
-        if (!oauth_token || !oauth_token_secret) {
-          console.error("No OAuth token found for Twitter");
-          return false;
-        }
-
-        try {
-          const response = await axiosClient.post("social/login/twitter/", {
-            oauth_token,
-            oauth_token_secret,
-          });
-
-          const apiAccessToken =
-            response.data.access_token || response.data.key;
-          if (!apiAccessToken) {
-            console.error("No access token found in response");
-            return false;
-          }
-
-          (user as AuthUser).accessToken = apiAccessToken;
-          return true;
-        } catch (error) {
-          console.error("Error signing in with Twitter", error);
           return false;
         }
       }
@@ -152,18 +121,21 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
+        token.image = user.image || null;
       }
 
       return token;
     },
 
     async session({ session, token }: { session: Session; token: JWT }) {
+      console.log("Session:", session);
+
       session.accessToken = (token.accessToken ?? "") as string;
       session.user = {
         id: (token.id ?? "") as string,
         name: token.name ?? null,
         email: token.email ?? null,
-        image: session.user?.image ?? null,
+        image: typeof token.image === "string" ? token.image : null,
       };
 
       return session;

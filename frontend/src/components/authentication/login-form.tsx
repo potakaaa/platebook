@@ -20,6 +20,7 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   email: z
@@ -40,7 +41,7 @@ export function LoginForm({
       password: "",
     },
   });
-
+  const router = useRouter();
   const onSubmit = async (data: any) => {
     try {
       form.clearErrors();
@@ -50,6 +51,12 @@ export function LoginForm({
         password: data.password,
         redirect: false,
       });
+
+      if (response?.ok) {
+        router.push("/home");
+      } else {
+        console.error("Login failed:", response?.error);
+      }
 
       console.log("Login Response:", response);
 

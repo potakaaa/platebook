@@ -2,7 +2,6 @@
 # Create your views here.
 
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from allauth.socialaccount.providers.twitter.views import TwitterOAuthAdapter
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.views import LoginView
@@ -52,6 +51,7 @@ class GoogleLogin(SocialLoginView):
                     "id": str(user.userId),
                     "email": user.email,
                     "username": user.username,
+                    "pfp_url": get_pfp_url(user)
                 }
             })
         return response
@@ -78,13 +78,14 @@ class GoogleLogin(SocialLoginView):
           return None
     
 
-    
-class TwitterLogin(SocialLoginView):
-    authentication_classes = []
-    adapter_class = TwitterOAuthAdapter
-    callback_url = settings.CALLBACK_URL
-    client_class = OAuth2Client
-    
+from django.conf import settings
+
+def get_pfp_url(obj):
+    if hasattr(obj, "pfp") and obj.pfp:  
+        cloudinary_url = f"https://res.cloudinary.com/{settings.CLOUDINARY_CLOUD_NAME}/image/upload/"
+        return f"{cloudinary_url}{obj.pfp}"  
+    return None
+
 
 
 
@@ -103,7 +104,8 @@ class CustomLoginView(LoginView):
             response.data["user"] = {
                 "id": user.pk,
                 "email": user.email,
-                "username": user.username
+                "username": user.username,
+                "pfp_url": get_pfp_url(user)
             }
         
         return response 
@@ -164,11 +166,7 @@ class VerifyOTPAndResetPasswordView(APIView):
         if not device:
              return Response({"error": "Device not found or OTP is incorrect."}, status=status.HTTP_400_BAD_REQUEST)
 
-        print(device)
-        print(device.token)
-        print(otp)
 
-        # Ensure that the OTP is valid and not expired
         if not device.verify_token(otp):
             return Response({"error": "Invalid OTP."}, status=status.HTTP_400_BAD_REQUEST)
 

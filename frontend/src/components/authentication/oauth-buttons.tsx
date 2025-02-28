@@ -27,20 +27,10 @@ const OauthButtons = () => {
         type="button"
         variant="outline"
         className="w-full relative group/btn dark:bg-transparent"
-        onClick={() => signIn("google")}
+        onClick={() => signIn("google", { callbackUrl: "/home" })}
       >
         <IconBrandGoogleFilled size={24} />
         <span className="sr-only">Login with Google</span>
-        <BottomGradient />
-      </Button>
-      <Button
-        variant="outline"
-        className="w-full relative group/btn dark:bg-transparent"
-        type="button"
-        onClick={() => signIn("twitter")}
-      >
-        <IconBrandX size={24} />
-        <span className="sr-only">Login with X</span>
         <BottomGradient />
       </Button>
     </div>
