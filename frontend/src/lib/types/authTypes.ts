@@ -34,8 +34,16 @@ export type BasicUser = {
 };
 
 
+
 export type ResetPasswordFormData = {
-  otp: string;
   password1: string;
   password2: string;
 };
+
+
+export type ResetPasswordInputData = {
+  email: string;
+  otp: string;
+  password1: string;
+  password2: string;
+}
