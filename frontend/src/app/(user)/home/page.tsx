@@ -13,7 +13,7 @@ const page = () => {
 
       {/* <UserNav /> */}
 
-      <div className="flex flex-row max-w-md lg:max-w-[27rem] xl:max-w-xl w-full justify-center items-start min-h-screen overflow-y-auto">
+      <div className="flex flex-row w-full justify-center items-start min-h-screen overflow-y-auto">
         <section
           id="feed"
           className="flex flex-col w-full z-30 py-10 overflow-y-auto"
