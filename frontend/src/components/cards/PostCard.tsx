@@ -95,7 +95,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             <Heart className="size-8" />
             <span
               className={`hidden xl:block ${
-                !forHero ? "md:hidden lg:block" : "lg:hidden sm:block"
+                !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
               }`}
             >
               Like
@@ -105,7 +105,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             <MessageCircleMore className="size-8" />
             <span
               className={`hidden xl:block ${
-                !forHero ? "md:hidden lg:block" : "lg:hidden sm:block"
+                !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
               }`}
             >
               Comment
@@ -115,7 +115,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             <Share className="size-8" />
             <span
               className={`hidden xl:block ${
-                !forHero ? "md:hidden lg:block" : "lg:hidden sm:block"
+                !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
               }`}
             >
               Share
@@ -125,7 +125,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             <Disc className="size-8 text-primary" />
             <span
               className={`hidden xl:block ${
-                !forHero ? "md:hidden lg:block" : "lg:hidden sm:block"
+                !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
               }`}
             >
               Add to Plate

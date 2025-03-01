@@ -12,6 +12,7 @@ import { Card, CardContent } from "./ui/card";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { Button } from "./ui/button";
+import { IconTrash } from "@tabler/icons-react";
 
 const PlateDialog = ({
   postName,
@@ -25,20 +26,28 @@ const PlateDialog = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex flex-row space-x-3 items-start cursor-pointer hover:bg-muted/80 rounded-xl p-2 transition duration-200">
-          <span className="size-14 rounded-lg overflow-hidden">
-            <Image
-              src={postImg}
-              alt={postName}
-              className="size-20 object-cover aspect-square "
-              width={200}
-              height={200}
-            />
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-row space-x-3 items-start cursor-pointer hover:bg-muted/80 rounded-xl p-2 transition duration-200">
+            <span className="size-14 rounded-lg overflow-hidden">
+              <Image
+                src={postImg}
+                alt={postName}
+                className="size-20 object-cover aspect-square "
+                width={200}
+                height={200}
+              />
+            </span>
+            <section className="flex flex-col w-24 xl:w-32 2xl:w-44">
+              <p className="font-semibold lg:text-base xl:text-lg truncate">
+                {postName}
+              </p>
+              <p className="lg:text-xs xl:text-sm truncate">{postDesc}</p>
+            </section>
+          </div>
+          {/* should make this button not a trigger */}
+          <span className="flex items-center cursor-pointer hover:bg-muted/80 rounded-full p-2 transition duration-200">
+            <IconTrash className="size-5 text-destructive" />
           </span>
-          <section className="flex flex-col w-32">
-            <p className="font-semibold lg:text-base xl:text-lg">{postName}</p>
-            <p className="lg:text-xs xl:text-sm truncate">{postDesc}</p>
-          </section>
         </div>
       </DialogTrigger>
       <DialogContent className="flex flex-col p-7 rounded-xl py-12 space-y-2">
