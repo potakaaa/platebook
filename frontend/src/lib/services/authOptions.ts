@@ -128,8 +128,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }: { session: Session; token: JWT }) {
-      console.log("Session:", session);
-
       session.accessToken = (token.accessToken ?? "") as string;
       session.user = {
         id: (token.id ?? "") as string,

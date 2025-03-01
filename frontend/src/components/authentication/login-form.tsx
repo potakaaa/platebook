@@ -22,12 +22,7 @@ import {
 } from "../ui/form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "../ui/input-otp";
+import ForgetForm from "./forget-form";
 
 const loginSchema = z.object({
   email: z
@@ -37,33 +32,14 @@ const loginSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-// step 1
-const emailForget_Schema = z.object({
-  email: z.string().email("Invalid email format").min(1, "Email is required"),
-});
 
-// step 2
-const OTP_ForgetSchema = z.object({
-  otp: z.string().min(6, { message: "OTP must be 6 digits" }),
-});
-
-// step 3
-const newPassword_ForgetSchema = z
-  .object({
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string().min(8, "Confirm Password is required"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
-  const [step, setStep] = useState(1);
+
   const [isForgetPass, setIsForgetPass] = useState(false);
 
   const loginForm = useForm({
@@ -74,21 +50,7 @@ export function LoginForm({
     },
   });
 
-  const forgetPassForm = useForm({
-    resolver: zodResolver(
-      (step === 1
-        ? emailForget_Schema
-        : step === 2
-        ? OTP_ForgetSchema
-        : newPassword_ForgetSchema) as any
-    ),
-    defaultValues: {
-      email: "",
-      otp: "",
-      password: "",
-      confirmPassword: "",
-    } as any,
-  });
+
 
   const onSubmit = async (data: any) => {
     try {
@@ -245,112 +207,7 @@ export function LoginForm({
               </form>
             </Form>
           ) : (
-            <Form {...forgetPassForm}>
-              <form
-                noValidate
-                onSubmit={forgetPassForm.handleSubmit(onSubmit)}
-                className="p-6 md:p-8 z-30"
-              >
-                <div className="flex flex-col gap-6">
-                  <h1 className="text-2xl font-bold text-center">
-                    Reset Password
-                  </h1>
-                  {step === 1 && (
-                    <FormField
-                      control={forgetPassForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <LabelInputContainer>
-                          <Label htmlFor="email">Enter your Email</Label>
-                          <FormControl>
-                            <InputAnimated
-                              id="email"
-                              type="email"
-                              placeholder="Enter your email"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </LabelInputContainer>
-                      )}
-                    />
-                  )}
-                  {step === 2 && (
-                    <FormField
-                      control={forgetPassForm.control}
-                      name="otp"
-                      render={({ field }) => (
-                        <LabelInputContainer className="px-10">
-                          <Label htmlFor="otp" className="text-left">
-                            Enter OTP
-                          </Label>
-                          <FormControl className="">
-                            <InputOTP maxLength={6} className="">
-                              <InputOTPGroup>
-                                <InputOTPSlot index={0} />
-                                <InputOTPSlot index={1} />
-                                <InputOTPSlot index={2} />
-                              </InputOTPGroup>
-                              <InputOTPSeparator />
-                              <InputOTPGroup>
-                                <InputOTPSlot index={3} />
-                                <InputOTPSlot index={4} />
-                                <InputOTPSlot index={5} />
-                              </InputOTPGroup>
-                            </InputOTP>
-                          </FormControl>
-                          <FormMessage />
-                        </LabelInputContainer>
-                      )}
-                    />
-                  )}
-                  {step === 3 && (
-                    <>
-                      <FormField
-                        control={forgetPassForm.control}
-                        name="password"
-                        render={({ field }) => (
-                          <LabelInputContainer>
-                            <Label htmlFor="password">New Password</Label>
-                            <FormControl>
-                              <InputAnimated
-                                id="password"
-                                type="password"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </LabelInputContainer>
-                        )}
-                      />
-                      <FormField
-                        control={forgetPassForm.control}
-                        name="confirmPassword"
-                        render={({ field }) => (
-                          <LabelInputContainer>
-                            <Label htmlFor="confirmPassword">
-                              Confirm Password
-                            </Label>
-                            <FormControl>
-                              <InputAnimated
-                                id="confirmPassword"
-                                type="password"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </LabelInputContainer>
-                        )}
-                      />
-                    </>
-                  )}
-
-                  <Button type="submit" className="w-full">
-                    {step === 3 ? "Reset Password" : "Next"}
-                  </Button>
-                </div>
-              </form>
-            </Form>
+            <ForgetForm/>
           )}
           <SideImage />
         </CardContent>
