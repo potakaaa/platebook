@@ -55,6 +55,16 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
+  			},
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				primary: 'hsl(var(--sidebar-primary))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+  				border: 'hsl(var(--sidebar-border))',
+  				ring: 'hsl(var(--sidebar-ring))'
   			}
   		},
   		borderRadius: {
@@ -62,49 +72,53 @@ export default {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
-		boxShadow: {
-			input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`,
-		},
-		animation: {
-			shimmer: "shimmer 2s linear infinite",
-			spotlight: "spotlight 2s ease .75s 1 forwards",
-			scroll:
-          "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
-		  "meteor-effect": "meteor 5s linear infinite",
-		},
-		keyframes: {
-			meteor: {
-				"0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
-				"70%": { opacity: "1" },
-				"100%": {
-				  transform: "rotate(215deg) translateX(-500px)",
-				  opacity: "0",
-				},
-			},
-			scroll: {
-				to: {
-				  transform: "translate(calc(-50% - 0.5rem))",
-				},
-			},
-			shimmer: {
-				from: {
-				  backgroundPosition: "0 0",
-				},
-				to: {
-				  backgroundPosition: "-200% 0",
-				},
-			},
-			spotlight: {
-				"0%": {
-				  opacity: "0",
-				  transform: "translate(-72%, -62%) scale(0.5)",
-				},
-				"100%": {
-				  opacity: "1",
-				  transform: "translate(-50%,-40%) scale(1)",
-				},
-			},
-		}
+  		boxShadow: {
+  			input: '`0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`'
+  		},
+  		animation: {
+  			shimmer: 'shimmer 2s linear infinite',
+  			spotlight: 'spotlight 2s ease .75s 1 forwards',
+  			scroll: 'scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite',
+  			'meteor-effect': 'meteor 5s linear infinite'
+  		},
+  		keyframes: {
+  			meteor: {
+  				'0%': {
+  					transform: 'rotate(215deg) translateX(0)',
+  					opacity: '1'
+  				},
+  				'70%': {
+  					opacity: '1'
+  				},
+  				'100%': {
+  					transform: 'rotate(215deg) translateX(-500px)',
+  					opacity: '0'
+  				}
+  			},
+  			scroll: {
+  				to: {
+  					transform: 'translate(calc(-50% - 0.5rem))'
+  				}
+  			},
+  			shimmer: {
+  				from: {
+  					backgroundPosition: '0 0'
+  				},
+  				to: {
+  					backgroundPosition: '-200% 0'
+  				}
+  			},
+  			spotlight: {
+  				'0%': {
+  					opacity: '0',
+  					transform: 'translate(-72%, -62%) scale(0.5)'
+  				},
+  				'100%': {
+  					opacity: '1',
+  					transform: 'translate(-50%,-40%) scale(1)'
+  				}
+  			}
+  		}
   	}
   },
   plugins: [require("tailwindcss-animate"), addVariablesForColors, 
