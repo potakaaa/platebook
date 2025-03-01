@@ -4,8 +4,8 @@ import { ArrowRightCircleIcon, SearchIcon } from "lucide-react";
 
 const SearchBar = () => {
   return (
-    <div className="w-full max-w-xl flex items-center justify-center mt-1 sm:mt-0">
-      <form className="w-full sm:max-w-lg md:max-w-xl flex flex-row border border-primary rounded-full px-2 items-center justify-center">
+    <div className="w-full flex items-center justify-center mt-1 sm:mt-0">
+      <form className="w-full flex flex-row border border-primary rounded-full px-2 items-center justify-center">
         <Input
           type="search"
           placeholder="Search for recipes"

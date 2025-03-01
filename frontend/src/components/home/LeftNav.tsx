@@ -2,19 +2,63 @@
 import {
   IconHome,
   IconLogout,
+  IconMoon,
+  IconSearch,
+  IconSquare,
   IconSquareRoundedPlus,
+  IconSun,
 } from "@tabler/icons-react";
-import { Button } from "../ui/button";
 import CustomAvatar from "../user/CustomAvatar";
-import Link from "next/link";
-import { BottomGradient } from "../ui/bottom-gradient";
-import { signOut, useSession } from "next-auth/react";
+import NavButtonLeft from "./NavButtonsLeft";
+import { useTheme } from "next-themes";
+import { useSession } from "next-auth/react";
 
 const LeftNav = () => {
   const { data: session, status } = useSession();
+  const { theme, setTheme } = useTheme();
 
   return (
-    <ul className="w-full flex flex-col justify-start z-30 space-y-5 my-5 pl-0 lg:pl-5 xl:pl-10 2xl:pl-44 transition-all">
+    <div className="flex flex-col size-full">
+      <div className="flex flex-col w-full space-y-3">
+        <section
+          id="user"
+          className="w-full border border-muted rounded-xl p-2 px-3 hover:bg-muted/80 transition duration-300"
+        >
+          <div className="flex flex-row space-x-4 items-center">
+            <CustomAvatar
+              userName={session?.user?.name || "Username"}
+              userImage={
+                session?.user?.image || "https://via.placeholder.com/150"
+              }
+              className="2xl:size-10"
+            />
+            <div className="flex flex-col space-y-0">
+              <span className="font-semibold">
+                {session?.user?.name || "Username"}
+              </span>
+              <span className="text-sm font-light">
+                {session?.user?.email || "email@email.com"}
+              </span>
+            </div>
+          </div>
+        </section>
+        <NavButtonLeft name="Home" icon={IconHome} />
+        <NavButtonLeft name="Post Recipe" icon={IconSquareRoundedPlus} />
+        <NavButtonLeft name="Search Recipe" icon={IconSearch} />
+        <NavButtonLeft
+          name="Toggle Theme"
+          icon={theme === "dark" ? IconSun : IconMoon}
+          onClick={() => {
+            setTheme(theme === "dark" ? "light" : "dark");
+          }}
+        />
+      </div>
+      <NavButtonLeft name="Log Out" icon={IconLogout} parentCN="mt-auto" />
+    </div>
+  );
+};
+
+/* <ul className="w-full flex flex-col justify-start z-40 space-y-3 my-0 transition-all">
       <li className="flex justify-start">
         <Link
           className="flex flex-row justify-start self-start items-center space-x-2 bg-transparent hover:bg-gradient-to-l hover:from-primary/40 hover:to-transparent transition-colors duration-300 p-2 rounded-xl"
@@ -64,8 +108,6 @@ const LeftNav = () => {
           </p>
         </button>
       </li>
-    </ul>
-  );
-};
+    </ul> */
 
 export default LeftNav;
