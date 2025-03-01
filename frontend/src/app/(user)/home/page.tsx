@@ -1,24 +1,27 @@
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
 import HomeImageSlider from "@/components/home/HomeImageSlider";
 import LeftNav from "@/components/home/LeftNav";
+import SearchBar from "@/components/home/SearchBar";
 import FloatingNavbar from "@/components/navbar/FloatingNav";
 import UserNav from "@/components/navbar/UserNav";
 import { SpotlightNew } from "@/components/ui/spotlight-new";
 
 const page = () => {
   return (
-    <div className="flex flex-row w-full justify-center items-center px-5 py-5 md:py-8 lg:py-12 xl:py-14 overflow-y-hidden bg-background dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative">
+    <div className="flex flex-row w-full justify-center items-center bg-background dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative">
       <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
-      <SpotlightNew />
-      <UserNav />
-      <div className="flex flex-row md:grid md:grid-cols-5 w-full justify-center items-start my-12 sm:my-14">
+
+      {/* <UserNav /> */}
+
+      <div className="flex flex-row w-full justify-center items-start min-h-screen overflow-y-auto">
         <section
-          id="left-nav"
-          className="w-full flex-[1] self-center h-full mx-0 hidden md:flex"
+          id="feed"
+          className="flex flex-col max-w-xl w-full z-30 py-10 overflow-y-auto"
         >
-          <LeftNav />
-        </section>
-        <section id="feed" className="flex flex-col w-full col-span-3">
+          <section id="search" className="mb-10 w-full">
+            <SearchBar />
+          </section>
+
           <section
             id="header"
             className="flex w-full max-w-md lg:max-w-xl xl:max-w-2xl flex-col justify-center items-center self-center space-y-4 z-10 mb-12 sm:mb-14"
@@ -43,6 +46,7 @@ const page = () => {
           </section>
         </section>
       </div>
+
       <FloatingNavbar />
     </div>
   );
