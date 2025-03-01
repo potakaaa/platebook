@@ -13,6 +13,7 @@ import CustomAvatar from "../user/CustomAvatar";
 import NavButtonLeft from "./NavButtonsLeft";
 import { useTheme } from "next-themes";
 import { useSession } from "next-auth/react";
+import ThemeToggle from "./buttons/ThemeToggle";
 
 const LeftNav = () => {
   const { data: session, status } = useSession();
@@ -46,13 +47,7 @@ const LeftNav = () => {
         <NavButtonLeft name="Home" icon={IconHome} />
         <NavButtonLeft name="Post Recipe" icon={IconSquareRoundedPlus} />
         <NavButtonLeft name="Search Recipe" icon={IconSearch} />
-        <NavButtonLeft
-          name="Toggle Theme"
-          icon={theme === "dark" ? IconSun : IconMoon}
-          onClick={() => {
-            setTheme(theme === "dark" ? "light" : "dark");
-          }}
-        />
+        <ThemeToggle />
         <NavButtonLeft
           name="Plate List"
           icon={IconDisc}

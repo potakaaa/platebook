@@ -1,6 +1,5 @@
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
 import HomeImageSlider from "@/components/home/HomeImageSlider";
-import LeftNav from "@/components/home/LeftNav";
 import SearchBar from "@/components/home/SearchBar";
 import FloatingNavbar from "@/components/navbar/FloatingNav";
 import UserNav from "@/components/navbar/UserNav";
