@@ -11,9 +11,11 @@ django-allauth==65.4.1
 django-cloudinary-storage==0.3.0
 django-cors-headers==4.7.0
 django-otp==1.5.4
+django-seed==0.3.1
 djangorestframework==3.15.2
 djangorestframework_simplejwt==5.4.0
 drf-nested-routers==0.94.1
+Faker==36.1.1
 idna==3.10
 oauthlib==3.2.2
 psycopg2-binary==2.9.10
@@ -24,6 +26,7 @@ requests==2.32.3
 requests-oauthlib==2.0.0
 six==1.17.0
 sqlparse==0.5.3
+toposort==1.10
 typing_extensions==4.12.2
 tzdata==2025.1
 urllib3==2.3.0

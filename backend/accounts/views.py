@@ -6,6 +6,7 @@ from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.views import LoginView
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 import requests
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -19,7 +20,10 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django_otp.plugins.otp_email.models import EmailDevice
 from cloudinary.uploader import upload
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.generics import RetrieveAPIView
+from rest_framework.decorators import action
 from .models import CustomUserModel
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -283,3 +287,9 @@ class ResetPasswordView(APIView):
         response.delete_cookie("uid")
 
         return response
+
+class GetUserByIDView(RetrieveAPIView):
+    queryset = CustomUserModel.objects.all()
+    serializer_class = CustomUserModelSerializer
+    lookup_field = "id"
+    permission_classes = [AllowAny]

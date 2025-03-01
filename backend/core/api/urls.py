@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import CustomLoginView, CustomRegisterView, OTPPasswordRequestView, ResetPasswordView, VerifyOTP
+from accounts.views import CustomLoginView, CustomRegisterView, OTPPasswordRequestView, ResetPasswordView, VerifyOTP, GetUserByIDView
 
 urlpatterns = [
     path('auth/login/', CustomLoginView.as_view(), name='custom_login'),
@@ -29,4 +29,5 @@ urlpatterns = [
     path('', include('recipes.urls')),
     path('', include('interactions.urls')),
     path('', include('cook_list.urls')),
+    path('user/<int:id>/', GetUserByIDView.as_view(), name='get_user_by_id'),
 ]
