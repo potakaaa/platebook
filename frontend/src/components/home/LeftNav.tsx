@@ -22,9 +22,9 @@ const LeftNav = () => {
       <div className="flex flex-col w-full space-y-3">
         <section
           id="user"
-          className="w-full border border-muted rounded-xl p-2 px-3 hover:bg-muted/80 transition duration-300"
+          className="w-full border border-muted rounded-xl p-2 px-3 hover:bg-muted/80 transition duration-300 overflow-hidden"
         >
-          <div className="flex flex-row space-x-4 items-center">
+          <div className="flex flex-row space-x-3 xl:space-x-4 items-center">
             <CustomAvatar
               userName={session?.user?.name || "Username"}
               userImage={
@@ -32,12 +32,12 @@ const LeftNav = () => {
               }
               className="2xl:size-10"
             />
-            <div className="flex flex-col space-y-0">
-              <span className="font-semibold">
+            <div className="flex flex-col space-y-0 truncate text-ellipsis">
+              <span className="font-semibold lg:text-sm">
                 {session?.user?.name || "Username"}
               </span>
-              <span className="text-sm font-light">
-                {session?.user?.email || "email@email.com"}
+              <span className="lg:text-xs xl:text-sm font-light w-full">
+                {session?.user?.email || "emailasdfsafd@email.com"}
               </span>
             </div>
           </div>

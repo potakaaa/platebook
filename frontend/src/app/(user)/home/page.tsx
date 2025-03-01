@@ -13,10 +13,10 @@ const page = () => {
 
       {/* <UserNav /> */}
 
-      <div className="flex flex-row w-full justify-center items-start min-h-screen overflow-y-auto">
+      <div className="flex flex-row max-w-md lg:max-w-[27rem] xl:max-w-xl w-full justify-center items-start min-h-screen overflow-y-auto">
         <section
           id="feed"
-          className="flex flex-col max-w-xl w-full z-30 py-10 overflow-y-auto"
+          className="flex flex-col w-full z-30 py-10 overflow-y-auto"
         >
           <section id="search" className="mb-10 w-full">
             <SearchBar />
@@ -24,7 +24,7 @@ const page = () => {
 
           <section
             id="header"
-            className="flex w-full max-w-md lg:max-w-xl xl:max-w-2xl flex-col justify-center items-center self-center space-y-4 z-10 mb-12 sm:mb-14"
+            className="flex w-full flex-col justify-center items-center self-center space-y-4 z-10 mb-12 sm:mb-14"
           >
             <div className="flex w-full justify-start flex-col space-y-1 ">
               <h1 className="text-primary text-xl sm:text-2xl lg:text-3xl font-bold text-left">

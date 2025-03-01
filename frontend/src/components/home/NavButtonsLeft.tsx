@@ -25,12 +25,12 @@ const NavButtonLeft = ({
     >
       <div
         className={cn(
-          "space-x-4 flex flex-row justify-center items-center",
+          "lg:space-x-3 xl:space-x-4 flex flex-row justify-center items-center",
           divCN
         )}
       >
-        <Icon className="2xl:size-8 text-primary" />
-        <span>{name}</span>
+        <Icon className="lg:size-6 2xl:size-8 text-primary" />
+        <span className="lg:text-sm xl:text-base">{name}</span>
       </div>
     </section>
   );

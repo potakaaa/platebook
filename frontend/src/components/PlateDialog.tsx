@@ -36,8 +36,8 @@ const PlateDialog = ({
             />
           </span>
           <section className="flex flex-col w-32">
-            <p className="font-semibold text-lg">{postName}</p>
-            <p className="text-sm truncate">{postDesc}</p>
+            <p className="font-semibold lg:text-base xl:text-lg">{postName}</p>
+            <p className="lg:text-xs xl:text-sm truncate">{postDesc}</p>
           </section>
         </div>
       </DialogTrigger>
