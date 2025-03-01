@@ -216,9 +216,10 @@ class VerifyOTP(APIView):
             key="reset_token",
             value=reset_token,
             httponly=True,  
-            secure=True,  
-            samesite="Strict",  
-            max_age=600  
+            max_age=600 , 
+            secure=False,
+            samesite="Lax",
+            path="/"
         )
 
    
@@ -226,9 +227,10 @@ class VerifyOTP(APIView):
             key="uid",
             value=uid,
             httponly=True,
-            secure=True,
-            samesite="Strict",
-            max_age=600
+            max_age=600,
+            secure=False,
+            samesite="Lax",
+            path="/"
         )
 
         return response
@@ -242,6 +244,7 @@ class ResetPasswordView(APIView):
     def post(self, request):
         reset_token = request.COOKIES.get("reset_token")
         uidb64 = request.COOKIES.get("uid")
+
 
         if not reset_token or not uidb64:
             return Response({"error": "Reset token is missing or invalid."}, status=status.HTTP_400_BAD_REQUEST)
@@ -269,6 +272,7 @@ class ResetPasswordView(APIView):
 
             validate_password(password1)
         except ValidationError as e:
+            print("VALIDATON ERROR")
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         user.set_password(password1)
