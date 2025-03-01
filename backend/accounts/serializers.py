@@ -116,6 +116,7 @@ class OTPSerializer(serializers.Serializer):
       otp = device.generate_challenge()
 
       device.valid_until = timezone.now() + timedelta(minutes=5) 
+      device.save()
 
       return value
    

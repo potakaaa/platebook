@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import LikeViewSet, ShareViewSet, CommentViewSet, FollowViewSet
+from .views import LikeViewSet, ShareViewSet, CommentViewSet, FollowViewSet, FollowingView, FollowersView, UserLikesView, UserSharesView
 from recipes.urls import recipes_router
 
 
@@ -13,4 +13,9 @@ router.register(r'follows', FollowViewSet, basename='follow')
 urlpatterns = [
     path('', include(router.urls)),  
     path('', include(recipes_router.urls)),
+    path("users/<int:user_pk>/following/", FollowingView.as_view(), name="user-following"),
+    path("users/<int:user_pk>/followers/", FollowersView.as_view(), name="user-followers"),
+    path("users/<int:user_pk>/likes/", UserLikesView.as_view(), name="user-likes"),
+    path("users/<int:user_pk>/shares/", UserSharesView.as_view(), name="user-shares"),
 ]
+

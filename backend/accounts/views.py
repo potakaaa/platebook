@@ -5,11 +5,17 @@ from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.views import LoginView
+from django.http import JsonResponse
+import requests
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from django.conf import settings
-import requests
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 from rest_framework import status
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django_otp.plugins.otp_email.models import EmailDevice
 from cloudinary.uploader import upload
 from rest_framework.views import APIView
@@ -118,7 +124,7 @@ class CustomRegisterView(RegisterView):
     serializer_class = CustomUserModelSerializer
 
 
-class OTPPasswordResetView(APIView):
+class OTPPasswordRequestView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -139,7 +145,6 @@ class OTPPasswordResetView(APIView):
         except Exception as e:
             return Response({"error": f"An unexpected error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-from django.utils import timezone 
 
 class VerifyOTPAndResetPasswordView(APIView):
     permission_classes = [AllowAny]
@@ -179,3 +184,98 @@ class VerifyOTPAndResetPasswordView(APIView):
         user.save()
 
         return Response({"success": "Password reset successfully."}, status=status.HTTP_200_OK)
+
+
+class VerifyOTP(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        otp = request.data.get("otp")
+        
+        if not otp:
+            return Response({"error": "OTP is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        device = EmailDevice.objects.filter(token=otp).first()
+        
+        if not device:
+            return Response({"error": "Device not found or OTP is incorrect."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not device.verify_token(otp):
+            return Response({"error": "Invalid OTP."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = device.user
+        if not user:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        reset_token = PasswordResetTokenGenerator().make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.userId))
+
+        response = JsonResponse({"success": "OTP verified successfully."})
+        
+        response.set_cookie(
+            key="reset_token",
+            value=reset_token,
+            httponly=True,  
+            secure=True,  
+            samesite="Strict",  
+            max_age=600  
+        )
+
+   
+        response.set_cookie(
+            key="uid",
+            value=uid,
+            httponly=True,
+            secure=True,
+            samesite="Strict",
+            max_age=600
+        )
+
+        return response
+    
+    
+
+
+class ResetPasswordView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        reset_token = request.COOKIES.get("reset_token")
+        uidb64 = request.COOKIES.get("uid")
+
+        if not reset_token or not uidb64:
+            return Response({"error": "Reset token is missing or invalid."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+
+            user_id = urlsafe_base64_decode(uidb64).decode()
+            user = CustomUserModel.objects.get(userId=user_id)
+        except (CustomUserModel.DoesNotExist, ValueError):
+            return Response({"error": "Invalid token or user ID."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not PasswordResetTokenGenerator().check_token(user, reset_token):
+            return Response({"error": "Invalid or expired reset token."}, status=status.HTTP_400_BAD_REQUEST)
+
+        password1 = request.data.get("password1")
+        password2 = request.data.get("password2")
+
+        if not password1 or not password2:
+            return Response({"error": "Both password fields are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if password1 != password2:
+            return Response({"error": "Passwords do not match."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+
+            validate_password(password1)
+        except ValidationError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(password1)
+        user.save()
+
+        response = Response({"success": "Password reset successfully."}, status=status.HTTP_200_OK)
+        response.delete_cookie("reset_token")
+        response.delete_cookie("uid")
+
+        return response
