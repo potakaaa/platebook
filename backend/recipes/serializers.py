@@ -35,6 +35,8 @@ class RecipeListSerializer(serializers.ModelSerializer):
     shares = serializers.SerializerMethodField()
     comments = serializers.SerializerMethodField()
     isPlateListed = serializers.SerializerMethodField()
+    isLiked = serializers.SerializerMethodField()
+    isShared = serializers.SerializerMethodField()
     
     def get_likes(self, obj):
         return obj.like_set.count()
@@ -45,7 +47,7 @@ class RecipeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ["id", "title","description", "chef", "origin_country", "created_at", "images", "likes", "shares", "comments", "isPlateListed"]
+        fields = ["id", "title","description", "chef", "origin_country", "created_at", "images", "likes", "shares", "comments", "isPlateListed", "isLiked", "isShared"]
 
     def get_chef(self, obj):
         return {
@@ -68,6 +70,22 @@ class RecipeListSerializer(serializers.ModelSerializer):
             return False
         
         return CooklistItem.objects.filter(cooklist__owner=user, recipe=obj).exists()
+    
+    def get_isLiked(self, obj):
+        user = self.context['request'].user
+
+        if user.is_anonymous:
+            return False
+        
+        return obj.like_set.filter(user=user).exists()
+    
+    def get_isShared(self, obj):
+        user = self.context['request'].user
+
+        if user.is_anonymous:
+            return False
+        
+        return obj.share_set.filter(user=user).exists()
         
     
 
@@ -84,15 +102,19 @@ class RecipeSerializer(serializers.ModelSerializer):
     shares = serializers.SerializerMethodField()
     comments = serializers.SerializerMethodField()
     isPlateListed = serializers.SerializerMethodField()
+    isLiked = serializers.SerializerMethodField()
+    isShared = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
-        fields = ['id', 'title', 'description', 'chef', 'origin_country', 'created_at', 'updated_at', 'ingredients', 'steps', 'images', 'likes', 'shares', 'comments', 'isPlateListed']
+        fields = ['id', 'title', 'description', 'chef', 'origin_country', 'created_at', 'updated_at', 'ingredients', 'steps', 'images', 'likes', 'shares', 'comments', 'isPlateListed', 'isLiked', 'isShared']
         extra_kwargs = {
             'likes': {'read_only': True},
             'shares': {'read_only': True},
             'comments': {'read_only': True},
-            'isPlateListed': {'read_only': True}
+            'isPlateListed': {'read_only': True},
+            'isLiked': {'read_only': True},
+            'isShared': {'read_only': True}
         }
 
 
@@ -113,3 +135,19 @@ class RecipeSerializer(serializers.ModelSerializer):
             return False
         
         return CooklistItem.objects.filter(cooklist__owner=user, recipe=obj).exists()
+    
+    def get_isLiked(self, obj):
+        user = self.context['request'].user
+
+        if user.is_anonymous:
+            return False
+        
+        return obj.like_set.filter(user=user).exists()
+    
+    def get_isShared(self, obj):
+        user = self.context['request'].user
+
+        if user.is_anonymous:
+            return False
+        
+        return obj.share_set.filter(user=user).exists()

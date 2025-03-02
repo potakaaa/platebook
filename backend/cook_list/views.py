@@ -6,24 +6,11 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 class CooklistViewSet(viewsets.ModelViewSet):
     serializer_class = CooklistSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
         return Cooklist.objects.filter(owner=self.request.user)
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-    def perform_update(self, serializer):
-        if serializer.instance.owner != self.request.user:
-            raise serializers.ValidationError("You can only modify your own cooklists.")
-        serializer.save()
-
-    def perform_destroy(self, instance):
-        if instance.owner != self.request.user:
-            raise serializers.ValidationError("You can only delete your own cooklists.")
-        instance.delete()
 
 
 class CooklistItemViewSet(viewsets.ModelViewSet):
@@ -47,3 +34,5 @@ class CooklistItemViewSet(viewsets.ModelViewSet):
         if instance.cooklist.owner != self.request.user:
             raise serializers.ValidationError("You can only remove items from your own cooklist.")
         instance.delete()
+        
+        

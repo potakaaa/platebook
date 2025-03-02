@@ -29,6 +29,8 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (response.data) {
+            console.log("Login response:", response.data);
+
             return {
               id: response.data.user?.id || "unknown",
               name: response.data.user?.username || null,
@@ -122,19 +124,26 @@ export const authOptions: NextAuthOptions = {
         token.name = user.name;
         token.email = user.email;
         token.image = user.image || null;
-      }
 
+        token.accessToken = (user as AuthUser).accessToken || token.accessToken;
+        token.refreshToken =
+          (user as AuthUser).refreshToken || token.refreshToken;
+      }
+      console.log("JWT token:", token);
       return token;
     },
 
     async session({ session, token }: { session: Session; token: JWT }) {
-      session.accessToken = (token.accessToken ?? "") as string;
+      session.accessToken = token.accessToken as string;
+      session.refreshToken = token.refreshToken as string;
       session.user = {
         id: (token.id ?? "") as string,
         name: token.name ?? null,
         email: token.email ?? null,
         image: typeof token.image === "string" ? token.image : null,
       };
+
+      console.log("Session:", session);
 
       return session;
     },

@@ -60,6 +60,32 @@ export const fetchFeed = async (page = 1) => {
   */
 };
 
+export const fetchFollowingFeed = async (page = 1) => {
+  try {
+    console.log(`Fetching following feed - Page: ${page}`);
+
+    const response = await axiosClient.get(
+      `/feed/?filter=following&page=${page}`
+    );
+
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "Fetch Following Feed Error:",
+      error.response?.data || error.message
+    );
+
+    if (error.response?.data) {
+      throw new Error(JSON.stringify(error.response.data));
+    }
+
+    throw new Error(
+      "An unknown error occurred while fetching the following feed."
+    );
+  }
+};
+
+
 export const postRecipe = async (data: SubmitRecipe) => {
   try {
     const response = await axiosClient.post("/recipes/", {

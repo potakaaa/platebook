@@ -13,9 +13,9 @@ router.register(r'follows', FollowViewSet, basename='follow')
 urlpatterns = [
     path('', include(router.urls)),  
     path('', include(recipes_router.urls)),
-    path("users/<int:user_pk>/following/", FollowingView.as_view(), name="user-following"),
-    path("users/<int:user_pk>/followers/", FollowersView.as_view(), name="user-followers"),
-    path("users/<int:user_pk>/likes/", UserLikesView.as_view(), name="user-likes"),
-    path("users/<int:user_pk>/shares/", UserSharesView.as_view(), name="user-shares"),
+    path("users/<uuid:user_pk>/following/", FollowingView.as_view(), name="user-following"),
+    path("users/<uuid:user_pk>/followers/", FollowersView.as_view(), name="user-followers"),
+    path("users/<uuid:user_pk>/likes/", UserLikesView.as_view(), name="user-likes"),
+    path("users/<uuid:user_pk>/shares/", UserSharesView.as_view(), name="user-shares"),
 ]
 

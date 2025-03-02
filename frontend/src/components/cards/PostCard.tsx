@@ -64,26 +64,23 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             {description}
           </CardItem>
           <div className="w-full py-2 grid grid-cols-2 gap-2">
-            <CardItem className="w-full" translateX={-5} translateZ={50}>
-              <AspectRatio ratio={1 / 1}>
-                <Image
-                  src={images[0]}
-                  alt={title}
-                  fill
-                  className="size-full rounded-lg object-cover shadow-md sm:shadow-lg lg:shadow-xl"
-                />
-              </AspectRatio>
-            </CardItem>
-            <CardItem className="w-full" translateX={5} translateZ={50}>
-              <AspectRatio ratio={1 / 1}>
-                <Image
-                  src={images[1]}
-                  alt={title}
-                  fill
-                  className="size-full rounded-lg object-cover shadow-xl"
-                />
-              </AspectRatio>
-            </CardItem>
+            {images.slice(0, 2).map((image, index) => (
+              <CardItem
+                key={index}
+                className="w-full"
+                translateX={index % 2 === 0 ? -5 : 5}
+                translateZ={40}
+              >
+                <AspectRatio ratio={1 / 1}>
+                  <Image
+                    src={image}
+                    alt={title}
+                    fill
+                    className="size-full rounded-lg object-cover shadow-md"
+                  />
+                </AspectRatio>
+              </CardItem>
+            ))}
           </div>
         </div>
         <CardItem

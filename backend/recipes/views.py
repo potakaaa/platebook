@@ -7,9 +7,11 @@ from rest_framework.permissions import AllowAny
 from .serializers import RecipeSerializer, IngredientSerializer, StepSerializer, RecipeImageSerializer, RecipeListSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.filters import OrderingFilter
 from django.http import JsonResponse
 from rest_framework.generics import ListAPIView
 from django.db.models import Q
+from interactions.models import Follow
 
 # Create your views here.
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -74,15 +76,28 @@ class RecipePagination(PageNumberPagination):
     page_size = 15
 
 class RecipeFeedView(ListAPIView):
-    queryset = Recipe.objects.all().order_by("-created_at")
     serializer_class = RecipeListSerializer
     pagination_class = RecipePagination
     permission_classes = [AllowAny]
-    
-    def dispatch(self, request, *args, **kwargs):
-        print("HASHJDAJSDJH")
-        print(f"Active permission classes: {self.permission_classes}")
-        return super().dispatch(request, *args, **kwargs)  
+    filter_backends = [OrderingFilter]
+    ordering_fields = ["created_at"]  
+    def get_queryset(self):
+        queryset = Recipe.objects.all()
+
+        filter_type = self.request.query_params.get("filter", None)
+        sort_order = self.request.query_params.get("sort", "newest")
+
+
+        if filter_type == "following" and self.request.user.is_authenticated:
+            following_users = Follow.objects.filter(user=self.request.user).values_list("followed_user", flat=True)
+            queryset = queryset.filter(chef__id__in=following_users)
+
+        if sort_order == "oldest":
+            queryset = queryset.order_by("created_at")  
+        else:
+            queryset = queryset.order_by("-created_at")
+
+        return queryset
 
 def search_view(request):
     search =  request.GET.get('search', '')
