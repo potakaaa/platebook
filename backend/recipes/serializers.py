@@ -33,6 +33,8 @@ class RecipeListSerializer(serializers.ModelSerializer):
     images = RecipeImageSerializer(many=True, read_only=True, source='recipeimage_set')
     likes = serializers.SerializerMethodField()
     shares = serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
+    isPlateListed = serializers.SerializerMethodField()
     
     def get_likes(self, obj):
         return obj.like_set.count()
@@ -43,7 +45,7 @@ class RecipeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ["id", "title","description", "chef", "origin_country", "created_at", "images", "likes", "shares"]
+        fields = ["id", "title","description", "chef", "origin_country", "created_at", "images", "likes", "shares", "comments", "isPlateListed"]
 
     def get_chef(self, obj):
         return {
@@ -55,6 +57,17 @@ class RecipeListSerializer(serializers.ModelSerializer):
         if hasattr(obj, "pfp") and obj.pfp:  
             return obj.pfp.url
         return None
+    
+    def get_comments(self, obj):
+        return obj.comment_set.count()
+    
+    def get_isPlateListed(self, obj):
+        user = self.context['request'].user
+
+        if user.is_anonymous:
+            return False
+        
+        return CooklistItem.objects.filter(cooklist__owner=user, recipe=obj).exists()
         
     
 

@@ -24,15 +24,15 @@ const InfiniteScrollComp = () => {
 
         const parsedResults: PostCardProps[] = data.results.map((result: any) => {
             return {
-                userImage: result.chef.pfp_url,
-                userName: result.chef.username,
-                title: result.title,
-                description: result.description,
-                images: result.images.map((image: any) => image.image_url),
-                likeCount: result.likes,
-                shareCount: result.shares,
-                commentCount: 0,
-                atPlateList: false,
+              userImage: result.chef.pfp_url,
+              userName: result.chef.username,
+              title: result.title,
+              description: result.description,
+              images: result.images.map((image: any) => image.image_url),
+              likeCount: result.likes,
+              shareCount: result.shares,
+              commentCount: result.comments,
+              atPlateList: result.isPlateListed,
             };
             });
 
