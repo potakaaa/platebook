@@ -38,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${poppins.className} antialiased w-full min-h-screen flex items-center justify-center bg-background overflow-y-auto 
+        className={`${poppins.className} antialiased scroll-smooth w-full min-h-screen flex items-center justify-center bg-background overflow-y-auto 
         [&::-webkit-scrollbar]:w-2
       [&::-webkit-scrollbar-track]:bg-gray-100
       [&::-webkit-scrollbar-thumb]:bg-gray-300

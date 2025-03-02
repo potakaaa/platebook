@@ -5,8 +5,17 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { easeIn, motion } from "framer-motion";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
-const HomeLogo = () => {
+const HomeLogo = ({
+  buttonCN = "",
+  logoCN = "",
+  textCN = "",
+}: {
+  buttonCN?: string;
+  logoCN?: string;
+  textCN?: string;
+}) => {
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
 
@@ -18,7 +27,10 @@ const HomeLogo = () => {
     >
       <Button
         variant={"ghost"}
-        className="px-0 mx-0 hover:bg-opacity-0 flex items-center justify-center gap-1 sm:gap-2 md:gap-1 xl:gap-0 z-10 relative"
+        className={cn(
+          "px-0 mx-0 hover:bg-opacity-0 flex items-center justify-center gap-1 sm:gap-2 md:gap-1 xl:gap-0 z-10 relative",
+          buttonCN
+        )}
         onClick={() => router.push("/")}
       >
         <motion.span
@@ -39,13 +51,18 @@ const HomeLogo = () => {
           className="object-fill aspect-auto size-6 flex items-center justify-center mb-2 shadow-sm z-10"
         /> */}
 
-        <section className="relative flex font-black text-base sm:text-lg md:text-xl mx-1 md:mx-2 xl:mx-4 lg:text-2xl z-10  ">
+        <section
+          className={cn(
+            `relative flex font-black text-base sm:text-lg md:text-xl mx-1 md:mx-2 xl:mx-4 lg:text-2xl z-10`,
+            textCN
+          )}
+        >
           <Image
             src="/platebook-logo-500.png"
             alt="platebook"
             width={100}
             height={100}
-            className="size-7 z-30 mr-3"
+            className={cn("size-7 z-30 mr-3", logoCN)}
           />
           <h1 className="text-primary drop-shadow-sm hidden sm:block">Plate</h1>
           <h1 className="drop-shadow-sm text-foreground hidden sm:block">

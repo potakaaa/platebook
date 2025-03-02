@@ -14,6 +14,7 @@ import NavButtonLeft from "./NavButtonsLeft";
 import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "./buttons/ThemeToggle";
+import HomeLogo from "../navbar/nav/HomeLogo";
 
 const LeftNav = () => {
   const { data: session, status } = useSession();
@@ -22,6 +23,9 @@ const LeftNav = () => {
   return (
     <div className="flex flex-col size-full">
       <div className="flex flex-col w-full space-y-3">
+        <section id="logo" className="w-full mb-5">
+          <HomeLogo textCN={"lg:text-xl xl:text-2xl"} />
+        </section>
         <section
           id="user"
           className="w-full border border-muted rounded-xl p-2 px-3 hover:bg-muted/80 transition duration-300 overflow-hidden cursor-pointer"
