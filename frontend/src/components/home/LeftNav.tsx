@@ -11,7 +11,7 @@ import {
 import CustomAvatar from "../user/CustomAvatar";
 import NavButtonLeft from "./NavButtonsLeft";
 import { useTheme } from "next-themes";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const LeftNav = () => {
   const { data: session, status } = useSession();
@@ -53,7 +53,14 @@ const LeftNav = () => {
           }}
         />
       </div>
-      <NavButtonLeft name="Log Out" icon={IconLogout} parentCN="mt-auto" />
+      <NavButtonLeft
+        name="Log Out"
+        icon={IconLogout}
+        parentCN="mt-auto"
+        onClick={() => {
+          signOut({ callbackUrl: "/" });
+        }}
+      />
     </div>
   );
 };
