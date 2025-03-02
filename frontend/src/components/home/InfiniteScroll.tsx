@@ -17,12 +17,13 @@ const InfiniteScrollComp = () => {
   }, []);
 
   const fetchFeedData = async () => {
+    console.log("Fetching Feed Data");
     try {
       const response = await fetchFeed(page);
       const data = response;
       if (data.results && Array.isArray(data.results)) {
-
-        const parsedResults: PostCardProps[] = data.results.map((result: any) => {
+        const parsedResults: PostCardProps[] = data.results.map(
+          (result: any) => {
             return {
               userImage: result.chef.pfp_url,
               userName: result.chef.username,
@@ -34,8 +35,9 @@ const InfiniteScrollComp = () => {
               commentCount: result.comments,
               atPlateList: result.isPlateListed,
             };
-            });
-
+          }
+        );
+        setPage(page + 1);
         setPosts((prevPosts) => [...prevPosts, ...parsedResults]);
 
         if (!data.next) {
@@ -51,7 +53,7 @@ const InfiniteScrollComp = () => {
   };
 
   const refresh = () => {
-    setPosts([]); 
+    setPosts([]);
     setPage(1);
     setHasMore(true);
     fetchFeedData();
@@ -60,7 +62,7 @@ const InfiniteScrollComp = () => {
   return (
     <InfiniteScroll
       dataLength={posts.length}
-      next={fetchFeed}
+      next={fetchFeedData}
       hasMore={hasMore}
       loader={<h4>Loading...</h4>}
       endMessage={
