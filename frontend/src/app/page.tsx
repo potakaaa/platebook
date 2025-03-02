@@ -138,8 +138,8 @@ const LandingPage = () => {
 export default LandingPage;
 
 const samplePost: PostCardProps = {
-  userImage: "https://avatars.githubusercontent.com/u/111859181?v=4",
-  userName: "Potakaaa",
+  userImage: "/platebook-logo-500.png",
+  userName: "Platebook",
   title: "Adobong Kare Kare Pinoy Style",
   description:
     "A delicious Filipino dish that combines the flavors of adobo and kare kare.",
