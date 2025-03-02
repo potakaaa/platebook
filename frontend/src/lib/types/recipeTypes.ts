@@ -15,7 +15,7 @@ export type Ingredient = {
 };
 
 export type Step = {
-  step_num: Number;
+  step_num: number;
   description: string;
 };
 
