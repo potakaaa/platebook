@@ -17,6 +17,7 @@ const InfiniteScrollComp = () => {
   }, []);
 
   const fetchFeedData = async () => {
+    console.log("Fetching Feed Data");
     try {
       const response = await fetchFeed(page);
       const data = response;
@@ -36,7 +37,7 @@ const InfiniteScrollComp = () => {
             };
           }
         );
-
+        setPage(page + 1);
         setPosts((prevPosts) => [...prevPosts, ...parsedResults]);
 
         if (!data.next) {
@@ -61,7 +62,7 @@ const InfiniteScrollComp = () => {
   return (
     <InfiniteScroll
       dataLength={posts.length}
-      next={fetchFeed}
+      next={fetchFeedData}
       hasMore={hasMore}
       loader={
         <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden">
