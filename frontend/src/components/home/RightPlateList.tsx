@@ -31,16 +31,28 @@ const plateList = [
   {
     name: "Plate List 1",
     desc: "Plate Desc 1 Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1",
-    img: "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
+    img: [
+      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
+      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
+      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
+    ],
   },
   {
     name: "Plate List 2",
     desc: "Plate Desc 2",
-    img: "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
+    img: [
+      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
+      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
+      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
+    ],
   },
   {
     name: "Plate List 3",
     desc: "Plate Desc 3",
-    img: "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
+    img: [
+      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
+      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
+      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
+    ],
   },
 ];

@@ -69,7 +69,9 @@ const InfiniteScrollComp = () => {
         </div>
       }
       endMessage={
-        <p className="text-center mt-20">Come back for more recipes!</p>
+        <p className="text-center mt-20 text-foreground/60">
+          Come back for more recipes!
+        </p>
       }
       refreshFunction={refresh}
       pullDownToRefresh
