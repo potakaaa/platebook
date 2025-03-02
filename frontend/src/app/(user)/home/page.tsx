@@ -1,5 +1,6 @@
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
 import HomeImageSlider from "@/components/home/HomeImageSlider";
+import InfiniteScrollComp from "@/components/home/InfiniteScroll";
 import SearchBar from "@/components/home/SearchBar";
 import FloatingNavbar from "@/components/navbar/FloatingNav";
 import UserNav from "@/components/navbar/UserNav";
@@ -39,9 +40,7 @@ const page = () => {
             id="posts"
             className="flex flex-col justify-center self-center w-full space-y-5"
           >
-            {posts.map((post, index) => (
-              <PostCard key={index} postItems={post} />
-            ))}
+            <InfiniteScrollComp />
           </section>
         </section>
       </div>

@@ -7,6 +7,7 @@ import exp from "constants";
 export const fetchFeed = async (page = 1) => {
   try {
     const response = await axiosClient.get(`/feed/?page=${page}`);
+
     return response.data;
   } catch (error: any) {
     console.error("Fetch Feed Error:", error.response?.data);
@@ -15,6 +16,7 @@ export const fetchFeed = async (page = 1) => {
     }
 
     throw new Error("An unknown error occurred.");
+
   }
 
   /*
