@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
 import { fetchFeed } from "@/lib/services/api/recipeServices";
 import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard, { PostCardProps } from "../cards/PostCard";
 import { title } from "process";
+import Spinner from "../loader/Spinner";
 
 const InfiniteScrollComp = () => {
   const [posts, setPosts] = useState<PostCardProps[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState<number>(1);
-
 
   useEffect(() => {
     fetchFeedData();
@@ -64,20 +64,22 @@ const InfiniteScrollComp = () => {
       dataLength={posts.length}
       next={fetchFeedData}
       hasMore={hasMore}
-      loader={<h4>Loading...</h4>}
+      loader={
+        <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden">
+          <Spinner />
+        </div>
+      }
       endMessage={
-        <p style={{ textAlign: "center" }}>
-          <b>Yay! You have seen it all</b>
-        </p>
+        <p className="text-center mt-20">Come back for more recipes!</p>
       }
       refreshFunction={refresh}
       pullDownToRefresh
       pullDownToRefreshThreshold={50}
       pullDownToRefreshContent={
-        <h3 style={{ textAlign: "center" }}>&#8595; Pull down to refresh</h3>
+        <h3 className="text-center">&#8595; Pull down to refresh</h3>
       }
       releaseToRefreshContent={
-        <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
+        <h3 className="text-center">&#8593; Release to refresh</h3>
       }
     >
       {posts.map((post, index) => (
