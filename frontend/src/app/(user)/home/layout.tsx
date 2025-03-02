@@ -9,7 +9,7 @@ const layout = ({ children }: { children: ReactNode }) => {
     <>
       <SpotlightNew />
       <div
-        className={`w-full px-2 sm:px-10 md:px-2 xl:px-5 2xl:px-12 flex items-center justify-center 2xl:space-x-20 scroll-smooth overflow-x-hidden`}
+        className={`w-full px-2 sm:px-10 md:px-2 xl:px-5 2xl:px-12 flex items-center justify-center 2xl:space-x-20 scroll-smooth`}
       >
         <section
           id="left-nav"
