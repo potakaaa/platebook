@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Recipe, Ingredient, Step, RecipeImage
 from accounts.models import CustomUserModel
 from accounts.serializers import CustomUserModelSerializer
+from cook_list.models import CooklistItem
 import cloudinary.uploader
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -32,6 +33,8 @@ class RecipeListSerializer(serializers.ModelSerializer):
     images = RecipeImageSerializer(many=True, read_only=True, source='recipeimage_set')
     likes = serializers.SerializerMethodField()
     shares = serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
+    isPlateListed = serializers.SerializerMethodField()
     
     def get_likes(self, obj):
         return obj.like_set.count()
@@ -42,7 +45,7 @@ class RecipeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ["id", "title","description", "chef", "origin_country", "created_at", "images", "likes", "shares"]
+        fields = ["id", "title","description", "chef", "origin_country", "created_at", "images", "likes", "shares", "comments", "isPlateListed"]
 
     def get_chef(self, obj):
         return {
@@ -54,6 +57,17 @@ class RecipeListSerializer(serializers.ModelSerializer):
         if hasattr(obj, "pfp") and obj.pfp:  
             return obj.pfp.url
         return None
+    
+    def get_comments(self, obj):
+        return obj.comment_set.count()
+    
+    def get_isPlateListed(self, obj):
+        user = self.context['request'].user
+
+        if user.is_anonymous:
+            return False
+        
+        return CooklistItem.objects.filter(cooklist__owner=user, recipe=obj).exists()
         
     
 
@@ -68,13 +82,17 @@ class RecipeSerializer(serializers.ModelSerializer):
     images = RecipeImageSerializer(many=True, read_only=True, source='recipeimage_set')
     likes = serializers.SerializerMethodField()
     shares = serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
+    isPlateListed = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
-        fields = ['id', 'title', 'description', 'chef', 'origin_country', 'created_at', 'updated_at', 'ingredients', 'steps', 'images', 'likes', 'shares']
+        fields = ['id', 'title', 'description', 'chef', 'origin_country', 'created_at', 'updated_at', 'ingredients', 'steps', 'images', 'likes', 'shares', 'comments', 'isPlateListed']
         extra_kwargs = {
             'likes': {'read_only': True},
-            'shares': {'read_only': True}
+            'shares': {'read_only': True},
+            'comments': {'read_only': True},
+            'isPlateListed': {'read_only': True}
         }
 
 
@@ -84,3 +102,14 @@ class RecipeSerializer(serializers.ModelSerializer):
     
     def get_shares(self, obj):
         return obj.share_set.count()
+    
+    def get_comments(self, obj):
+        return obj.comment_set.count()
+    
+    def get_isPlateListed(self, obj):
+        user = self.context['request'].user
+
+        if user.is_anonymous:
+            return False
+        
+        return CooklistItem.objects.filter(cooklist__owner=user, recipe=obj).exists()

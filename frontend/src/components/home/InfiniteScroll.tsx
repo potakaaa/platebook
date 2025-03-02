@@ -31,8 +31,8 @@ const InfiniteScrollComp = () => {
               images: result.images.map((image: any) => image.image_url),
               likeCount: result.likes,
               shareCount: result.shares,
-              commentCount: 0,
-              atPlateList: false,
+              commentCount: result.comments,
+              atPlateList: result.isPlateListed,
             };
           }
         );
