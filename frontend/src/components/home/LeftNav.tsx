@@ -1,5 +1,6 @@
 "use client";
 import {
+  IconDisc,
   IconHome,
   IconLogout,
   IconMoon,
@@ -12,6 +13,7 @@ import CustomAvatar from "../user/CustomAvatar";
 import NavButtonLeft from "./NavButtonsLeft";
 import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
+import ThemeToggle from "./buttons/ThemeToggle";
 
 const LeftNav = () => {
   const { data: session, status } = useSession();
@@ -22,7 +24,7 @@ const LeftNav = () => {
       <div className="flex flex-col w-full space-y-3">
         <section
           id="user"
-          className="w-full border border-muted rounded-xl p-2 px-3 hover:bg-muted/80 transition duration-300 overflow-hidden"
+          className="w-full border border-muted rounded-xl p-2 px-3 hover:bg-muted/80 transition duration-300 overflow-hidden cursor-pointer"
         >
           <div className="flex flex-row space-x-3 xl:space-x-4 items-center">
             <CustomAvatar
@@ -36,7 +38,7 @@ const LeftNav = () => {
               <span className="font-semibold lg:text-sm">
                 {session?.user?.name || "Username"}
               </span>
-              <span className="lg:text-xs xl:text-sm font-light w-full">
+              <span className="md:text-[12px] lg:text-xs xl:text-sm font-light w-full max-w-lg">
                 {session?.user?.email || "emailasdfsafd@email.com"}
               </span>
             </div>
@@ -45,12 +47,11 @@ const LeftNav = () => {
         <NavButtonLeft name="Home" icon={IconHome} />
         <NavButtonLeft name="Post Recipe" icon={IconSquareRoundedPlus} />
         <NavButtonLeft name="Search Recipe" icon={IconSearch} />
+        <ThemeToggle />
         <NavButtonLeft
-          name="Toggle Theme"
-          icon={theme === "dark" ? IconSun : IconMoon}
-          onClick={() => {
-            setTheme(theme === "dark" ? "light" : "dark");
-          }}
+          name="Plate List"
+          icon={IconDisc}
+          divCN="flex lg:hidden"
         />
       </div>
       <NavButtonLeft

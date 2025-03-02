@@ -1,7 +1,6 @@
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
 import HomeImageSlider from "@/components/home/HomeImageSlider";
 import InfiniteScrollComp from "@/components/home/InfiniteScroll";
-import LeftNav from "@/components/home/LeftNav";
 import SearchBar from "@/components/home/SearchBar";
 import FloatingNavbar from "@/components/navbar/FloatingNav";
 import UserNav from "@/components/navbar/UserNav";
@@ -17,15 +16,15 @@ const page = () => {
       <div className="flex flex-row w-full justify-center items-start min-h-screen overflow-y-auto">
         <section
           id="feed"
-          className="flex flex-col w-full z-30 py-10 overflow-y-auto"
+          className="flex flex-col w-full z-30 py-4 sm:py-7 md:py-10 overflow-y-auto gap-5"
         >
-          <section id="search" className="mb-10 w-full">
+          <section id="search" className="mb-5 w-full">
             <SearchBar />
           </section>
 
           <section
             id="header"
-            className="flex w-full flex-col justify-center items-center self-center space-y-4 z-10 mb-12 sm:mb-14"
+            className="flex w-full flex-col justify-center items-center self-center space-y-4 z-10 "
           >
             <div className="flex w-full justify-start flex-col space-y-1 ">
               <h1 className="text-primary text-xl sm:text-2xl lg:text-3xl font-bold text-left">
@@ -39,7 +38,7 @@ const page = () => {
           </section>
           <section
             id="posts"
-            className="flex flex-col max-w-md lg:max-w-xl xl:max-w-2xl justify-center self-center w-full space-y-5"
+            className="flex flex-col justify-center self-center w-full space-y-5"
           >
             <InfiniteScrollComp />
           </section>
