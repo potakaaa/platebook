@@ -55,8 +55,6 @@ export function SignUpForm({
   const router = useRouter();
 
   const onSubmit = async (data: SignUpFormData) => {
-    console.log("Submitting data:", data);
-
     try {
       const response = await signUp(data);
 

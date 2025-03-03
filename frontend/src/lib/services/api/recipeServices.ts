@@ -62,7 +62,6 @@ export const fetchFeed = async (page = 1) => {
 
 export const fetchFollowingFeed = async (page = 1) => {
   try {
-    console.log(`Fetching following feed - Page: ${page}`);
 
     const response = await axiosClient.get(
       `/feed/?filter=following&page=${page}`
@@ -122,8 +121,10 @@ export const postRecipe = async (data: SubmitRecipe) => {
 const postRecipeImages = async (id: number, images: File[]) => {
   try {
     const formData = new FormData();
+
+    // Append each image to the FormData
     images.forEach((image) => {
-      formData.append("images", image);
+      formData.append("image", image);
     });
 
     const response = await axiosClient.post(
@@ -149,10 +150,17 @@ const postRecipeImages = async (id: number, images: File[]) => {
 
 const postRecipeSteps = async (id: number, steps: Step[]) => {
   try {
-    steps.forEach(async (step) => {
-      const response = await axiosClient.post(`/recipes/${id}/steps/`, step);
-      return response;
-    });
+    const response = await axiosClient.post(
+      `/recipes/${id}/steps/`,
+      steps, 
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response;
   } catch (error: any) {
     console.error("Recipe Steps Post Error:", error.response?.data);
     if (error.response?.data) {
@@ -165,14 +173,17 @@ const postRecipeSteps = async (id: number, steps: Step[]) => {
 
 const postRecipeIngredients = async (id: number, ingredients: Ingredient[]) => {
   try {
-    ingredients.forEach(async (ingredient) => {
-      const response = await axiosClient.post(
-        `/recipes/${id}/ingredients/`,
-        ingredient
-      );
+    const response = await axiosClient.post(
+      `/recipes/${id}/ingredients/`,
+      ingredients,  
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-      return response;
-    });
+    return response;
   } catch (error: any) {
     console.error("Recipe Ingredients Post Error:", error.response?.data);
     if (error.response?.data) {
@@ -182,6 +193,7 @@ const postRecipeIngredients = async (id: number, ingredients: Ingredient[]) => {
     throw new Error("An unknown error occurred.");
   }
 };
+
 
 
 export const searchRecipe = async (search: string) => {

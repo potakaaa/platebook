@@ -11,12 +11,11 @@ export const axiosClient = axios.create({
 axiosClient.interceptors.request.use(
   async (config) => {
     const session = await getSession();
-
-    console.log("Session:", session);
-
+    
     if (session?.accessToken) {
       config.headers.Authorization = `Bearer ${session.accessToken}`;
     }
+    
     return config;
   },
   (error) => {
@@ -29,7 +28,7 @@ axiosClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    console.error("Error response:", error.response);
+    console.error("Error response:", error.response.data);
 
     if (
       error.response?.status === 401 ||
@@ -45,21 +44,26 @@ axiosClient.interceptors.response.use(
           return Promise.reject(error);
         }
 
-        console.log("Refreshing access token...");
-
         const refreshResponse = await axiosClient.post("/auth/refresh/", {
           refresh: session.refreshToken,
         });
 
-        if (refreshResponse.data?.access) {
-          console.log("🔄 Access token refreshed!");
 
-          await signIn("credentials", {
+        console.log("Refresh Response:", refreshResponse);
+
+
+
+        if (refreshResponse.data?.access) {
+          await signIn("credentials", {  
             accessToken: refreshResponse.data.access,
             refreshToken: session.refreshToken,
-            redirect: false,
+            id: session.user?.id,
+            name: session.user?.name,
+            email: session.user?.email,
+            image: session.user?.image,
+            redirect: false, 
+            
           });
-
           originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.access}`;
           return axiosClient(originalRequest);
         }

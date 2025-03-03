@@ -15,6 +15,7 @@ import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "./buttons/ThemeToggle";
 import HomeLogo from "../navbar/nav/HomeLogo";
+import PostRecipeDialog from "../PostRecipeDialog";
 
 const LeftNav = () => {
   const { data: session, status } = useSession();
@@ -49,7 +50,7 @@ const LeftNav = () => {
           </div>
         </section>
         <NavButtonLeft name="Home" icon={IconHome} />
-        <NavButtonLeft name="Post Recipe" icon={IconSquareRoundedPlus} />
+        <PostRecipeDialog/>
         <NavButtonLeft name="Search Recipe" icon={IconSearch} />
         <ThemeToggle />
         <NavButtonLeft

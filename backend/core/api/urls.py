@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from accounts.views import CustomLoginView, CustomRegisterView, OTPPasswordRequestView, ResetPasswordView, VerifyOTP, GetUserByIDView
+from rest_framework_simplejwt.views import TokenRefreshView
+
 
 urlpatterns = [
     path('auth/login/', CustomLoginView.as_view(), name='custom_login'),
     path('auth/', include('dj_rest_auth.urls')),
+    path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/registration/', CustomRegisterView.as_view(), name='custom_register'),
     path('auth/otp-request/', OTPPasswordRequestView.as_view()),
     path('auth/reset-password/', ResetPasswordView.as_view()),

@@ -6,6 +6,8 @@ from .permissions import IsChefOrReadOnly
 from rest_framework.permissions import AllowAny
 from .serializers import RecipeSerializer, IngredientSerializer, StepSerializer, RecipeImageSerializer, RecipeListSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter
 from django.http import JsonResponse
@@ -26,25 +28,39 @@ class RecipeViewSet(viewsets.ModelViewSet):
 class IngredientViewSet(viewsets.ModelViewSet):
     serializer_class = IngredientSerializer
     permission_classes = [IsChefOrReadOnly]  
-    
+
     def get_queryset(self):
         recipe = get_object_or_404(Recipe, pk=self.kwargs['recipe_pk'])
         return Ingredient.objects.filter(recipe=recipe)
 
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
-
     def perform_create(self, serializer):
-        
         recipe = get_object_or_404(Recipe, pk=self.kwargs['recipe_pk'])
         serializer.save(recipe=recipe)
-    
+
+    def create(self, request, *args, **kwargs):
+        if isinstance(request.data, list):
+            return self.bulk_create(request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
+
+    def bulk_create(self, request, *args, **kwargs):
+        recipe = get_object_or_404(Recipe, pk=self.kwargs['recipe_pk'])
+        ingredients_data = request.data
+
+        for item in ingredients_data:
+            item['recipe'] = recipe.id
+
+        serializer = IngredientSerializer(data=ingredients_data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class StepViewSet(viewsets.ModelViewSet):
     queryset = Step.objects.all()
     serializer_class = StepSerializer
     permission_classes = [IsChefOrReadOnly]
-    
+
     def get_queryset(self):
         recipe = get_object_or_404(Recipe, pk=self.kwargs['recipe_pk'])
         return Step.objects.filter(recipe=recipe)
@@ -52,6 +68,27 @@ class StepViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         recipe = get_object_or_404(Recipe, pk=self.kwargs['recipe_pk'])
         serializer.save(recipe=recipe)
+
+    def create(self, request, *args, **kwargs):
+        if isinstance(request.data, list):
+            return self.bulk_create(request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
+
+    def bulk_create(self, request, *args, **kwargs):
+        recipe = get_object_or_404(Recipe, pk=self.kwargs['recipe_pk'])
+        steps_data = request.data
+
+        for item in steps_data:
+            item['recipe'] = recipe.id
+
+        serializer = StepSerializer(data=steps_data, many=True)
+
+        if serializer.is_valid():
+            serializer.save() 
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     
     
 class RecipeImageViewSet(viewsets.ModelViewSet):
@@ -60,7 +97,6 @@ class RecipeImageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsChefOrReadOnly]
     parser_classes = (MultiPartParser, FormParser)
 
-
     def get_queryset(self):
         recipe = get_object_or_404(Recipe, pk=self.kwargs['recipe_pk'])
         return RecipeImage.objects.filter(recipe=recipe)
@@ -68,6 +104,26 @@ class RecipeImageViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         recipe = get_object_or_404(Recipe, pk=self.kwargs['recipe_pk'])
         serializer.save(recipe=recipe)
+
+    def create(self, request, *args, **kwargs):
+        if isinstance(request.data.getlist('image'), list):
+            return self.bulk_create(request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
+
+    def bulk_create(self, request, *args, **kwargs):
+        recipe = get_object_or_404(Recipe, pk=self.kwargs['recipe_pk'])
+        images_data = request.FILES.getlist('image')
+
+        if not images_data:
+            return Response({"detail": "No images provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+        recipe_images = [RecipeImage(recipe=recipe, image=image) for image in images_data]
+
+
+        RecipeImage.objects.bulk_create(recipe_images)
+   
+
+        return Response({"detail": f"{len(images_data)} images uploaded successfully."}, status=status.HTTP_201_CREATED)
         
 
 from rest_framework.pagination import PageNumberPagination

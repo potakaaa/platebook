@@ -64,14 +64,10 @@ export function LoginForm({
         console.error("Login failed:", response?.error);
       }
 
-      console.log("Login Response:", response);
-
       if (response?.error) {
         let errorMessage = response.error;
         try {
           const errorData = JSON.parse(response.error);
-          console.log("Parsed Error Data:", errorData);
-
           Object.keys(errorData).forEach((key) => {
             if (key in data) {
               loginForm.setError(

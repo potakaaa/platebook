@@ -17,7 +17,6 @@ const InfiniteScrollComp = () => {
   }, []);
 
   const fetchFeedData = async () => {
-    console.log("Fetching Feed Data");
     try {
       const response = await fetchFeed(page);
       const data = response;
