@@ -6,14 +6,17 @@ from cook_list.models import CooklistItem
 import cloudinary.uploader
 
 class IngredientSerializer(serializers.ModelSerializer):
+    recipe = serializers.PrimaryKeyRelatedField(queryset=Recipe.objects.all(), required=True)
+
     class Meta:
         model = Ingredient
-        fields = ['id', 'name', 'quantity']
+        fields = ['id', 'name', 'quantity', 'recipe']
 
 class StepSerializer(serializers.ModelSerializer):
+    recipe = serializers.PrimaryKeyRelatedField(queryset=Recipe.objects.all(), required=True)
     class Meta:
         model = Step
-        fields = ['id', 'step_num', 'description']
+        fields = ['id', 'step_num', 'description', 'recipe']
 
 class RecipeImageSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()

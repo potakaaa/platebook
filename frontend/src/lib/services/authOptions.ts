@@ -6,6 +6,8 @@ import GoogleProvider from "next-auth/providers/google";
 import TwitterProvider from "next-auth/providers/twitter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { redirect } from "next/navigation";
+import { access } from "fs";
+import { getSession, useSession } from "next-auth/react";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -18,39 +20,60 @@ export const authOptions: NextAuthOptions = {
           placeholder: "you@example.com",
         },
         password: { label: "Password", type: "password" },
+        accessToken: { label: "Access Token", type: "text" },
+        refreshToken: { label: "Refresh Token", type: "text" },
+        id: { label: "ID", type: "text" },
+        name: { label: "Name", type: "text" },
+        image: { label: "Image", type: "text" },
       },
       async authorize(credentials) {
+
         if (!credentials) return null;
 
-        try {
-          const response = await axiosClient.post("/auth/login/", {
-            email: credentials.email,
-            password: credentials.password,
-          });
+        if (credentials.email && credentials.password) {
 
-          if (response.data) {
-            console.log("Login response:", response.data);
 
-            return {
-              id: response.data.user?.id || "unknown",
-              name: response.data.user?.username || null,
-              email: response.data.user?.email || null,
-              image: response.data.user?.pfp_url || null,
-              accessToken: response.data.access,
-              refreshToken: response.data.refresh,
-            };
-          }
-        } catch (error: any) {
-          console.error("Login failed:", error);
+          try {
+            const response = await axiosClient.post("/auth/login/", {
+              email: credentials.email,
+              password: credentials.password,
+            });
 
-          throw new Error(
-            error.response?.data?.non_field_errors?.[0] ||
+            if (response.data) {
+              return {
+                id: response.data.user?.id || "unknown",
+                name: response.data.user?.username || null,
+                email: response.data.user?.email || null,
+                image: response.data.user?.pfp_url || null,
+                accessToken: response.data.access,
+                refreshToken: response.data.refresh,
+              };
+            }
+          } catch (error: any) {
+            console.error("Login failed:", error);
+
+            throw new Error(
+              error.response?.data?.non_field_errors?.[0] ||
               error.response?.data?.email?.[0] ||
               error.response?.data?.password?.[0] ||
               "Invalid email or password"
-          );
+            );
+          }
         }
 
+        if (credentials.accessToken && credentials.refreshToken) {
+
+
+            return {
+              id: credentials.id,
+              name: credentials.name,
+              email: credentials.email,
+              image: credentials.image,
+              accessToken: credentials.accessToken,
+              refreshToken: credentials.refreshToken,
+            }
+
+          } ;
         return null;
       },
     }),
@@ -129,7 +152,7 @@ export const authOptions: NextAuthOptions = {
         token.refreshToken =
           (user as AuthUser).refreshToken || token.refreshToken;
       }
-      console.log("JWT token:", token);
+
       return token;
     },
 
@@ -142,9 +165,6 @@ export const authOptions: NextAuthOptions = {
         email: token.email ?? null,
         image: typeof token.image === "string" ? token.image : null,
       };
-
-      console.log("Session:", session);
-
       return session;
     },
   },

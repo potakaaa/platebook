@@ -45,8 +45,6 @@ export const forgotPasswordVerify = async (otp: string) => {
       otp: otp
     }, {withCredentials: true});
 
-    console.log(response)
-
     return response.data;
   } catch (error: any) {
     console.error("Forgot Password Verify Error:", error.response?.data);

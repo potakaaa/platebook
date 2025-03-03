@@ -45,11 +45,10 @@ const newPassword_ForgetSchema = z
 
 const ForgetForm = () => {
   const router = useRouter();
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
 
   const onSubmit = async (data: ResetPasswordInputData) => {
     if (step === 1) {
-      console.log("Sending email for OTP:", data.email);
       try {
         const response = await forgotPasswordRequest(data.email);
         setStep(2);
@@ -68,7 +67,6 @@ const ForgetForm = () => {
         }
       }
     } else if (step === 2) {
-      console.log("Verifying OTP:", data.otp);
       try {
         const response = await forgotPasswordVerify(data.otp);
         setStep(3);
@@ -87,7 +85,6 @@ const ForgetForm = () => {
         }
       }
     } else if (step === 3) {
-      console.log("Resetting password with:", data.password1);
       try {
         const response = await verifiedPasswordReset({
           password1: data.password1,

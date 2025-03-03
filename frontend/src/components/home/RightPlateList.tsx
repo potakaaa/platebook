@@ -19,8 +19,6 @@ const RightPlateList = () => {
     if (!session) return;
     try {
       const response = await getPlatelist();
-
-      console.log("API Response:", response);
       if (!response[0]?.cooklist_items) {
         setPlateList([]);
         return;
@@ -33,7 +31,9 @@ const RightPlateList = () => {
   };
 
   useEffect(() => {
-    if (session) fetchPlatelist();
+    if (session && plateList.length === 0) {
+      fetchPlatelist();
+    }
   }, [session]);
 
   if (!session) {
@@ -58,33 +58,3 @@ const RightPlateList = () => {
 };
 
 export default RightPlateList;
-
-const plateList = [
-  {
-    name: "Plate List 1",
-    desc: "Plate Desc 1 Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1Plate Desc 1",
-    img: [
-      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
-      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
-      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
-    ],
-  },
-  {
-    name: "Plate List 2",
-    desc: "Plate Desc 2",
-    img: [
-      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
-      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
-      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
-    ],
-  },
-  {
-    name: "Plate List 3",
-    desc: "Plate Desc 3",
-    img: [
-      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
-      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
-      "https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg",
-    ],
-  },
-];
