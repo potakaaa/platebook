@@ -46,8 +46,8 @@ const PlateDialog = ({
         </div>
       </DialogTrigger>
       <DialogContent className="">
-        <div className="flex flex-col pt-5 px-3 rounded-xl w-full bg-background  dark:bg-grid-small-white/[0.2] bg-grid-small-black/[0.2] relative  items-center justify-center">
-          <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+        <div className="flex flex-col pt-5 px-3 rounded-xl w-full bg-card dark:bg-grid-small-white/[0.2] bg-grid-small-black/[0.2] relative  items-center justify-center">
+          <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-card [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
           <DialogTitle className="py-5">
             <PlateImageCarousel
               images={postImg}
