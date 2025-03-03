@@ -49,7 +49,7 @@ const RightPlateList = () => {
             key={index}
             postName={plate.recipe.title}
             postDesc={plate.recipe.description}
-            postImg={[plate.recipe.images[0].image_url]}
+            postImg={plate.recipe.images.map((image) => image.image_url)}
           />
         ))}
       </div>
