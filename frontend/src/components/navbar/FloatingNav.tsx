@@ -30,12 +30,12 @@ const links = [
   {
     title: "Platebook",
     icon: (
-      <div className="bg-secondary-foreground p-2 rounded-md">
+      <div className="w-full h-full z-30">
         <Image
-          src="/platebook-logo-monotone.png"
-          width={17}
-          height={17}
-          className="drop-shadow-md"
+          src="/platebook-logo-500.png"
+          width={500}
+          height={500}
+          className="drop-shadow-md object-cover size-4"
           alt="Platebook Logo"
         />
       </div>

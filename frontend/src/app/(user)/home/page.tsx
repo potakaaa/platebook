@@ -38,7 +38,7 @@ const page = () => {
           </section>
           <section
             id="posts"
-            className="flex flex-col justify-center self-center w-full space-y-5"
+            className="flex flex-col justify-center self-center w-full"
           >
             <InfiniteScrollComp />
           </section>

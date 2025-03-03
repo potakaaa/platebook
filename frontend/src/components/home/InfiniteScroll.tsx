@@ -84,9 +84,11 @@ const InfiniteScrollComp = () => {
         <h3 className="text-center">&#8593; Release to refresh</h3>
       }
     >
-      {posts.map((post, index) => (
-        <PostCard key={index} postItems={post} />
-      ))}
+      <div className="flex flex-col w-full space-y-5">
+        {posts.map((post, index) => (
+          <PostCard key={index} postItems={post} />
+        ))}
+      </div>
     </InfiniteScroll>
   );
 };
