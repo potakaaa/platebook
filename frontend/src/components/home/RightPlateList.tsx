@@ -12,6 +12,9 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
     if (!session) return;
     try {
       const response = await getPlatelist();
+
+      console.log("Plate List Response:", response);
+
       if (!response[0]?.cooklist_items) {
         setPlateList([]);
         return;

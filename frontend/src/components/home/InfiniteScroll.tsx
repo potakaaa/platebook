@@ -6,20 +6,25 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard, { PostCardProps } from "../cards/PostCard";
 import { title } from "process";
 import Spinner from "../loader/Spinner";
+import { useSession } from "next-auth/react";
 
 const InfiniteScrollComp = () => {
+  const { status } = useSession();
   const [posts, setPosts] = useState<PostCardProps[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
-    fetchFeedData();
-  }, []);
+    if (status !== "loading") {
+      fetchFeedData();
+    }
+  }, [status]);
 
   const fetchFeedData = async () => {
     try {
       const response = await fetchFeed(page);
       const data = response;
+
       if (data.results && Array.isArray(data.results)) {
         const parsedResults: PostCardProps[] = data.results.map(
           (result: any) => {
@@ -33,6 +38,8 @@ const InfiniteScrollComp = () => {
               shareCount: result.shares,
               commentCount: result.comments,
               atPlateList: result.isPlateListed,
+              isLiked: result.isLiked,
+              isShared: result.isShared,
             };
           }
         );

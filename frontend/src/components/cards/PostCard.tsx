@@ -18,6 +18,8 @@ export type PostCardProps = {
   commentCount?: number;
   shareCount?: number;
   atPlateList?: boolean;
+  isLiked?: boolean;
+  isShared?: boolean;
   forHero?: boolean;
 };
 
@@ -32,6 +34,9 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
     commentCount,
     shareCount,
     atPlateList,
+    isLiked,
+    isShared,
+
     forHero = false,
   } = postItems;
   return (
@@ -89,13 +94,17 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
           translateZ={20}
         >
           <Button variant={"ghost"} className="">
-            <Heart className="size-8" />
+            <Heart
+              className={`size-8 ${
+                isLiked ? "fill-primary stroke-primary" : "fill-none"
+              }`}
+            />
             <span
               className={`hidden xl:block ${
                 !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
-              }`}
+              } ${isLiked ? "text-primary" : ""}`}
             >
-              Like
+              Like{isLiked ? "d" : ""}
             </span>
           </Button>
           <Button variant={"ghost"} className="">
@@ -109,23 +118,29 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             </span>
           </Button>
           <Button variant={"ghost"} className="">
-            <Share className="size-8" />
+            <Share
+              className={`size-8 ${isShared ? "stroke-primary" : "fill-none"}`}
+            />
             <span
               className={`hidden xl:block ${
                 !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
-              }`}
+              } ${isShared ? "text-primary" : ""}`}
             >
-              Share
+              Share{isShared ? "d" : ""}
             </span>
           </Button>
           <Button variant={"ghost"} className="">
-            <Disc className="size-8 text-primary" />
+            <Disc
+              className={`size-8 ${
+                atPlateList ? "stroke-primary" : "fill-none"
+              }`}
+            />
             <span
               className={`hidden xl:block ${
                 !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
-              }`}
+              } ${atPlateList ? "text-primary" : ""}`}
             >
-              Add to Plate
+              Add{atPlateList ? "ed" : ""} to Plate
             </span>
           </Button>
         </CardItem>

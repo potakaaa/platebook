@@ -18,8 +18,11 @@ class CooklistItemViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        cooklist = get_object_or_404(Cooklist, pk=self.kwargs['cooklist_pk'], owner=self.request.user)
-        return CooklistItem.objects.filter(cooklist=cooklist)
+        return (
+            CooklistItem.objects.filter(user=self.request.user)
+            .order_by('-created_at')
+            .distinct('recipe') 
+        )
 
     def perform_create(self, serializer):
         cooklist = get_object_or_404(Cooklist, pk=self.kwargs['cooklist_pk'], owner=self.request.user)

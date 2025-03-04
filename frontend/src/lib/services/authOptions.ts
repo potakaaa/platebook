@@ -115,8 +115,8 @@ export const authOptions: NextAuthOptions = {
             access_token,
             refresh_token,
           });
-
           const apiAccessToken = response.data.access_token;
+          const apiRefreshToken = response.data.refresh_token;
 
           if (!apiAccessToken) {
             console.error("No access token found in response");
@@ -124,6 +124,7 @@ export const authOptions: NextAuthOptions = {
           }
           (user as AuthUser).image = response.data.user?.pfp_url || null;
           (user as AuthUser).accessToken = apiAccessToken;
+          (user as AuthUser).refreshToken = apiRefreshToken;
           return true;
         } catch (error) {
           console.error("Error signing in with Google", error);

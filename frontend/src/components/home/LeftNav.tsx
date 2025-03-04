@@ -1,17 +1,7 @@
 "use client";
-import {
-  IconDisc,
-  IconHome,
-  IconLogout,
-  IconMoon,
-  IconSearch,
-  IconSquare,
-  IconSquareRoundedPlus,
-  IconSun,
-} from "@tabler/icons-react";
+import { IconHome, IconLogout, IconSearch } from "@tabler/icons-react";
 import CustomAvatar from "../user/CustomAvatar";
 import NavButtonLeft from "./NavButtonsLeft";
-import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "./buttons/ThemeToggle";
 import HomeLogo from "../navbar/nav/HomeLogo";
@@ -20,8 +10,6 @@ import { PlateListSidebarToggle } from "./platelist/PlateListSidebar";
 
 const LeftNav = () => {
   const { data: session, status } = useSession();
-  const { theme, setTheme } = useTheme();
-
   return (
     <div className="flex flex-col size-full">
       <div className="flex flex-col w-full space-y-3">

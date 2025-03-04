@@ -26,6 +26,12 @@ export type ListRecipe = {
   origin_country: string;
   images: RecipeImage[];
   chef: BasicUser;
+  likes: number;
+  shares: number;
+  comments: number;
+  isPlateListed: boolean;
+  isLiked: boolean;
+  isShared: boolean;
 };
 
 export type RecipeImage = {
@@ -41,4 +47,5 @@ export type FullRecipe = {
   chef: BasicUser;
   steps: Step[];
   ingredients: Ingredient[];
+
 };
