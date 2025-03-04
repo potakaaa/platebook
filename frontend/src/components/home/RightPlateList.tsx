@@ -2,27 +2,30 @@
 import React, { useEffect, useState } from "react";
 import PlateDialog from "../PlateDialog";
 import { useUserStore } from "@/store/useUserStore";
+import Spinner from "../loader/Spinner";
 
 const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
   const { user, plateList, fetchPlateList, isFetchingPlateList } =
     useUserStore();
 
   useEffect(() => {
-    console.log("plateList", plateList);
-
-    if (plateList.length === 0 && user) {
+    if (plateList.length === 0 && user !== null) {
       fetchPlateList();
     }
-  }, [user, plateList]);
+  }, [user]);
 
   if (!user) {
     return <p>You must be logged in to view your Plate List..</p>;
   }
 
   if (isFetchingPlateList) {
-    return <p>Loading Plate List...</p>;
+    return (
+      <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden">
+        <Spinner />
+      </div>
+    );
   }
- 
+
   return (
     <div className="flex flex-col w-full space-y-5">
       {!isMobile && (
@@ -34,7 +37,7 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
             key={index}
             postName={plate.recipe.title}
             postDesc={plate.recipe.description}
-            postImg={[plate.recipe.images[0].image_url]}
+            postImg={[plate.recipe.images[0]?.image_url]}
             isMobile={isMobile}
           />
         ))}

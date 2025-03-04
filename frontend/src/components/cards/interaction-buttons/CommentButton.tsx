@@ -1,8 +1,7 @@
-import { Button } from '@/components/ui/button';
-import { MessageCircleMore } from 'lucide-react';
-import React from 'react'
-
-
+"use client";
+import { Button } from "@/components/ui/button";
+import { MessageCircleMore } from "lucide-react";
+import React from "react";
 
 const CommentButton = ({ forHero }: { forHero: boolean }) => {
   return (
@@ -19,6 +18,6 @@ const CommentButton = ({ forHero }: { forHero: boolean }) => {
       </Button>
     </div>
   );
-}
+};
 
-export default CommentButton
+export default CommentButton;

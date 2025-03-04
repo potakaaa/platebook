@@ -1,4 +1,5 @@
-import { Button } from '@/components/ui/button';
+"use client";
+import { Button } from "@/components/ui/button";
 import useMutationInteraction from "@/hooks/tanstack/interaction/useMutationInteraction";
 import { Share } from "lucide-react";
 import React, { useState } from "react";
@@ -22,6 +23,11 @@ const ShareButton: React.FC<ShareButtonProps> = ({
 
   const handleShare = () => {
     if (shareIsPending || unshareIsPending) return;
+
+    if (forHero) {
+      setShared((prev: boolean | undefined) => !prev);
+      return;
+    }
 
     if (!shared) {
       sharePost(id, {
@@ -54,4 +60,4 @@ const ShareButton: React.FC<ShareButtonProps> = ({
   );
 };
 
-export default ShareButton
+export default ShareButton;

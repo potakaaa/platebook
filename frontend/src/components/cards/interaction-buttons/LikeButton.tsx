@@ -1,41 +1,50 @@
-import { Button } from '@/components/ui/button';
-import { Heart } from 'lucide-react';
-import React, { useState } from 'react'
-import useMutationInteraction from '@/hooks/tanstack/interaction/useMutationInteraction'
+"use client";
+import { Button } from "@/components/ui/button";
+import { Heart } from "lucide-react";
+import React, { useState } from "react";
+import useMutationInteraction from "@/hooks/tanstack/interaction/useMutationInteraction";
 
 interface LikeButtonProps {
-    isLiked?: boolean;
-    forHero?: boolean;
-    id: string;
+  isLiked?: boolean;
+  forHero?: boolean;
+  id: string;
 }
 
-const LikeButton:React.FC<LikeButtonProps> = ({isLiked: initialLiked, forHero, id}) => {
-
-  const { useMutationLike, useMutationUnlike } = useMutationInteraction()
-  const {mutate: unlikePost, isPending: unlikeIsPending} = useMutationUnlike()
-  const {mutate: likePost, isPending: likeIsPending} = useMutationLike()
+const LikeButton: React.FC<LikeButtonProps> = ({
+  isLiked: initialLiked,
+  forHero,
+  id,
+}) => {
+  const { useMutationLike, useMutationUnlike } = useMutationInteraction();
+  const { mutate: unlikePost, isPending: unlikeIsPending } =
+    useMutationUnlike();
+  const { mutate: likePost, isPending: likeIsPending } = useMutationLike();
   const [liked, setLiked] = useState<boolean | undefined>(initialLiked);
+
   const handleLike = () => {
-    if (likeIsPending) return; 
+    if (likeIsPending) return;
     if (unlikeIsPending) return;
+
+    if (forHero) {
+      setLiked((prev: boolean | undefined) => !prev);
+      return;
+    }
 
     if (liked === false) {
       likePost(id, {
         onError: () => {
-          setLiked(initialLiked); 
+          setLiked(initialLiked);
         },
-    });} else { 
+      });
+    } else {
       unlikePost(id, {
         onError: () => {
-          setLiked(initialLiked); 
+          setLiked(initialLiked);
         },
-    });}
+      });
+    }
 
-
-    setLiked((prev: boolean | undefined) => !prev); 
-
-  
-  
+    setLiked((prev: boolean | undefined) => !prev);
   };
   return (
     <Button variant={"ghost"} className="" onClick={handleLike}>
@@ -53,6 +62,6 @@ const LikeButton:React.FC<LikeButtonProps> = ({isLiked: initialLiked, forHero, i
       </span>
     </Button>
   );
-}
+};
 
-export default LikeButton
+export default LikeButton;

@@ -158,13 +158,21 @@ export const authOptions: NextAuthOptions = {
         image: typeof token.image === "string" ? token.image : null,
       };
 
-      const { setSession } = useUserStore.getState();
-      setSession({
-        id: session.user?.id,
-        name: session.user?.name,
-        email: session.user?.email,
-        image: session.user?.image,
-      });
+      const { setSession, user: storedSession } = useUserStore.getState();
+      if (
+        !storedSession ||
+        storedSession.id !== session.user.id ||
+        storedSession.name !== session.user.name ||
+        storedSession.email !== session.user.email ||
+        storedSession.image !== session.user.image
+      ) {
+        setSession({
+          id: session.user?.id,
+          name: session.user?.name,
+          email: session.user?.email,
+          image: session.user?.image,
+        });
+      }
 
       return session;
     },

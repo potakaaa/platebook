@@ -31,6 +31,13 @@ axiosClient.interceptors.response.use(
     const originalRequest = error.config;
     const { resetStore } = useUserStore.getState();
     const session = await getSession();
+    console.log("Session:", session);
+
+    if (!session) {
+      console.warn("No session found, logging out");
+      return Promise.reject(error);
+    }
+
     if (
       (error.response?.status === 401 || error.response?.status === 403) &&
       !originalRequest._retry &&
@@ -39,7 +46,9 @@ axiosClient.interceptors.response.use(
       originalRequest._retry = true;
       try {
         if (!session?.refreshToken) {
-          console.error("No refresh token available, redirecting to login.");
+          console.warn("No refresh token found, logging out");
+          resetStore();
+          await signOut();
           return Promise.reject(error);
         }
 

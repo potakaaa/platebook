@@ -4,27 +4,33 @@ import { useUserStore } from "@/store/useUserStore";
 
 const SessionInitializer = () => {
   const { data: session, status } = useSession();
-  const { setSession } = useUserStore(state => state);
+  const { setSession, user: storedSession } = useUserStore((state) => state);
 
   useEffect(() => {
     if (status === "authenticated" && session) {
-      setSession(
-        {
+      if (
+        !storedSession ||
+        storedSession.id !== session.user?.id ||
+        storedSession.name !== session.user?.name ||
+        storedSession.email !== session.user?.email ||
+        storedSession.image !== session.user?.image
+      ) {
+        setSession({
           id: session.user?.id,
           name: session.user?.name,
           email: session.user?.email,
           image: session.user?.image,
-        },
-      );
-    } else if (status === "unauthenticated") {
+        });
+      }
+    } else if (status === "unauthenticated" && storedSession?.id) {
       setSession({
         id: null,
         name: null,
         email: null,
         image: null,
-      }); 
+      });
     }
-  }, [session, status, setSession]);
+  }, [session, status, storedSession, setSession]);
 
   return null;
 };
