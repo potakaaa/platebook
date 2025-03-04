@@ -6,10 +6,9 @@ router = routers.DefaultRouter()
 router.register(r'cooklists', CooklistViewSet, basename='cooklist')
 
 
-cooklist_router = routers.NestedDefaultRouter(router, r'cooklists', lookup='cooklist')
-cooklist_router.register(r'items', CooklistItemViewSet, basename='cooklist-items')
+router.register(r'cooklist-items', CooklistItemViewSet, basename='cooklist-items')
 
 urlpatterns = [
     path('', include(router.urls)),       
-    path('', include(cooklist_router.urls))
+    path("cooklist-items/<int:recipe_id>/", CooklistItemViewSet.as_view({'delete': 'destroy'}), name="cooklist-item-destroy"),
 ]

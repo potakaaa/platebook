@@ -9,12 +9,10 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
     useUserStore();
 
   useEffect(() => {
-    console.log("plateList", plateList);
-
-    if (plateList.length === 0 && user) {
+    if (plateList.length === 0 && user !== null) {
       fetchPlateList();
     }
-  }, [user, plateList]);
+  }, [user]);
 
   if (!user) {
     return <p>You must be logged in to view your Plate List..</p>;
@@ -41,7 +39,7 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
             key={index}
             postName={plate.recipe.title}
             postDesc={plate.recipe.description}
-            postImg={[plate.recipe.images[0].image_url]}
+            postImg={[plate.recipe.images[0]?.image_url]}
             isMobile={isMobile}
           />
         ))}

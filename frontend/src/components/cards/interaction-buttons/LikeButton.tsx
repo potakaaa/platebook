@@ -21,9 +21,15 @@ const LikeButton: React.FC<LikeButtonProps> = ({
     useMutationUnlike();
   const { mutate: likePost, isPending: likeIsPending } = useMutationLike();
   const [liked, setLiked] = useState<boolean | undefined>(initialLiked);
+
   const handleLike = () => {
     if (likeIsPending) return;
     if (unlikeIsPending) return;
+
+    if (forHero) {
+      setLiked((prev: boolean | undefined) => !prev);
+      return;
+    }
 
     if (liked === false) {
       likePost(id, {

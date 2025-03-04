@@ -25,6 +25,11 @@ const ShareButton: React.FC<ShareButtonProps> = ({
   const handleShare = () => {
     if (shareIsPending || unshareIsPending) return;
 
+    if (forHero) {
+      setShared((prev: boolean | undefined) => !prev);
+      return;
+    }
+
     if (!shared) {
       sharePost(id, {
         onError: () => setShared(initialShared),
