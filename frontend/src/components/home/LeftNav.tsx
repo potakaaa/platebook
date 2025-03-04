@@ -16,6 +16,7 @@ import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "./buttons/ThemeToggle";
 import HomeLogo from "../navbar/nav/HomeLogo";
 import PostRecipeDialog from "../PostRecipeDialog";
+import { PlateListSidebarToggle } from "./platelist/PlateListSidebar";
 
 const LeftNav = () => {
   const { data: session, status } = useSession();
@@ -50,14 +51,10 @@ const LeftNav = () => {
           </div>
         </section>
         <NavButtonLeft name="Home" icon={IconHome} />
-        <PostRecipeDialog/>
+        <PostRecipeDialog />
         <NavButtonLeft name="Search Recipe" icon={IconSearch} />
         <ThemeToggle />
-        <NavButtonLeft
-          name="Plate List"
-          icon={IconDisc}
-          divCN="flex lg:hidden"
-        />
+        <PlateListSidebarToggle />
       </div>
       <NavButtonLeft
         name="Log Out"
