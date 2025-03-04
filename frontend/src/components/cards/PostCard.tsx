@@ -7,8 +7,13 @@ import { AspectRatio } from "../ui/aspect-ratio";
 import { Button } from "../ui/button";
 import { Disc, Heart, MessageCircleMore, Share } from "lucide-react";
 import CustomAvatar from "../user/CustomAvatar";
+import LikeButton from "./interaction-buttons/LikeButton";
+import ShareButton from "./interaction-buttons/ShareButton";
+import PlatelistButton from "./interaction-buttons/PlatelistButton";
+import CommentButton from "./interaction-buttons/CommentButton";
 
 export type PostCardProps = {
+  id: string;
   userImage: string;
   userName: string;
   title: string;
@@ -25,6 +30,7 @@ export type PostCardProps = {
 
 const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
   const {
+    id,
     userImage,
     userName,
     title,
@@ -93,56 +99,10 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
           className="flex flex-row w-full justify-between"
           translateZ={20}
         >
-          <Button variant={"ghost"} className="">
-            <Heart
-              className={`size-8 ${
-                isLiked ? "fill-primary stroke-primary" : "fill-none"
-              }`}
-            />
-            <span
-              className={`hidden xl:block ${
-                !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
-              } ${isLiked ? "text-primary" : ""}`}
-            >
-              Like{isLiked ? "d" : ""}
-            </span>
-          </Button>
-          <Button variant={"ghost"} className="">
-            <MessageCircleMore className="size-8" />
-            <span
-              className={`hidden xl:block ${
-                !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
-              }`}
-            >
-              Comment
-            </span>
-          </Button>
-          <Button variant={"ghost"} className="">
-            <Share
-              className={`size-8 ${isShared ? "stroke-primary" : "fill-none"}`}
-            />
-            <span
-              className={`hidden xl:block ${
-                !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
-              } ${isShared ? "text-primary" : ""}`}
-            >
-              Share{isShared ? "d" : ""}
-            </span>
-          </Button>
-          <Button variant={"ghost"} className="">
-            <Disc
-              className={`size-8 ${
-                atPlateList ? "stroke-primary" : "fill-none"
-              }`}
-            />
-            <span
-              className={`hidden xl:block ${
-                !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
-              } ${atPlateList ? "text-primary" : ""}`}
-            >
-              Add{atPlateList ? "ed" : ""} to Plate
-            </span>
-          </Button>
+          <LikeButton isLiked={isLiked} forHero={forHero} id={id} />
+          <CommentButton forHero={forHero} />
+          <ShareButton isShared={isShared} forHero={forHero} />
+          <PlatelistButton atPlateList={atPlateList} forHero={forHero} />
         </CardItem>
       </CardBody>
     </CardContainer>

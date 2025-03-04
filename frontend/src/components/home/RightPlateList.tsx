@@ -4,20 +4,25 @@ import PlateDialog from "../PlateDialog";
 import { useUserStore } from "@/store/useUserStore";
 
 const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
-  const { session, plateList, fetchPlateList } = useUserStore();
+  const { user, plateList, fetchPlateList, isFetchingPlateList } =
+    useUserStore();
 
   useEffect(() => {
-    console.log("Plate List:", plateList);
+    console.log("plateList", plateList);
 
-    if (plateList.length === 0 && session) {
+    if (plateList.length === 0 && user) {
       fetchPlateList();
     }
-  }, []);
+  }, [user, plateList]);
 
-  if (!session) {
-    return <p>You must be logged in to view your Plate List.</p>;
+  if (!user) {
+    return <p>You must be logged in to view your Plate List..</p>;
   }
 
+  if (isFetchingPlateList) {
+    return <p>Loading Plate List...</p>;
+  }
+ 
   return (
     <div className="flex flex-col w-full space-y-5">
       {!isMobile && (

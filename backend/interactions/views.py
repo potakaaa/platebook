@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions, serializers
+from rest_framework.exceptions import ValidationError, NotFound
 from .models import Like, Share, Comment, Follow
 from accounts.models import CustomUserModel
 from rest_framework.response import Response
@@ -10,20 +11,48 @@ from rest_framework.views import APIView
 
 # Create your views here.
 class LikeViewSet(viewsets.ModelViewSet):
+    print("LIKE VIEW SET")
     serializer_class = LikeSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    http_method_names = ['get', 'post', 'delete']
 
+    def get_object(self):
+        print("GET OBJECCCC")
+        recipe = get_object_or_404(Recipe, id=self.kwargs["recipe_pk"])
+        like = Like.objects.filter(user=self.request.user, recipe=recipe).first()
+
+        if not like:
+            raise NotFound({"message": "Like not found."})
+
+        return like
+    
     def get_queryset(self):
         recipe_id = self.kwargs["recipe_pk"]
         return Like.objects.filter(recipe_id=recipe_id, user=self.request.user).select_related("recipe")
+    
 
+    
     def perform_create(self, serializer):
         recipe = get_object_or_404(Recipe, id=self.kwargs["recipe_pk"])
+
         like, created = Like.objects.get_or_create(user=self.request.user, recipe=recipe)
 
-        if not created: 
+        if not created:
+            raise ValidationError({"message": "You already liked this recipe."})
+
+    def destroy(self, request, *args, **kwargs):
+        print("destroy")
+        recipe = get_object_or_404(Recipe, id=self.kwargs["recipe_pk"])
+        like = Like.objects.filter(user=self.request.user, recipe=recipe).first()
+
+        if like:
             like.delete()
-            raise serializers.ValidationError({"message": "Like removed."})
+            return Response({"message": "Like removed."}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({"message": "Like not found."}, status=status.HTTP_404_NOT_FOUND)
+            
+    
 
 class ShareViewSet(viewsets.ModelViewSet):
     serializer_class = ShareSerializer

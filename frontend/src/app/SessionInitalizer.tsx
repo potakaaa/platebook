@@ -8,9 +8,21 @@ const SessionInitializer = () => {
 
   useEffect(() => {
     if (status === "authenticated" && session) {
-      setSession(session);
+      setSession(
+        {
+          id: session.user?.id,
+          name: session.user?.name,
+          email: session.user?.email,
+          image: session.user?.image,
+        },
+      );
     } else if (status === "unauthenticated") {
-      setSession(null); 
+      setSession({
+        id: null,
+        name: null,
+        email: null,
+        image: null,
+      }); 
     }
   }, [session, status, setSession]);
 

@@ -1,5 +1,6 @@
 import { useUserStore } from "@/store/useUserStore";
 import axios from "axios";
+import { get } from "http";
 import { getSession, signIn, signOut } from "next-auth/react";
 
 export const axiosClient = axios.create({
@@ -11,10 +12,10 @@ export const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   async (config) => {
-    const { session } = useUserStore.getState();
+    const session = await getSession();
 
     if (session?.accessToken) {
-      config.headers.Authorization = `Bearer ${session.accessToken}`;
+      config.headers.Authorization = `Bearer ${session?.accessToken}`;
     }
 
     return config;
@@ -28,7 +29,8 @@ axiosClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    const { session, resetStore } = useUserStore.getState();
+    const { resetStore } = useUserStore.getState();
+    const session = await getSession();
     if (
       (error.response?.status === 401 || error.response?.status === 403) &&
       !originalRequest._retry &&
@@ -66,7 +68,6 @@ axiosClient.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
-    console.error("Error response:", error.response.data);
 
     return Promise.reject(error);
   }

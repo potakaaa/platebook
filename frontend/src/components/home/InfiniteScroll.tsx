@@ -24,6 +24,7 @@ const InfiniteScrollComp = () => {
         const parsedResults: PostCardProps[] = data.results.map(
           (result: any) => {
             return {
+              id: result.id,
               userImage: result.chef.pfp_url,
               userName: result.chef.username,
               title: result.title,

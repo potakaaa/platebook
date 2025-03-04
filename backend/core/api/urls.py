@@ -30,7 +30,7 @@ urlpatterns = [
     path('auth/verify-otp/', VerifyOTP.as_view()),
     path('social/login/', include('accounts.urls')),
     path('', include('recipes.urls')),
-    path('', include('interactions.urls')),
     path('', include('cook_list.urls')),
+    path('', include('interactions.urls')),
     path('user/<int:id>/', GetUserByIDView.as_view(), name='get_user_by_id'),
 ]

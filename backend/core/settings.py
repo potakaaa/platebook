@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django.contrib.sites',
     'django_seed',
+    'django_extensions',
     
     
     # image hosts

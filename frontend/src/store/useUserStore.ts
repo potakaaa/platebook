@@ -1,23 +1,34 @@
 import { create } from "zustand";
 import { getPlatelist } from "@/lib/services/api/platelistServices";
 import { PlatelistItem } from "@/lib/types/platelistTypes";
-import { Session } from "next-auth";
+
+type storedUser = {
+  id: string | null;
+  name: string | null | undefined;
+  email: string | null | undefined;
+  image: string | null | undefined;
+};
 
 type UserStore = {
-  session: Session | null;
+  user: storedUser | null;
+  accessToken: string | null;
   plateList: PlatelistItem[];
   isFetchingPlateList: boolean;
-  setSession: (session: Session | null) => void;
+  setSession: (user: storedUser | null) => void;
   fetchPlateList: () => Promise<void>;
   resetStore: () => void;
 };
 
 export const useUserStore = create<UserStore>((set) => ({
-  session: null,
+  user: null,
+  accessToken: null,
   plateList: [],
   isFetchingPlateList: false,
 
-  setSession: (session) => set({ session }),
+  setSession: (user) =>
+    set({
+      user,
+    }),
 
   fetchPlateList: async () => {
     set({ isFetchingPlateList: true });
@@ -32,5 +43,10 @@ export const useUserStore = create<UserStore>((set) => ({
   },
 
   resetStore: () =>
-    set({ session: null, plateList: [], isFetchingPlateList: false }),
+    set({
+      user: null,
+      accessToken: null,
+      plateList: [],
+      isFetchingPlateList: false,
+    }),
 }));

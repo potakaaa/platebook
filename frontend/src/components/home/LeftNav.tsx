@@ -8,9 +8,10 @@ import HomeLogo from "../navbar/nav/HomeLogo";
 import PostRecipeDialog from "../PostRecipeDialog";
 import { PlateListSidebarToggle } from "./platelist/PlateListSidebar";
 import { useUserStore } from "@/store/useUserStore";
+import { useEffect } from "react";
 
 const LeftNav = () => {
-  const { session, resetStore } = useUserStore();
+  const { user, resetStore } = useUserStore();
 
   return (
     <div className="flex flex-col size-full">
@@ -24,18 +25,16 @@ const LeftNav = () => {
         >
           <div className="flex flex-row space-x-3 xl:space-x-4 items-center">
             <CustomAvatar
-              userName={session?.user?.name || "Username"}
-              userImage={
-                session?.user?.image || "https://via.placeholder.com/150"
-              }
+              userName={user?.name || "Username"}
+              userImage={user?.image || "https://via.placeholder.com/150"}
               className="2xl:size-10"
             />
             <div className="flex flex-col space-y-0 truncate text-ellipsis">
               <span className="font-semibold lg:text-sm">
-                {session?.user?.name || "Username"}
+                {user?.name || "Username"}
               </span>
               <span className="md:text-[12px] lg:text-xs xl:text-sm font-light w-full max-w-lg">
-                {session?.user?.email || "emailasdfsafd@email.com"}
+                {user?.email || "emailasdfsafd@email.com"}
               </span>
             </div>
           </div>

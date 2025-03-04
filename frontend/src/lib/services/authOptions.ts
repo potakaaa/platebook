@@ -159,7 +159,12 @@ export const authOptions: NextAuthOptions = {
       };
 
       const { setSession } = useUserStore.getState();
-      setSession(session);
+      setSession({
+        id: session.user?.id,
+        name: session.user?.name,
+        email: session.user?.email,
+        image: session.user?.image,
+      });
 
       return session;
     },
