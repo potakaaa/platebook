@@ -2,14 +2,16 @@
 import { IconHome, IconLogout, IconSearch } from "@tabler/icons-react";
 import CustomAvatar from "../user/CustomAvatar";
 import NavButtonLeft from "./NavButtonsLeft";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import ThemeToggle from "./buttons/ThemeToggle";
 import HomeLogo from "../navbar/nav/HomeLogo";
 import PostRecipeDialog from "../PostRecipeDialog";
 import { PlateListSidebarToggle } from "./platelist/PlateListSidebar";
+import { useUserStore } from "@/store/useUserStore";
 
 const LeftNav = () => {
-  const { data: session, status } = useSession();
+  const { session, resetStore } = useUserStore();
+
   return (
     <div className="flex flex-col size-full">
       <div className="flex flex-col w-full space-y-3">
@@ -49,6 +51,7 @@ const LeftNav = () => {
         icon={IconLogout}
         parentCN="mt-auto"
         onClick={() => {
+          resetStore();
           signOut({ callbackUrl: "/" });
         }}
       />

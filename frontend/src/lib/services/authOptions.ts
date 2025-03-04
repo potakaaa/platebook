@@ -3,11 +3,7 @@ import { AuthUser } from "@/lib/types/authTypes";
 import NextAuth, { NextAuthOptions, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
-import TwitterProvider from "next-auth/providers/twitter";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { redirect } from "next/navigation";
-import { access } from "fs";
-import { getSession, useSession } from "next-auth/react";
 
 export const authOptions: NextAuthOptions = {
   providers: [

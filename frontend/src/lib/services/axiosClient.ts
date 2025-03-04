@@ -1,5 +1,7 @@
-import axios from 'axios';
+import { useUserStore } from "@/store/useUserStore";
+import axios from "axios";
 import { getSession, signIn, signOut } from "next-auth/react";
+import { set } from "zod";
 
 export const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_DJANGO_API_URL,
@@ -10,7 +12,7 @@ export const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   async (config) => {
-    const session = await getSession();
+    const { session } = useUserStore.getState();
 
     if (session?.accessToken) {
       config.headers.Authorization = `Bearer ${session.accessToken}`;
@@ -27,7 +29,7 @@ axiosClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
+    const { session, resetStore } = useUserStore.getState();
     if (
       (error.response?.status === 401 || error.response?.status === 403) &&
       !originalRequest._retry &&
@@ -35,8 +37,6 @@ axiosClient.interceptors.response.use(
     ) {
       originalRequest._retry = true;
       try {
-        const session = await getSession();
-
         if (!session?.refreshToken) {
           console.error("No refresh token available, redirecting to login.");
           return Promise.reject(error);
@@ -57,10 +57,15 @@ axiosClient.interceptors.response.use(
             redirect: false,
           });
           originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.access}`;
+
+          const refreshedSession = await getSession();
+
+          setSession(refreshedSession);
           return axiosClient(originalRequest);
         }
       } catch (refreshError) {
         console.error("Failed to refresh token:", refreshError);
+        resetStore();
         await signOut({ callbackUrl: "/login" });
         return Promise.reject(refreshError);
       }

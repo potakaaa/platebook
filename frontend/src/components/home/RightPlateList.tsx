@@ -1,41 +1,20 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import PlateDialog from "../PlateDialog";
-import { getPlatelist } from "@/lib/services/api/platelistServices";
-import { PlatelistItem } from "@/lib/types/platelistTypes";
-import { useSession } from "next-auth/react";
+import { useUserStore } from "@/store/useUserStore";
 
 const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
-  const [plateList, setPlateList] = useState<PlatelistItem[]>([]);
-  const { data: session, status } = useSession();
-  const fetchPlatelist = async () => {
-    if (!session) return;
-    try {
-      const response = await getPlatelist();
-      if (!response[0]?.cooklist_items) {
-        setPlateList([]);
-        return;
-      }
-
-      setPlateList(response[0].cooklist_items);
-    } catch (error) {
-      console.error("Error fetching plate list:", error);
-    }
-  };
+  const { session, plateList, fetchPlateList } = useUserStore();
 
   useEffect(() => {
     console.log("Plate List:", plateList);
 
-    if (status === "authenticated" && plateList.length === 0) {
-      fetchPlatelist();
+    if (plateList.length === 0 && session) {
+      fetchPlateList();
     }
-  }, [status]);
+  }, []);
 
-  if (status === "loading") {
-    return <p>Loading Plate List...</p>;
-  }
-
-  if (status !== "authenticated") {
+  if (!session) {
     return <p>You must be logged in to view your Plate List.</p>;
   }
 

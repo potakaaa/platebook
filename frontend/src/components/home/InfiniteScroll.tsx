@@ -4,21 +4,16 @@ import { fetchFeed } from "@/lib/services/api/recipeServices";
 import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard, { PostCardProps } from "../cards/PostCard";
-import { title } from "process";
 import Spinner from "../loader/Spinner";
-import { useSession } from "next-auth/react";
 
 const InfiniteScrollComp = () => {
-  const { status } = useSession();
   const [posts, setPosts] = useState<PostCardProps[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
-    if (status !== "loading") {
-      fetchFeedData();
-    }
-  }, [status]);
+    fetchFeedData();
+  }, []);
 
   const fetchFeedData = async () => {
     try {
