@@ -13,7 +13,7 @@ from rest_framework.filters import OrderingFilter
 from django.http import JsonResponse
 from rest_framework.generics import ListAPIView
 from django.db.models import Q
-from interactions.models import Follow
+from interactions.models import Follow, Share
 
 # Create your views here.
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -137,6 +137,7 @@ class RecipeFeedView(ListAPIView):
     permission_classes = [AllowAny]
     filter_backends = [OrderingFilter]
     ordering_fields = ["created_at"]  
+    
     def get_queryset(self):
         queryset = Recipe.objects.all()
 
@@ -146,7 +147,17 @@ class RecipeFeedView(ListAPIView):
 
         if filter_type == "following" and self.request.user.is_authenticated:
             following_users = Follow.objects.filter(user=self.request.user).values_list("followed_user", flat=True)
-            queryset = queryset.filter(chef__id__in=following_users)
+
+            shared_recipes = Share.objects.filter(user__in=following_users).select_related("recipe", "user")
+            shared_recipes_map = {share.recipe.id: share.user for share in shared_recipes}
+
+            shared_recipe_ids = shared_recipes.values_list("recipe__id", flat=True)
+
+            queryset = queryset.filter(Q(chef__id__in=following_users) | Q(id__in=shared_recipe_ids)).distinct()
+
+            for recipe in queryset:
+                if recipe.id in shared_recipes_map:
+                    recipe.sharer = shared_recipes_map[recipe.id]
 
         if sort_order == "oldest":
             queryset = queryset.order_by("created_at")  

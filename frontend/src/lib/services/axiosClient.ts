@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getSession, signIn } from "next-auth/react";
+import { getSession, signIn, signOut } from "next-auth/react";
 
 export const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_DJANGO_API_URL,
@@ -11,11 +11,11 @@ export const axiosClient = axios.create({
 axiosClient.interceptors.request.use(
   async (config) => {
     const session = await getSession();
-    
+
     if (session?.accessToken) {
       config.headers.Authorization = `Bearer ${session.accessToken}`;
     }
-    
+
     return config;
   },
   (error) => {
@@ -28,14 +28,12 @@ axiosClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    console.error("Error response:", error.response.data);
-
     if (
-      error.response?.status === 401 ||
-      (error.response?.status === 403 && !originalRequest._retry)
+      (error.response?.status === 401 || error.response?.status === 403) &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes("/auth/refresh/")
     ) {
       originalRequest._retry = true;
-
       try {
         const session = await getSession();
 
@@ -48,30 +46,26 @@ axiosClient.interceptors.response.use(
           refresh: session.refreshToken,
         });
 
-
-        console.log("Refresh Response:", refreshResponse);
-
-
-
         if (refreshResponse.data?.access) {
-          await signIn("credentials", {  
+          await signIn("credentials", {
             accessToken: refreshResponse.data.access,
             refreshToken: session.refreshToken,
             id: session.user?.id,
             name: session.user?.name,
             email: session.user?.email,
             image: session.user?.image,
-            redirect: false, 
-            
+            redirect: false,
           });
           originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.access}`;
           return axiosClient(originalRequest);
         }
       } catch (refreshError) {
         console.error("Failed to refresh token:", refreshError);
+        await signOut({ callbackUrl: "/login" });
         return Promise.reject(refreshError);
       }
     }
+    console.error("Error response:", error.response.data);
 
     return Promise.reject(error);
   }

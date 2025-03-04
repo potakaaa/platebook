@@ -16,11 +16,11 @@ import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "./buttons/ThemeToggle";
 import HomeLogo from "../navbar/nav/HomeLogo";
 import PostRecipeDialog from "../PostRecipeDialog";
+import { useEffect } from "react";
 
 const LeftNav = () => {
   const { data: session, status } = useSession();
   const { theme, setTheme } = useTheme();
-
   return (
     <div className="flex flex-col size-full">
       <div className="flex flex-col w-full space-y-3">
@@ -50,7 +50,7 @@ const LeftNav = () => {
           </div>
         </section>
         <NavButtonLeft name="Home" icon={IconHome} />
-        <PostRecipeDialog/>
+        <PostRecipeDialog />
         <NavButtonLeft name="Search Recipe" icon={IconSearch} />
         <ThemeToggle />
         <NavButtonLeft
