@@ -7,14 +7,11 @@ import { useSession } from "next-auth/react";
 
 const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
   const [plateList, setPlateList] = useState<PlatelistItem[]>([]);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const fetchPlatelist = async () => {
     if (!session) return;
     try {
       const response = await getPlatelist();
-
-      console.log("Plate List Response:", response);
-
       if (!response[0]?.cooklist_items) {
         setPlateList([]);
         return;
@@ -27,12 +24,18 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
   };
 
   useEffect(() => {
-    if (session && plateList.length === 0) {
+    console.log("Plate List:", plateList);
+
+    if (status === "authenticated" && plateList.length === 0) {
       fetchPlatelist();
     }
-  }, [session]);
+  }, [status]);
 
-  if (!session) {
+  if (status === "loading") {
+    return <p>Loading Plate List...</p>;
+  }
+
+  if (status !== "authenticated") {
     return <p>You must be logged in to view your Plate List.</p>;
   }
 
