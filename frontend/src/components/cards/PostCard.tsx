@@ -59,17 +59,22 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
       >
         <CardItem
           id="profile"
-          className="flex flex-row items-center space-x-2"
+          className="flex flex-row w-full items-center justify-between"
           translateZ={10}
         >
-          <CustomAvatar
-            userName={userName}
-            userImage={userImage}
-            onClick={() => router.push(`/home/user/${id}`)}
-          />
-          <p className="text-xs sm:text-sm lg:text-base font-semibold">
-            {userName}
-          </p>
+          <div className="w-full flex flex-row space-x-2 items-center">
+            <CustomAvatar
+              userName={userName}
+              userImage={userImage}
+              onClick={() => router.push(`/home/user/${id}`)}
+            />
+            <p className="text-xs sm:text-sm lg:text-base font-semibold">
+              {userName}
+            </p>
+          </div>
+          <Button variant={"outline"} className="">
+            View Recipe
+          </Button>
         </CardItem>
         <div id="post" className="flex flex-col space-y-1">
           <CardItem
@@ -107,7 +112,11 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
           translateZ={20}
         >
           <LikeButton isLiked={isLiked} forHero={forHero} id={id} />
-          <CommentButton forHero={forHero} />
+          <CommentButton
+            forHero={forHero}
+            postName={title}
+            postUser={userName}
+          />
           <ShareButton isShared={isShared} forHero={forHero} id={id} />
           <PlatelistButton
             atPlateList={atPlateList}
