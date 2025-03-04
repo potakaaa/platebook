@@ -1,4 +1,6 @@
-import { Button } from '@/components/ui/button';
+"use client";
+
+import { Button } from "@/components/ui/button";
 import useMutationInteraction from "@/hooks/tanstack/interaction/useMutationInteraction";
 import { Share } from "lucide-react";
 import React, { useState } from "react";
@@ -54,4 +56,4 @@ const ShareButton: React.FC<ShareButtonProps> = ({
   );
 };
 
-export default ShareButton
+export default ShareButton;

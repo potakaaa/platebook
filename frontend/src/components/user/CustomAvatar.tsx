@@ -6,14 +6,20 @@ const CustomAvatar = ({
   userImage,
   userName,
   className,
+  onClick,
 }: {
   userImage: string;
   userName: string;
   className?: string;
+  onClick?: () => void;
 }) => {
   return (
     <Avatar
-      className={cn("size-6 sm:size-7 lg:size-8 drop-shadow-md", className)}
+      onClick={onClick}
+      className={cn(
+        "size-6 sm:size-7 lg:size-8 drop-shadow-md cursor-pointer",
+        className
+      )}
     >
       <AvatarImage src={userImage} alt={userName} />
       <AvatarFallback className="text-foreground bg-primary size-full text-center flex items-center justify-center self-center">

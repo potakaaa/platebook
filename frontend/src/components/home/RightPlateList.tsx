@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import PlateDialog from "../PlateDialog";
 import { useUserStore } from "@/store/useUserStore";
+import { Loader2 } from "lucide-react";
 
 const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
   const { user, plateList, fetchPlateList, isFetchingPlateList } =
@@ -20,9 +21,15 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
   }
 
   if (isFetchingPlateList) {
-    return <p>Loading Plate List...</p>;
+    return (
+      <span className="w-full flex items-center justify-center my-5 gap-3">
+        <Loader2 className="animate-spin text-primary size-5" />
+
+        <p>Loading Plate List</p>
+      </span>
+    );
   }
- 
+
   return (
     <div className="flex flex-col w-full space-y-5">
       {!isMobile && (

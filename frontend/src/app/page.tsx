@@ -57,7 +57,7 @@ const LandingPage = () => {
           <section
             id="right"
             className="w-full sm:max-w-none lg:max-w-none bg-background dark:bg-grid-small-white/[0.2] bg-grid-small-black/[0.2] relative flex items-center justify-center"
-          >
+        >
             <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
             <div className="flex flex-col w-full h-fit items-center justify-center z-40">
               <HoverMe />

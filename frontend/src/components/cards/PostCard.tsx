@@ -1,4 +1,5 @@
-import Link from "next/link";
+"use client";
+
 import { CardBody, CardContainer, CardItem } from "../ui/3d-card";
 import Image from "next/image";
 import { Avatar } from "../ui/avatar";
@@ -11,6 +12,7 @@ import LikeButton from "./interaction-buttons/LikeButton";
 import ShareButton from "./interaction-buttons/ShareButton";
 import PlatelistButton from "./interaction-buttons/PlatelistButton";
 import CommentButton from "./interaction-buttons/CommentButton";
+import { useRouter } from "next/navigation";
 
 export type PostCardProps = {
   id: string;
@@ -42,9 +44,10 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
     atPlateList,
     isLiked,
     isShared,
-
     forHero = false,
   } = postItems;
+
+  const router = useRouter();
   return (
     <CardContainer className="inter-var h-full w-full">
       <CardBody
@@ -59,7 +62,11 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
           className="flex flex-row items-center space-x-2"
           translateZ={10}
         >
-          <CustomAvatar userName={userName} userImage={userImage} />
+          <CustomAvatar
+            userName={userName}
+            userImage={userImage}
+            onClick={() => router.push(`/home/user/${id}`)}
+          />
           <p className="text-xs sm:text-sm lg:text-base font-semibold">
             {userName}
           </p>
