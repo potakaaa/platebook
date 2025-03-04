@@ -4,6 +4,7 @@ import NextAuth, { NextAuthOptions, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { useUserStore } from "@/store/useUserStore";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -23,12 +24,9 @@ export const authOptions: NextAuthOptions = {
         image: { label: "Image", type: "text" },
       },
       async authorize(credentials) {
-
         if (!credentials) return null;
 
         if (credentials.email && credentials.password) {
-
-
           try {
             const response = await axiosClient.post("/auth/login/", {
               email: credentials.email,
@@ -50,26 +48,23 @@ export const authOptions: NextAuthOptions = {
 
             throw new Error(
               error.response?.data?.non_field_errors?.[0] ||
-              error.response?.data?.email?.[0] ||
-              error.response?.data?.password?.[0] ||
-              "Invalid email or password"
+                error.response?.data?.email?.[0] ||
+                error.response?.data?.password?.[0] ||
+                "Invalid email or password"
             );
           }
         }
 
         if (credentials.accessToken && credentials.refreshToken) {
-
-
-            return {
-              id: credentials.id,
-              name: credentials.name,
-              email: credentials.email,
-              image: credentials.image,
-              accessToken: credentials.accessToken,
-              refreshToken: credentials.refreshToken,
-            }
-
-          } ;
+          return {
+            id: credentials.id,
+            name: credentials.name,
+            email: credentials.email,
+            image: credentials.image,
+            accessToken: credentials.accessToken,
+            refreshToken: credentials.refreshToken,
+          };
+        }
         return null;
       },
     }),
@@ -162,6 +157,10 @@ export const authOptions: NextAuthOptions = {
         email: token.email ?? null,
         image: typeof token.image === "string" ? token.image : null,
       };
+
+      const { setSession } = useUserStore.getState();
+      setSession(session);
+
       return session;
     },
   },

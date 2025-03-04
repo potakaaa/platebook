@@ -1,11 +1,11 @@
 import { axiosClient } from "../axiosClient"
 
-export const likeRecipe = async (recipeId: number) => {
+export const likeRecipe = async (id: string) => {
   try {
-    const response = await axiosClient.post(`/recipes/${recipeId}/likes`)
+    const response = await axiosClient.post(`/recipes/${id}/likes`);
 
-    return response
-  } catch (error: any){
+    return response;
+  } catch (error: any) {
     console.error("Like Error:", error.response?.data);
 
     if (error.response?.data) {
@@ -14,4 +14,4 @@ export const likeRecipe = async (recipeId: number) => {
 
     throw new Error("An unknown error occurred.");
   }
-}
+};

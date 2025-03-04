@@ -1,7 +1,6 @@
 import { useUserStore } from "@/store/useUserStore";
 import axios from "axios";
 import { getSession, signIn, signOut } from "next-auth/react";
-import { set } from "zod";
 
 export const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_DJANGO_API_URL,
@@ -58,9 +57,6 @@ axiosClient.interceptors.response.use(
           });
           originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.access}`;
 
-          const refreshedSession = await getSession();
-
-          setSession(refreshedSession);
           return axiosClient(originalRequest);
         }
       } catch (refreshError) {
