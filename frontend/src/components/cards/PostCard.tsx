@@ -101,7 +101,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
         >
           <LikeButton isLiked={isLiked} forHero={forHero} id={id} />
           <CommentButton forHero={forHero} />
-          <ShareButton isShared={isShared} forHero={forHero} />
+          <ShareButton isShared={isShared} forHero={forHero} id={id} />
           <PlatelistButton atPlateList={atPlateList} forHero={forHero} />
         </CardItem>
       </CardBody>

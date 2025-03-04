@@ -1,6 +1,8 @@
 import {
   likeRecipe,
+  shareRecipe,
   unlikeRecipe,
+  unshareRecipe,
 } from "@/lib/services/api/interactionServices";
 import { useMutation } from "@tanstack/react-query";
 import React, { use } from "react";
@@ -30,9 +32,35 @@ const useMutationInteraction = () => {
     });
   };
 
+  const useMutationShare = () => {
+    return useMutation({
+      mutationFn: (id: string) => shareRecipe(id),
+      onSuccess(data) {
+        console.log("Share Success:", data);
+      },
+      onError(error) {
+        console.error("Share Error:", error);
+      },
+    });
+  };
+
+  const useMutationUnshare = () => {
+    return useMutation({
+      mutationFn: (id: string) => unshareRecipe(id),
+      onSuccess(data) {
+        console.log("Unshare Success:", data);
+      },
+      onError(error) {
+        console.error("Unshare Error:", error);
+      },
+    });
+  };
+
   return {
     useMutationLike,
     useMutationUnlike,
+    useMutationShare,
+    useMutationUnshare,
   };
 };
 
