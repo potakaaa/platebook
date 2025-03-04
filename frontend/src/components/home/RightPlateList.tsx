@@ -48,6 +48,7 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
             postName={plate.recipe.title}
             postDesc={plate.recipe.description}
             postImg={[plate.recipe.images[0].image_url]}
+            isMobile={isMobile}
           />
         ))}
       </div>

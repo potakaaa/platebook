@@ -19,15 +19,17 @@ const PlateDialog = ({
   postName,
   postDesc,
   postImg,
+  isMobile = false,
 }: {
   postName: string;
   postDesc: string;
   postImg: string[];
+  isMobile?: boolean;
 }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex flex-row space-x-3 items-start cursor-pointer hover:bg-muted/80 rounded-xl p-2 transition duration-200">
+        <div className="flex flex-row space-x-3 justify-start self-start items-start cursor-pointer hover:bg-muted/80 rounded-xl p-2 transition duration-200">
           <span className="size-14 rounded-lg overflow-hidden">
             <Image
               src={postImg[0]}
@@ -37,11 +39,17 @@ const PlateDialog = ({
               height={200}
             />
           </span>
-          <section className="flex flex-col w-24 xl:w-32 2xl:w-44">
-            <p className="font-semibold lg:text-base xl:text-lg truncate">
+          <section
+            className={`flex flex-col ${
+              isMobile ? "w-full sm:w-60" : "w-24 lg:w-40 xl:w-64"
+            } `}
+          >
+            <p className="font-semibold text-sm lg:text-base xl:text-lg truncate">
               {postName}
             </p>
-            <p className="lg:text-xs xl:text-sm truncate">{postDesc}</p>
+            <p className="text-xs sm:text-sm lg:text-xs xl:text-sm truncate">
+              {postDesc}
+            </p>
           </section>
         </div>
       </DialogTrigger>

@@ -34,7 +34,7 @@ export function PlateListSidebarToggle() {
             Your Plate List is a collection of recipes you've saved to cook.
           </SheetDescription>
         </SheetHeader>
-        <div className="overflow-auto">
+        <div className="overflow-hidden">
           <RightPlateList isMobile />
         </div>
         <SheetFooter>
