@@ -1,7 +1,9 @@
 import {
+  followUser,
   likeRecipe,
   postRecipeComment,
   shareRecipe,
+  unfollowUser,
   unlikeRecipe,
   unshareRecipe,
 } from "@/lib/services/api/interactionServices";
@@ -70,12 +72,38 @@ const useMutationInteraction = () => {
     });
   };
 
+  const useMutationFollowUser = () => {
+    return useMutation({
+      mutationFn: (id: string) => followUser(id),
+      onSuccess(data) {
+        console.log("Follow Success:", data);
+      },
+      onError(error) {
+        console.error("Follow Error:", error);
+      },
+    });
+  };
+
+  const useMutationUnfollowUser = () => {
+    return useMutation({
+      mutationFn: (id: string) => unfollowUser(id),
+      onSuccess(data) {
+        console.log("Unfollow Success:", data);
+      },
+      onError(error) {
+        console.error("Unfollow Error:", error);
+      },
+    });
+  };
+
   return {
     useMutationLike,
     useMutationUnlike,
     useMutationShare,
     useMutationUnshare,
     useMutationPostComment,
+    useMutationFollowUser,
+    useMutationUnfollowUser,
   };
 };
 

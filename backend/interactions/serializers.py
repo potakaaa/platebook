@@ -34,4 +34,7 @@ class FollowSerializer(ModelSerializer):
     class Meta:
         model = Follow
         fields = "__all__"
+        extra_kwargs = {
+            "user": {"read_only": True},
+        }
         

@@ -8,11 +8,17 @@ import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
 import useQueryAuth from "@/hooks/tanstack/auth/useQueryAuth";
 import { UserPen, UserPlus } from "lucide-react";
 import React from "react";
+import EditButton from "./Buttons/EditButton";
+import { useUserStore } from "@/store/useUserStore";
+import FollowButton from "./Buttons/FollowButton";
 
 const page = (props: { params: Promise<{ id: string }> }) => {
   const params = React.use(props.params);
   const { useQueryGetUserbyID } = useQueryAuth();
   const { data: user, isPending, error } = useQueryGetUserbyID(params.id);
+  const { user: client } = useUserStore();
+
+  const isOwner = client?.id === user?.id;
 
   if (isPending)
     return (
@@ -81,10 +87,12 @@ const page = (props: { params: Promise<{ id: string }> }) => {
             Share Profile
             <UserPlus className="size-6" />
           </Button>
-          <Button variant={"outline"}>
-            Edit
-            <UserPen className="size-6" />
-          </Button>
+
+          {isOwner ? (
+            <EditButton />
+          ) : (
+            <FollowButton id={params.id} isFollowing={user.isFollowing} />
+          )}
         </div>
       </section>
       <span className="w-full border-b border-muted" />

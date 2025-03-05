@@ -8,6 +8,7 @@ from rest_framework import status
 from recipes.models import Recipe
 from .serializers import LikeSerializer, ShareSerializer, CommentSerializer, FollowSerializer
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 
 # Create your views here.
 class LikeViewSet(viewsets.ModelViewSet):
@@ -108,20 +109,37 @@ class FollowViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Follow.objects.filter(follower=self.request.user).select_related("followed")
 
-    def perform_create(self, serializer):
-        followed_user = serializer.validated_data['followed']
+    @action(detail=False, methods=["post"], url_path="follow")
+    def follow_user(self, request):
+        followed_user = request.data.get("followed_user")
 
-        if followed_user == self.request.user:
-            raise serializers.ValidationError("You cannot follow yourself.")
+        if not followed_user:
+            return Response({"error": "followed_user is required."}, status=status.HTTP_400_BAD_REQUEST)
 
-        follow, created = Follow.objects.get_or_create(follower=self.request.user, followed=followed_user)
+        if followed_user == str(request.user.userId):
+            return Response({"error": "You cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not created: 
-            follow.delete()
-            raise serializers.ValidationError({"message": "Unfollowed user."})
+        follow, created = Follow.objects.get_or_create(user=request.user, followed_user_id=followed_user)
 
-        serializer.save(follower=self.request.user)
-        
+        if created:
+            return Response({"message": "User followed successfully."}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"message": "You are already following this user."}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=["delete"], url_path="unfollow")
+    def unfollow_user(self, request):
+        followed_user = request.data.get("followed_user")
+
+        if not followed_user:
+            return Response({"error": "followed_user is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        follow = Follow.objects.filter(user=request.user, followed_user_id=followed_user).first()
+
+        if not follow:
+            return Response({"error": "You are not following this user."}, status=status.HTTP_400_BAD_REQUEST)
+
+        follow.delete()
+        return Response({"message": "User unfollowed successfully."}, status=status.HTTP_200_OK)
         
 
 class FollowingView(APIView):

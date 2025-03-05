@@ -20,6 +20,7 @@ class CustomUserModelSerializer(ModelSerializer):
   following_count = serializers.SerializerMethodField()
   recipes_count = serializers.SerializerMethodField()
   pfp_url = serializers.SerializerMethodField()
+  isFollowing = serializers.SerializerMethodField()
 
   class Meta:
     model = CustomUserModel
@@ -34,6 +35,7 @@ class CustomUserModelSerializer(ModelSerializer):
       "followers_count",
       "following_count",
       "recipes_count",
+      "isFollowing",
     ]
     extra_kwargs = {
             "pfp": {"required": False, "write_only": True},
@@ -53,6 +55,13 @@ class CustomUserModelSerializer(ModelSerializer):
 
   def get_recipes_count(self, obj):
         return Recipe.objects.filter(chef=obj).count()
+      
+  def get_isFollowing(self, obj):
+        request = self.context.get("request")
+        user = request.user
+        if user.is_authenticated:
+            return Follow.objects.filter(user=user, followed_user=obj).exists()
+        return False
     
   def validate(self, data):
     password1 = data.get("password1")

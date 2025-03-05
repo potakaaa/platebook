@@ -102,3 +102,41 @@ export const postRecipeComment = async (id: string, comment: string) => {
     throw new Error("An unknown error occurred.");
   }
 };
+
+export const followUser = async (id: string) => {
+  try {
+    const response = await axiosClient.post(`/follows/follow/`, {
+      followed_user: id,
+    });
+
+    return response;
+  } catch (error: any) {
+    console.error("Follow Error:", error.response?.data);
+
+    if (error.response?.data) {
+      throw error.response.data;
+    }
+
+    throw new Error("An unknown error occurred.");
+  }
+};
+
+export const unfollowUser = async (id: string) => {
+  try {
+    const response = await axiosClient.delete(`/follows/unfollow/`, {
+      data: {
+        followed_user: id,
+      },
+    });
+
+    return response;
+  } catch (error: any) {
+    console.error("Unfollow Error:", error.response?.data);
+
+    if (error.response?.data) {
+      throw error.response.data;
+    }
+
+    throw new Error("An unknown error occurred.");
+  }
+};
