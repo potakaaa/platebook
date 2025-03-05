@@ -121,14 +121,25 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
           className="flex flex-row w-full justify-between"
           translateZ={20}
         >
-          <LikeButton isLiked={isLiked} forHero={forHero} id={id} />
+          <LikeButton
+            isLiked={isLiked}
+            forHero={forHero}
+            id={id}
+            likeCount={likeCount}
+          />
           <CommentButton
             id={id}
             forHero={forHero}
             postName={title}
             postUser={userName}
+            commentCount={commentCount}
           />
-          <ShareButton isShared={isShared} forHero={forHero} id={id} />
+          <ShareButton
+            isShared={isShared}
+            forHero={forHero}
+            id={id}
+            shareCount={shareCount}
+          />
           <PlatelistButton
             atPlateList={atPlateList}
             forHero={forHero}

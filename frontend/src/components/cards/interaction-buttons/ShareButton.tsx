@@ -9,12 +9,14 @@ interface ShareButtonProps {
   isShared?: boolean;
   forHero?: boolean;
   id: string;
+  shareCount?: number;
 }
 
 const ShareButton: React.FC<ShareButtonProps> = ({
   isShared: initialShared,
   forHero,
   id,
+  shareCount = 0,
 }) => {
   const { useMutationShare, useMutationUnshare } = useMutationInteraction();
   const { mutate: sharePost, isPending: shareIsPending } = useMutationShare();
@@ -56,7 +58,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
         >
           Share{shared ? "d" : ""}
         </span>
-        <p className="text-xs self-center">{"(123)"}</p>
+        <p className="text-xs self-center">{`(${shareCount})`}</p>
       </Button>
     </div>
   );

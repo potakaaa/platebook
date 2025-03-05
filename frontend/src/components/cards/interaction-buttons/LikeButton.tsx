@@ -9,12 +9,14 @@ interface LikeButtonProps {
   isLiked?: boolean;
   forHero?: boolean;
   id: string;
+  likeCount?: number;
 }
 
 const LikeButton: React.FC<LikeButtonProps> = ({
   isLiked: initialLiked,
   forHero,
   id,
+  likeCount = 0,
 }) => {
   const { useMutationLike, useMutationUnlike } = useMutationInteraction();
   const { mutate: unlikePost, isPending: unlikeIsPending } =
@@ -61,7 +63,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
       >
         Like{liked ? "d" : ""}
       </span>
-      <p className="text-xs self-center">{"(123)"}</p>
+      <p className="text-xs self-center">{`(${likeCount})`}</p>
     </Button>
   );
 };

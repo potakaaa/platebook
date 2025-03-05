@@ -21,11 +21,13 @@ const CommentButton = ({
   forHero,
   postName,
   postUser,
+  commentCount = 0,
 }: {
   id: string;
   forHero: boolean;
   postName: string;
   postUser: string;
+  commentCount?: number;
 }) => {
   const { useQueryGetComments } = useQueryInteraction();
   const { useMutationPostComment } = useMutationInteraction();
@@ -67,7 +69,7 @@ const CommentButton = ({
               >
                 Comment
               </span>
-              <p className="text-xs self-center">{"(123)"}</p>
+              <p className="text-xs self-center">{`(${commentCount})`}</p>
             </Button>
           </DialogTrigger>
           <DialogContent
