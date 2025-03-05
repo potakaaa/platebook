@@ -9,9 +9,11 @@ import PostRecipeDialog from "../PostRecipeDialog";
 import { PlateListSidebarToggle } from "./platelist/PlateListSidebar";
 import { useUserStore } from "@/store/useUserStore";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const LeftNav = () => {
   const { user, resetStore } = useUserStore();
+  const router = useRouter();
 
   return (
     <div className="flex flex-col size-full">
@@ -22,6 +24,10 @@ const LeftNav = () => {
         <section
           id="user"
           className="w-full border border-muted rounded-xl p-2 px-3 hover:bg-muted/80 transition duration-300 overflow-hidden cursor-pointer"
+          onClick={() => {
+            router.push(`/home/user/${user?.id}`);
+            console.log(user?.id);
+          }}
         >
           <div className="flex flex-row space-x-3 xl:space-x-4 items-center">
             <CustomAvatar

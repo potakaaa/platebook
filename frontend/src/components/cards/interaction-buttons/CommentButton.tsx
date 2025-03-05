@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { MessageCircleMore, SendHorizonal } from "lucide-react";
+import { Loader2, MessageCircleMore, SendHorizonal } from "lucide-react";
 import React, { useState } from "react";
 import Comments from "../Comments";
 import useQueryInteraction from "@/hooks/tanstack/interaction/useQueryInteractions";
@@ -79,19 +79,18 @@ const CommentButton = ({
               onTouchMove={(e) => e.stopPropagation()}
             >
               <DialogTitle className="text-lg ">Comments</DialogTitle>
-              <DialogDescription>
-                <div className="flex flex-col line-clamp-2 w-full max-w-sm">
-                  <span className="font-semibold text-sm">{postName}</span>
-                  <span className="text-xs">by {postUser}</span>
-                </div>
-              </DialogDescription>
+              <div className="flex flex-col line-clamp-2 w-full max-w-sm">
+                <span className="font-semibold text-sm">{postName}</span>
+                <span className="text-xs">by {postUser}</span>
+              </div>
             </DialogHeader>
             <div className="w-full h-full flex flex-col space-y-5">
               <section id="comments" className="flex flex-col space-y-3">
                 {isLoading ? (
-                  <div className="text-center text-sm text-muted-foreground">
-                    loading comments..
-                  </div>
+                  <span className="text-center text-sm text-muted-foreground flex flex-row w-full items-center justify-center gap-1">
+                    <Loader2 className="size-5 animate-spin text-primary" />
+                    Loading comments
+                  </span>
                 ) : isError ? (
                   <div>Error: {error.message}</div>
                 ) : data?.length > 0 ? (
@@ -116,13 +115,14 @@ const CommentButton = ({
                     placeholder="Enter comment here..."
                     className="p-3 text-sm"
                     value={commentInput}
+                    disabled={isLoading}
                     onChange={(e) => setCommentInput(e.target.value)}
                   ></Input>
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={handlePostComment}
-                    disabled={isPosting}
+                    disabled={isPosting || isLoading}
                   >
                     <SendHorizonal className="size-5" />
                   </Button>
