@@ -22,12 +22,14 @@ from cloudinary.uploader import upload
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.generics import RetrieveAPIView, ListAPIView
+from rest_framework.generics import RetrieveAPIView, ListAPIView, RetrieveUpdateAPIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import action
 from .models import CustomUserModel
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied
 from recipes.models import Recipe
 from recipes.serializers import RecipeSerializer
 
@@ -90,6 +92,37 @@ class GoogleLogin(SocialLoginView):
           print(f"Cloudinary upload error: {e}")
           return None
     
+
+class UpdateUserView(RetrieveUpdateAPIView):
+    queryset = CustomUserModel.objects.all()
+    serializer_class = CustomUserModelSerializer
+    lookup_field = "userId"
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser] 
+
+    def get_object(self):
+        user_id = self.kwargs.get("userId")
+        user = self.get_queryset().filter(userId=user_id).first()
+
+        if not user:
+            raise Http404("User not found")
+
+        if user != self.request.user:
+            raise PermissionDenied("You do not have permission to edit this profile.")
+
+        return user
+
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": "User details updated successfully", "user": serializer.data},
+                status=status.HTTP_200_OK,
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 from django.conf import settings
 

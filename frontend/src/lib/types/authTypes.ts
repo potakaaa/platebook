@@ -48,3 +48,9 @@ export type ResetPasswordInputData = {
   password1: string;
   password2: string;
 }
+
+export type UpdateUserInputData = {
+  username: string;
+  email: string;
+  pfp: File;
+};

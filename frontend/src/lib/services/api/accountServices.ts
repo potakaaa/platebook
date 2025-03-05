@@ -91,3 +91,18 @@ export const getUserByID = async (id: string) => {
     throw new Error("An unknown error occurred.");
   }
 };
+
+export const updateUser = async (id: string, data: any) => {
+  try {
+    const response = await axiosClient.patch(`/users/${id}/update/`, data);
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Update User Error:", error.response?.data);
+    if (error.response?.data) {
+      throw error.response.data;
+    }
+
+    throw new Error("An unknown error occurred.");
+  }
+};

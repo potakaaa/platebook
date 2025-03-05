@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import CustomLoginView, CustomRegisterView, OTPPasswordRequestView, ResetPasswordView, VerifyOTP, GetUserByIDView, GetUserRecipesView
+from accounts.views import CustomLoginView, CustomRegisterView, OTPPasswordRequestView, ResetPasswordView, VerifyOTP, GetUserByIDView, GetUserRecipesView, UpdateUserView
 from rest_framework_simplejwt.views import TokenRefreshView
 
 
@@ -34,4 +34,5 @@ urlpatterns = [
     path('', include('interactions.urls')),
     path('users/<uuid:userId>/', GetUserByIDView.as_view(), name='get_user_by_id'),
     path('users/<uuid:userId>/recipes/', GetUserRecipesView.as_view(), name='get_user_recipes_by_id'),
+    path("user/<uuid:userId>/update/", UpdateUserView.as_view(), name="update-user"),
 ]
