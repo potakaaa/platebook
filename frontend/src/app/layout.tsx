@@ -28,6 +28,7 @@ export const metadata: Metadata = {
     "culinary community",
     "Eat Cook PlateBook Repeat",
   ],
+  icons: "/favicon.ico",
 };
 
 export default function RootLayout({
@@ -37,6 +38,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta property="og:title" content="Platebook" />
+        <meta
+          property="og:description"
+          content="Eat. Cook. PlateBook. Repeat."
+        />
+        <meta property="og:image" content="/favicon.ico" />
+        <meta property="og:type" content="website" />
+      </head>
       <body
         className={`${poppins.className} antialiased scroll-smooth w-full min-h-screen flex items-center justify-center bg-background overflow-y-auto 
         [&::-webkit-scrollbar]:w-2
