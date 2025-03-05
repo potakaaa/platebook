@@ -32,6 +32,8 @@ from django.core.exceptions import ValidationError
 from rest_framework.exceptions import PermissionDenied
 from recipes.models import Recipe
 from recipes.serializers import RecipeSerializer
+from dj_rest_auth.registration.views import RegisterView
+from .serializers import CustomUserModelSerializer, OTPSerializer
 
 
 class GoogleLogin(SocialLoginView):
@@ -157,8 +159,7 @@ class CustomLoginView(LoginView):
         return response 
     
     
-from dj_rest_auth.registration.views import RegisterView
-from .serializers import CustomUserModelSerializer, OTPSerializer
+
 
 class CustomRegisterView(RegisterView):
     serializer_class = CustomUserModelSerializer
