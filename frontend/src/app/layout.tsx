@@ -46,6 +46,10 @@ export default function RootLayout({
         />
         <meta property="og:image" content="/favicon.ico" />
         <meta property="og:type" content="website" />
+        <meta
+          name="google-site-verification"
+          content="6iSXF_4Q3u3eRTJA1mx2MdDE5CjD0pz5BfxIEu0WfWw"
+        />
       </head>
       <body
         className={`${poppins.className} antialiased scroll-smooth w-full min-h-screen flex items-center justify-center bg-background overflow-y-auto 
