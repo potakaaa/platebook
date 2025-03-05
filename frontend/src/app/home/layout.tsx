@@ -3,6 +3,8 @@ import RightPlateList from "@/components/home/RightPlateList";
 import FloatingNavbar from "@/components/navbar/FloatingNav";
 import { SpotlightNew } from "@/components/ui/spotlight-new";
 import React, { ReactNode } from "react";
+import SearchStateProvider from "./SearchStateProvider";
+import SearchBar from "@/components/home/SearchBar";
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
@@ -19,9 +21,12 @@ const layout = ({ children }: { children: ReactNode }) => {
         </section>
         <section
           id="feed"
-          className="flex w-full max-w-screen-md lg:max-w-xl px-5 2xl:max-w-2xl justify-center items-center self-center flex-[2] "
+          className="flex w-full flex-col max-w-screen-md lg:max-w-xl px-5 2xl:max-w-2xl justify-center items-center self-center flex-[2] "
         >
-          {children}
+          <section id="search" className="mb-5 w-full">
+            <SearchBar />
+          </section>
+          <SearchStateProvider>{children}</SearchStateProvider>
         </section>
         <section
           id="right-platelist"

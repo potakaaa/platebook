@@ -20,10 +20,6 @@ const page = () => {
           id="feed"
           className="flex flex-col w-full z-30 py-4 sm:py-7 md:py-10 overflow-y-auto gap-5"
         >
-          <section id="search" className="mb-5 w-full">
-            <SearchBar />
-          </section>
-
           <section
             id="header"
             className="flex w-full flex-col justify-center items-center self-center space-y-4 z-10 "

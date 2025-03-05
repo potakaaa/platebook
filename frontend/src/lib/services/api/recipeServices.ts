@@ -151,12 +151,16 @@ const postRecipeIngredients = async (id: number, ingredients: Ingredient[]) => {
 
 
 
-export const searchRecipe = async (search: string) => {
+export const searchRecipe = async (search: string, page: number) => {
   try {
-    const response = await axiosClient.get(`/search/?search=${search}`);
+    const response = await axiosClient.get(
+      `/search/?search=${search}&page=${page}`
+    );
+
+    console.log("Search Response", response);
 
     if (response.status === 200) {
-      return response;
+      return response.data;
     } else {
       console.error("Error: Unexpected response status", response.status);
     }

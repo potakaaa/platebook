@@ -69,28 +69,29 @@ class RecipeListSerializer(serializers.ModelSerializer):
         return obj.comment_set.count()
     
     def get_isPlateListed(self, obj):
-        user = self.context['request'].user
+        request = self.context.get('request')  
 
-        if user.is_anonymous:
+        if not request or not hasattr(request, "user") or request.user.is_anonymous:
             return False
-        
-        return CooklistItem.objects.filter(cooklist__owner=user, recipe=obj).exists()
+
+        return CooklistItem.objects.filter(cooklist__owner=request.user, recipe=obj).exists()
     
     def get_isLiked(self, obj):
-        user = self.context['request'].user
+        request = self.context.get('request') 
 
-        if user.is_anonymous:
-            return False
+        if not request or not hasattr(request, "user") or request.user.is_anonymous:
+            return False 
         
-        return obj.like_set.filter(user=user).exists()
-    
+        return obj.like_set.filter(user=request.user).exists()
+
     def get_isShared(self, obj):
-        user = self.context['request'].user
+        request = self.context.get('request') 
 
-        if user.is_anonymous:
-            return False
+        if not request or not hasattr(request, "user") or request.user.is_anonymous:
+            return False 
         
-        return obj.share_set.filter(user=user).exists()
+        return obj.share_set.filter(user=request.user).exists()
+
     
         
 class SharedRecipeListSerializer(RecipeListSerializer):
