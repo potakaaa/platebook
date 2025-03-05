@@ -21,11 +21,7 @@ export const fetchFeed = async (page = 1) => {
 
 export const fetchFollowingFeed = async (page = 1) => {
   try {
-
-    const response = await axiosClient.get(
-      `/feed/?filter=following&page=${page}`
-    );
-
+    const response = await axiosClient.get(`/following/?page=${page}`);
     return response.data;
   } catch (error: any) {
     console.error(

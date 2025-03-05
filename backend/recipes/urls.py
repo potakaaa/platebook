@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework_nested import routers
-from .views import RecipeViewSet, IngredientViewSet, StepViewSet, RecipeImageViewSet, RecipeFeedView, search_view
+from .views import RecipeViewSet, IngredientViewSet, StepViewSet, RecipeImageViewSet,FollowingFeedView, RecipeFeedView, search_view
 from interactions.views import LikeViewSet, ShareViewSet, CommentViewSet
 
 router = routers.DefaultRouter()
@@ -17,5 +17,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('', include(recipes_router.urls)),
     path('feed/', RecipeFeedView.as_view(), name='recipe-feed'),
+    path('following/', FollowingFeedView.as_view(), name='following-feed'),
     path('search/', search_view, name='search')
 ]

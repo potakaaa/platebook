@@ -43,8 +43,8 @@ const useQueryRecipe = () => {
         return response;
       },
       initialPageParam: 1,
-      getNextPageParam: (lastPage) =>
-        lastPage.next ? lastPage.nextPage : undefined,
+      getNextPageParam: (lastPage, allPages) =>
+        lastPage.next ? allPages.length + 1 : undefined,
     });
   };
 

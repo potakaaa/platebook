@@ -3,6 +3,7 @@ from .models import Recipe, Ingredient, Step, RecipeImage
 from accounts.models import CustomUserModel
 from accounts.serializers import CustomUserModelSerializer
 from cook_list.models import CooklistItem
+from interactions.models import Follow, Share
 import cloudinary.uploader
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -90,10 +91,22 @@ class RecipeListSerializer(serializers.ModelSerializer):
             return False
         
         return obj.share_set.filter(user=user).exists()
-        
     
+        
+class SharedRecipeListSerializer(RecipeListSerializer):
+    sharedBy = serializers.SerializerMethodField()
+    
+    
+    class Meta(RecipeListSerializer.Meta):
+        fields = RecipeListSerializer.Meta.fields + ["sharedBy"]
+        
+    def get_sharedBy(self, obj):
+        shared_recipe_map = self.context.get("shared_recipe_map", {})
 
-
+        shared_user = shared_recipe_map.get(obj.id)
+        if shared_user:
+            return shared_user.username  
+        return None
 
 
 

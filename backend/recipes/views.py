@@ -3,8 +3,8 @@ from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from .models import Recipe, Ingredient, Step, RecipeImage
 from .permissions import IsChefOrReadOnly
-from rest_framework.permissions import AllowAny
-from .serializers import RecipeSerializer, IngredientSerializer, StepSerializer, RecipeImageSerializer, RecipeListSerializer
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from .serializers import RecipeSerializer, IngredientSerializer, StepSerializer, RecipeImageSerializer, RecipeListSerializer, SharedRecipeListSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,7 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter
 from django.http import JsonResponse
 from rest_framework.generics import ListAPIView
-from django.db.models import Q
+from django.db.models import Q, Case, When, Value, IntegerField, UUIDField
 from interactions.models import Follow, Share
 
 # Create your views here.
@@ -144,21 +144,6 @@ class RecipeFeedView(ListAPIView):
         filter_type = self.request.query_params.get("filter", None)
         sort_order = self.request.query_params.get("sort", "newest")
 
-
-        if filter_type == "following" and self.request.user.is_authenticated:
-            following_users = Follow.objects.filter(user=self.request.user).values_list("followed_user", flat=True)
-
-            shared_recipes = Share.objects.filter(user__in=following_users).select_related("recipe", "user")
-            shared_recipes_map = {share.recipe.id: share.user for share in shared_recipes}
-
-            shared_recipe_ids = shared_recipes.values_list("recipe__id", flat=True)
-
-            queryset = queryset.filter(Q(chef__id__in=following_users) | Q(id__in=shared_recipe_ids)).distinct()
-
-            for recipe in queryset:
-                if recipe.id in shared_recipes_map:
-                    recipe.sharer = shared_recipes_map[recipe.id]
-
         if sort_order == "oldest":
             queryset = queryset.order_by("created_at")  
         else:
@@ -182,3 +167,29 @@ def search_view(request):
         'search': search,
         'results': serializer.data
     })
+
+
+class FollowingFeedView(ListAPIView):
+    serializer_class = SharedRecipeListSerializer 
+    pagination_class = RecipePagination
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        following_users = Follow.objects.filter(user=user).values_list("followed_user", flat=True)
+
+        shared_recipes = Share.objects.filter(user__in=following_users).select_related("recipe", "user")
+        shared_recipe_map = {share.recipe.id: share.user for share in shared_recipes}
+        shared_recipe_ids = shared_recipe_map.keys()
+        queryset = Recipe.objects.filter(
+            Q(chef__in=following_users) | Q(id__in=shared_recipe_ids)
+        ).distinct().select_related("chef")
+        self.shared_recipe_map = shared_recipe_map
+
+        return queryset
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["shared_recipe_map"] = self.shared_recipe_map
+        return context

@@ -13,6 +13,7 @@ import ShareButton from "./interaction-buttons/ShareButton";
 import PlatelistButton from "./interaction-buttons/PlatelistButton";
 import CommentButton from "./interaction-buttons/CommentButton";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export type PostCardProps = {
   id: string;
@@ -29,6 +30,7 @@ export type PostCardProps = {
   isLiked?: boolean;
   isShared?: boolean;
   forHero?: boolean;
+  sharer?: string;
 };
 
 const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
@@ -47,8 +49,8 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
     isLiked,
     isShared,
     forHero = false,
+    sharer,
   } = postItems;
-
   const router = useRouter();
   return (
     <CardContainer className="inter-var h-full w-full">
@@ -59,6 +61,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             : "shadow-lg bg-background"
         }`}
       >
+        {sharer && <p>Shared by {sharer}</p>}
         <CardItem
           id="profile"
           className="flex flex-row w-full items-center justify-between"
