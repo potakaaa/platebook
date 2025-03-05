@@ -95,7 +95,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         recipe_id = self.kwargs["recipe_pk"]
-        return Share.objects.filter(recipe_id=recipe_id, user=self.request.user).select_related("recipe")
+        return Comment.objects.filter(recipe_id=recipe_id).select_related("recipe")
 
     def perform_create(self, serializer):
         recipe = get_object_or_404(Recipe, id=self.kwargs["recipe_pk"])

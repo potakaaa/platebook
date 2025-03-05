@@ -1,5 +1,6 @@
 import {
   likeRecipe,
+  postRecipeComment,
   shareRecipe,
   unlikeRecipe,
   unshareRecipe,
@@ -56,11 +57,25 @@ const useMutationInteraction = () => {
     });
   };
 
+  const useMutationPostComment = () => {
+    return useMutation({
+      mutationFn: ({ id, data }: { id: string; data: string }) =>
+        postRecipeComment(id, data),
+      onSuccess(data) {
+        console.log("Post Comment Success:", data);
+      },
+      onError(error) {
+        console.error("Post Comment Error:", error);
+      },
+    });
+  };
+
   return {
     useMutationLike,
     useMutationUnlike,
     useMutationShare,
     useMutationUnshare,
+    useMutationPostComment,
   };
 };
 

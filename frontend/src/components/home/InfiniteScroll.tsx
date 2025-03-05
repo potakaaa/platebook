@@ -5,67 +5,47 @@ import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard, { PostCardProps } from "../cards/PostCard";
 import Spinner from "../loader/Spinner";
+import useQueryRecipe from "@/hooks/tanstack/recipe/useQueryRecipe";
 
-const InfiniteScrollComp = () => {
-  const [posts, setPosts] = useState<PostCardProps[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState<number>(1);
+const InfiniteScrollComp = ({ userId }: { userId?: string }) => {
+  const { useQueryFeed, useQueryFetchUserRecipes } = useQueryRecipe();
 
-  useEffect(() => {
-    fetchFeedData();
-  }, []);
+  const { data, fetchNextPage, hasNextPage, isFetching, refetch } = userId
+    ? useQueryFetchUserRecipes(userId)
+    : useQueryFeed();
 
-  const fetchFeedData = async () => {
-    try {
-      const response = await fetchFeed(page);
-      const data = response;
+  const posts: PostCardProps[] =
+    data?.pages.flatMap((page) =>
+      page.results.map((result: any) => ({
+        id: result.id,
+        userId: result.chef.id,
+        userImage: result.chef.pfp_url,
+        userName: result.chef.username,
+        title: result.title,
+        description: result.description,
+        images: result.images.map((image: any) => image.image_url),
+        likeCount: result.likes,
+        shareCount: result.shares,
+        commentCount: result.comments,
+        atPlateList: result.isPlateListed,
+        isLiked: result.isLiked,
+        isShared: result.isShared,
+      }))
+    ) || [];
 
-      if (data.results && Array.isArray(data.results)) {
-        const parsedResults: PostCardProps[] = data.results.map(
-          (result: any) => {
-            return {
-              id: result.id,
-              userImage: result.chef.pfp_url,
-              userName: result.chef.username,
-              title: result.title,
-              description: result.description,
-              images: result.images.map((image: any) => image.image_url),
-              likeCount: result.likes,
-              shareCount: result.shares,
-              commentCount: result.comments,
-              atPlateList: result.isPlateListed,
-              isLiked: result.isLiked,
-              isShared: result.isShared,
-            };
-          }
-        );
-        setPage(page + 1);
-        setPosts((prevPosts) => [...prevPosts, ...parsedResults]);
-
-        if (!data.next) {
-          setHasMore(false);
-        }
-      } else {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error("Fetch Feed Error:", error);
-      setHasMore(false);
-    }
-  };
-
-  const refresh = () => {
-    setPosts([]);
-    setPage(1);
-    setHasMore(true);
-    fetchFeedData();
-  };
+  if (isFetching && posts.length === 0) {
+    return (
+      <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <InfiniteScroll
       dataLength={posts.length}
-      next={fetchFeedData}
-      hasMore={hasMore}
+      next={fetchNextPage}
+      hasMore={!!hasNextPage}
       loader={
         <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden">
           <Spinner />
@@ -76,7 +56,7 @@ const InfiniteScrollComp = () => {
           Come back for more recipes!
         </p>
       }
-      refreshFunction={refresh}
+      refreshFunction={refetch}
       pullDownToRefresh
       pullDownToRefreshThreshold={50}
       pullDownToRefreshContent={

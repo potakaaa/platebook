@@ -138,6 +138,8 @@ const LandingPage = () => {
 export default LandingPage;
 
 const samplePost: PostCardProps = {
+  id: "1",
+  userId: "1",
   userImage: "/platebook-logo-500.png",
   userName: "Platebook",
   title: "Adobong Kare Kare Pinoy Style",

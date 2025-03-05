@@ -186,3 +186,21 @@ export const fetchRecipe = async (id: number) => {
     return [];
   }
 };
+
+export const fetchUserRecipes = async (id: string, page: number) => {
+  try {
+    const response = await axiosClient.get(
+      `/users/${id}/recipes/?page=${page}`
+    );
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      console.error("Error: Unexpected response status", response.status);
+    }
+  } catch (err) {
+    console.error("Error while fetching user recipes:", err);
+
+    return [];
+  }
+};

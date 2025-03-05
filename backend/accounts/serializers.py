@@ -9,11 +9,16 @@ from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from cook_list.models import Cooklist
+from interactions.models import Follow
+from recipes.models import Recipe
 
 class CustomUserModelSerializer(ModelSerializer): 
 
-  password1 = CharField(write_only=True)
-  password2 = CharField(write_only=True)
+  password1 = CharField(write_only=True, required=False)
+  password2 = CharField(write_only=True, required=False)
+  followers_count = serializers.SerializerMethodField()
+  following_count = serializers.SerializerMethodField()
+  recipes_count = serializers.SerializerMethodField()
   pfp_url = serializers.SerializerMethodField()
 
   class Meta:
@@ -22,8 +27,13 @@ class CustomUserModelSerializer(ModelSerializer):
       "userId",
       "username",
       "email",
-      "password1","password2", "pfp",
+      "pfp",
       "pfp_url",
+      "password1",
+      "password2",
+      "followers_count",
+      "following_count",
+      "recipes_count",
     ]
     extra_kwargs = {
             "pfp": {"required": False, "write_only": True},
@@ -31,9 +41,18 @@ class CustomUserModelSerializer(ModelSerializer):
     }
     
   def get_pfp_url(self, obj):
-    if hasattr(obj, "pfp") and obj.pfp:  
-        return obj.pfp.url
-    return None
+      if hasattr(obj, "pfp") and obj.pfp:  
+          return obj.pfp.url
+      return None
+  
+  def get_followers_count(self, obj):
+        return Follow.objects.filter(followed_user=obj).count() 
+
+  def get_following_count(self, obj):
+        return Follow.objects.filter(user=obj).count()  
+
+  def get_recipes_count(self, obj):
+        return Recipe.objects.filter(chef=obj).count()
     
   def validate(self, data):
     password1 = data.get("password1")

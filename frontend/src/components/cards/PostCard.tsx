@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 
 export type PostCardProps = {
   id: string;
+  userId: string;
   userImage: string;
   userName: string;
   title: string;
@@ -33,6 +34,7 @@ export type PostCardProps = {
 const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
   const {
     id,
+    userId,
     userImage,
     userName,
     title,
@@ -66,7 +68,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             <CustomAvatar
               userName={userName}
               userImage={userImage}
-              onClick={() => router.push(`/home/user/${id}`)}
+              onClick={() => router.push(`/home/user/${userId}`)}
             />
             <p className="text-xs sm:text-sm lg:text-base font-semibold">
               {userName}
@@ -113,6 +115,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
         >
           <LikeButton isLiked={isLiked} forHero={forHero} id={id} />
           <CommentButton
+            id={id}
             forHero={forHero}
             postName={title}
             postUser={userName}

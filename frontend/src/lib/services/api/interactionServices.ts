@@ -64,3 +64,41 @@ export const unshareRecipe = async (id: string) => {
     throw new Error("An unknown error occurred.");
   }
 };
+
+
+export const getRecipeComments = async (id: string) => {
+  try {
+    console.log("ID", id);
+    const response = await axiosClient.get(`/recipes/${id}/comments/`);
+
+    console.log("Comments", response);
+    return response.data;
+  } catch (error: any) {
+    console.error("Recipe Comments Error:", error.response?.data);
+
+    if (error.response?.data) {
+      throw error.response.data;
+    }
+
+    throw new Error("An unknown error occurred.");
+  }
+};
+
+export const postRecipeComment = async (id: string, comment: string) => {
+  try {
+    const response = await axiosClient.post(`/recipes/${id}/comments/`, {
+      recipe: id,
+      content: comment,
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Recipe Comment Post Error:", error.response?.data);
+
+    if (error.response?.data) {
+      throw error.response.data;
+    }
+
+    throw new Error("An unknown error occurred.");
+  }
+};

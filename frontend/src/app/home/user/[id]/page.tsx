@@ -1,11 +1,30 @@
+"use client";
 import InfiniteScrollComp from "@/components/home/InfiniteScroll";
+import Spinner from "@/components/loader/Spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import CustomAvatar from "@/components/user/CustomAvatar";
+import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
+import useQueryAuth from "@/hooks/tanstack/auth/useQueryAuth";
 import { UserPen, UserPlus } from "lucide-react";
 import React from "react";
 
-const page = ({ params }: { params: { id: string } }) => {
+const page = (props: { params: Promise<{ id: string }> }) => {
+  const params = React.use(props.params);
+  const { useQueryGetUserbyID } = useQueryAuth();
+  const { data: user, isPending, error } = useQueryGetUserbyID(params.id);
+
+  if (isPending)
+    return (
+      <div>
+        <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden">
+          <Spinner />
+        </div>
+      </div>
+    );
+
+  if (error) return <div>Error loading user</div>;
+
   return (
     <div className="flex flex-col w-full min-h-screen justify-start items-center py-10 gap-0 sm:gap-3 md:gap-5">
       <section
@@ -18,9 +37,9 @@ const page = ({ params }: { params: { id: string } }) => {
           className="w-full flex justify-center items-center"
         >
           <Avatar className="size-24 drop-shadow-sm">
-            <AvatarImage src={sampleUser.img} alt={sampleUser.username} />
+            <AvatarImage src={user.pfp_url} alt={user.username} />
             <AvatarFallback className="text-foreground bg-primary text-3xl font-bold size-full text-center flex items-center justify-center self-center">
-              {sampleUser.username[0]}
+              {user.username[0]}
             </AvatarFallback>
           </Avatar>
         </div>
@@ -28,10 +47,8 @@ const page = ({ params }: { params: { id: string } }) => {
           id="user-name"
           className="flex flex-col justify-center items-center w-full text-ellipsis truncate overflow-x-scroll line-clamp-1"
         >
-          <span className="text-xl text-left font-bold">
-            {sampleUser.username}
-          </span>
-          <span className="text-sm font-normal">{sampleUser.email}</span>
+          <span className="text-xl text-left font-bold">{user.username}</span>
+          <span className="text-sm font-normal">{user.email}</span>
         </div>
         <div
           id="user-follow"
@@ -39,19 +56,19 @@ const page = ({ params }: { params: { id: string } }) => {
         >
           <section id="following" className="flex flex-col">
             <p className="text-center font-bold sm:text-lg">
-              {sampleUser.following}
+              {user.following_count}
             </p>
             <h1 className="font-medium text-xs sm:text-sm">Following</h1>
           </section>
           <section id="followers" className="flex flex-col">
             <p className="text-center font-bold sm:text-lg">
-              {sampleUser.follower}
+              {user.followers_count}
             </p>
             <h1 className="font-medium text-xs sm:text-sm">Followers</h1>
           </section>
           <section id="posts" className="flex flex-col">
             <p className="text-center font-bold sm:text-lg">
-              {sampleUser.posts}
+              {user.recipes_count}
             </p>
             <h1 className="font-medium text-xs sm:text-sm">Posts</h1>
           </section>
@@ -72,20 +89,10 @@ const page = ({ params }: { params: { id: string } }) => {
       </section>
       <span className="w-full border-b border-muted" />
       <div id="my-posts" className="w-full flex flex-col gap-5">
-        <InfiniteScrollComp />
+        <InfiniteScrollComp userId={params.id} />
       </div>
     </div>
   );
 };
 
 export default page;
-
-const sampleUser = {
-  id: 1,
-  username: "Rald Helbs",
-  email: "rald@gmail.com",
-  img: "",
-  following: 321,
-  follower: 123,
-  posts: 120,
-};

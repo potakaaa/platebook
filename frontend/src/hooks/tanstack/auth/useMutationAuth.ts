@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import {
   forgotPasswordRequest,
   forgotPasswordVerify,
+  getUserByID,
   signUp,
   verifiedPasswordReset,
 } from "@/lib/services/api/accountServices";
@@ -57,11 +58,23 @@ const useMutationAuth = () => {
     });
   };
 
+  const useMutationGetUserById = () => {
+    return useMutation({
+      mutationFn: (id: string) => getUserByID(id),
+      onSuccess(data) {
+        console.log("Get User By Id Success:", data);
+      },
+      onError(error) {
+        console.error("Get User By Id Error:", error);
+      },
+    });
+  };
   return {
     useMutationSignUp,
     useMutationForgotPasswordRequest,
     useMutationForgotPasswordVerify,
     useMutationVerifiedPasswordReset,
+    useMutationGetUserById,
   };
 };
 

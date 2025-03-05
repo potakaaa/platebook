@@ -54,6 +54,7 @@ class RecipeListSerializer(serializers.ModelSerializer):
 
     def get_chef(self, obj):
         return {
+            "id": obj.chef.userId,
             "username": obj.chef.username,
             "pfp_url": getattr(obj.chef.pfp, 'url', None)
         }

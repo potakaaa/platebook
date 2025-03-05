@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from .models import Like, Share, Comment, Follow
+from accounts.serializers import CustomUserModelSerializer 
 
 class LikeSerializer(ModelSerializer):
     class Meta:
@@ -23,6 +24,7 @@ class ShareSerializer(ModelSerializer):
         
 
 class CommentSerializer(ModelSerializer):
+    user = CustomUserModelSerializer(read_only=True)
     class Meta:
         model = Comment
         fields = "__all__"
