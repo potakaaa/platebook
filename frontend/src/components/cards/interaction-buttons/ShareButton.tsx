@@ -45,17 +45,18 @@ const ShareButton: React.FC<ShareButtonProps> = ({
 
   return (
     <div>
-      <Button variant={"ghost"} className="" onClick={handleShare}>
+      <Button variant={"ghost"} className="p-1 sm:p-3" onClick={handleShare}>
         <Share
           className={`size-8 ${shared ? "stroke-primary" : "fill-none"}`}
         />
         <span
           className={`hidden xl:block ${
-            !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
+            !forHero ? "sm:hidden xl:block" : "lg:hidden sm:block"
           } ${shared ? "text-primary" : ""}`}
         >
           Share{shared ? "d" : ""}
         </span>
+        <p className="text-xs self-center">{"(123)"}</p>
       </Button>
     </div>
   );

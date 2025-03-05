@@ -58,15 +58,16 @@ const CommentButton = ({
       {!forHero ? (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant={"ghost"} className="">
+            <Button variant={"ghost"} className="p-1 sm:p-3">
               <MessageCircleMore className="size-8" />
               <span
                 className={`hidden xl:block ${
-                  !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
+                  !forHero ? "sm:hidden xl:block" : "lg:hidden sm:block"
                 }`}
               >
                 Comment
               </span>
+              <p className="text-xs self-center">{"(123)"}</p>
             </Button>
           </DialogTrigger>
           <DialogContent

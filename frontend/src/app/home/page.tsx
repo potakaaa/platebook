@@ -18,7 +18,7 @@ const page = () => {
       <div className="flex flex-row w-full justify-center items-start min-h-screen overflow-y-auto">
         <section
           id="feed"
-          className="flex flex-col w-full z-30 py-4 sm:py-7 md:py-10 overflow-y-auto gap-5"
+          className="flex flex-col w-full z-30 py-4 sm:py-7 md:py-10 overflow-y-auto gap-2"
         >
           <section
             id="header"

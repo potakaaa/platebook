@@ -18,11 +18,11 @@ import RightPlateList from "../RightPlateList";
 export function PlateListSidebarToggle() {
   return (
     <Sheet>
-      <SheetTrigger asChild>
+      <SheetTrigger asChild className="">
         <NavButtonLeft
           name="Plate List"
           icon={IconDisc}
-          divCN="flex lg:hidden"
+          parentCN="flex lg:hidden"
         />
       </SheetTrigger>
       <SheetContent className="bg-card flex flex-col gap-5">

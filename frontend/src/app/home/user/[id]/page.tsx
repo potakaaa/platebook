@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import CustomAvatar from "@/components/user/CustomAvatar";
 import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
 import useQueryAuth from "@/hooks/tanstack/auth/useQueryAuth";
-import { UserPen, UserPlus } from "lucide-react";
+import { Frown, UserPen, UserPlus } from "lucide-react";
 import React from "react";
 import EditButton from "./Buttons/EditButton";
 import { useUserStore } from "@/store/useUserStore";
@@ -29,7 +29,13 @@ const page = (props: { params: Promise<{ id: string }> }) => {
       </div>
     );
 
-  if (error) return <div>Error loading user</div>;
+  if (1 === 1)
+    return (
+      <div className="flex flex-row gap-2 mt-10">
+        <p>Error loading user</p>
+        <Frown className="size-5 text-primary drop-shadow-sm" />
+      </div>
+    );
 
   return (
     <div className="flex flex-col w-full min-h-screen justify-start items-center py-10 gap-0 sm:gap-3 md:gap-5">

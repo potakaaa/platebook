@@ -11,7 +11,11 @@ const layout = ({ children }: { children: ReactNode }) => {
     <>
       <SpotlightNew />
       <div
-        className={`w-full px-2 sm:px-10 md:px-2 xl:px-5 2xl:px-12 flex items-center justify-center 2xl:space-x-20 scroll-smooth`}
+        className={`w-full px-2 sm:px-10 md:px-2 xl:px-5 2xl:px-12 flex items-center justify-center lg:gap-x-12 xl:gap-x-2 2xl:gap-x-20 scroll-smooth  [&::-webkit-scrollbar]:w-2
+      [&::-webkit-scrollbar-track]:bg-gray-100
+      [&::-webkit-scrollbar-thumb]:bg-gray-300
+      dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+      dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 `}
       >
         <section
           id="left-nav"
@@ -21,7 +25,7 @@ const layout = ({ children }: { children: ReactNode }) => {
         </section>
         <section
           id="feed"
-          className="flex w-full flex-col max-w-screen-md lg:max-w-xl px-5 2xl:max-w-2xl justify-center items-center self-center flex-[2] "
+          className="flex w-full flex-col max-w-screen-md lg:max-w-2xl px-5 2xl:max-w-2xl justify-center items-center self-start flex-[2] py-5 sm:py-8 lg:py-10"
         >
           <section id="search" className="mb-5 w-full">
             <SearchBar />

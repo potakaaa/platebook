@@ -45,7 +45,11 @@ const LeftNav = () => {
             </div>
           </div>
         </section>
-        <NavButtonLeft name="Home" icon={IconHome} />
+        <NavButtonLeft
+          name="Home"
+          icon={IconHome}
+          onClick={() => router.push("/home")}
+        />
         <PostRecipeDialog />
         <NavButtonLeft name="Search Recipe" icon={IconSearch} />
         <ThemeToggle />

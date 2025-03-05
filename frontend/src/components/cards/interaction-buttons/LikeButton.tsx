@@ -48,7 +48,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
     setLiked((prev: boolean | undefined) => !prev);
   };
   return (
-    <Button variant={"ghost"} className="" onClick={handleLike}>
+    <Button variant={"ghost"} className="p-1 sm:p-3" onClick={handleLike}>
       <Heart
         className={`size-8 ${
           liked ? "fill-primary stroke-primary" : "fill-none"
@@ -56,11 +56,12 @@ const LikeButton: React.FC<LikeButtonProps> = ({
       />
       <span
         className={`hidden xl:block ${
-          !forHero ? "sm:block lg:block" : "lg:hidden sm:block"
+          !forHero ? "sm:hidden xl:block" : "lg:hidden sm:block"
         } ${liked ? "text-primary" : ""}`}
       >
         Like{liked ? "d" : ""}
       </span>
+      <p className="text-xs self-center">{"(123)"}</p>
     </Button>
   );
 };

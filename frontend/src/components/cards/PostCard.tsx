@@ -6,7 +6,7 @@ import { Avatar } from "../ui/avatar";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { Button } from "../ui/button";
-import { Disc, Heart, MessageCircleMore, Share } from "lucide-react";
+import { Disc, Heart, MessageCircleMore, Repeat2, Share } from "lucide-react";
 import CustomAvatar from "../user/CustomAvatar";
 import LikeButton from "./interaction-buttons/LikeButton";
 import ShareButton from "./interaction-buttons/ShareButton";
@@ -53,7 +53,13 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
   } = postItems;
   const router = useRouter();
   return (
-    <CardContainer className="inter-var h-full w-full">
+    <CardContainer className="inter-var flex flex-col h-full w-full">
+      {sharer && (
+        <span className="flex flex-row w-full px-3 mb-3 self-start gap-2 max-w-md line-clamp-1">
+          <Repeat2 className="size-4 text-primary sm:size-5" />
+          <p className="text-left text-xs sm:text-sm">Shared by {sharer}</p>
+        </span>
+      )}
       <CardBody
         className={`flex flex-col h-full w-full border border-neutral-200/20 px-5 py-4 sm:px-6 sm:py-5 lg:py-6 lg:px-7 rounded-xl space-y-4 ${
           forHero
@@ -61,7 +67,6 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             : "shadow-lg bg-background"
         }`}
       >
-        {sharer && <p>Shared by {sharer}</p>}
         <CardItem
           id="profile"
           className="flex flex-row w-full items-center justify-between"
