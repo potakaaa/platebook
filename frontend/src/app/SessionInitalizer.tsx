@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useUserStore } from "@/store/useUserStore";
+import { useUserStore } from "@/store/user/UserStore";
 
 const SessionInitializer = () => {
   const { data: session, status } = useSession();

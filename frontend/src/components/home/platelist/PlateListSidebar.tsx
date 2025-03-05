@@ -11,9 +11,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import NavButtonLeft from "../NavButtonsLeft";
+import NavButtonLeft from "../nav/NavButtonsLeft";
 import { IconDisc } from "@tabler/icons-react";
-import RightPlateList from "../RightPlateList";
+import RightPlateList from "./RightPlateList";
 
 export function PlateListSidebarToggle() {
   return (

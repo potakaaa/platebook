@@ -1,4 +1,4 @@
-import { useUserStore } from "@/store/useUserStore";
+import { useUserStore } from "@/store/user/UserStore";
 import axios from "axios";
 import { get } from "http";
 import { getSession, signIn, signOut } from "next-auth/react";

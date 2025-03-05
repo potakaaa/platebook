@@ -3,44 +3,35 @@
 import { fetchFeed } from "@/lib/services/api/recipeServices";
 import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import PostCard, { PostCardProps } from "../cards/PostCard";
-import Spinner from "../loader/Spinner";
+import PostCard, { PostCardProps } from "@/components/cards/PostCard";
+import Spinner from "@/components/loader/Spinner";
 import useQueryRecipe from "@/hooks/tanstack/recipe/useQueryRecipe";
-import useSearchStore from "@/store/useSearchState";
-import { useQueryClient } from "@tanstack/react-query";
 
-const SearchResults = () => {
-  const {useQuerySearchRecipe} = useQueryRecipe();
-  const {searchQuery} = useSearchStore();
-  const queryClient = useQueryClient();
+const FollowingTab = () => {
+  const { useQueryFollowingFeed } = useQueryRecipe();
 
-    const { data, fetchNextPage, hasNextPage, isFetching, refetch } = useQuerySearchRecipe(searchQuery);
+  const { data, fetchNextPage, hasNextPage, isFetching, refetch } =
+    useQueryFollowingFeed();
 
-    console.log("search api responjse", data);
-
-    const posts: PostCardProps[] =
-      data?.pages.flatMap((page) =>
-        page.results.map((result: any) => ({
-          id: result.id,
-          userId: result.chef.id,
-          userImage: result.chef.pfp_url ?? "", 
-          userName: result.chef.username,
-          title: result.title,
-          description: result.description,
-          images: result.images?.map((image: any) => image.image_url) || [],
-          likeCount: result.likeCount,
-          shareCount: result.shareCount,
-          commentCount: result.commentCount,
-          atPlateList: result.isPlateListed,
-          isLiked: result.isLiked,
-          isShared: result.isShared,
-          createdAt: result.created_at,
-          originCountry: result.origin_country,
-        }))
-      ) || [];
-
-
-
+  const posts: PostCardProps[] =
+    data?.pages.flatMap((page) =>
+      page.results.map((result: any) => ({
+        id: result.id,
+        userId: result.chef.id,
+        userImage: result.chef.pfp_url,
+        userName: result.chef.username,
+        title: result.title,
+        description: result.description,
+        images: result.images.map((image: any) => image.image_url),
+        likeCount: result.likes,
+        shareCount: result.shares,
+        commentCount: result.comments,
+        atPlateList: result.isPlateListed,
+        isLiked: result.isLiked,
+        isShared: result.isShared,
+        sharer: result.sharedBy,
+      }))
+    ) || [];
 
   if (isFetching && posts.length === 0) {
     return (
@@ -49,7 +40,6 @@ const SearchResults = () => {
       </div>
     );
   }
-
 
   return (
     <InfiniteScroll
@@ -85,4 +75,4 @@ const SearchResults = () => {
   );
 };
 
-export default SearchResults;
+export default FollowingTab;

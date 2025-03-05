@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import useMutationInteraction from "@/hooks/tanstack/interaction/useMutationInteraction";
 import { Share } from "lucide-react";
 import React, { useState } from "react";
+import { set } from "zod";
 
 interface ShareButtonProps {
   isShared?: boolean;
@@ -23,12 +24,14 @@ const ShareButton: React.FC<ShareButtonProps> = ({
   const { mutate: unsharePost, isPending: unshareIsPending } =
     useMutationUnshare();
   const [shared, setShared] = useState<boolean | undefined>(initialShared);
+  const [heroShare, setHeroShare] = useState(250);
 
   const handleShare = () => {
     if (shareIsPending || unshareIsPending) return;
 
     if (forHero) {
       setShared((prev: boolean | undefined) => !prev);
+      setHeroShare((prev: number) => (prev === 250 ? 251 : 250));
       return;
     }
 
@@ -58,7 +61,9 @@ const ShareButton: React.FC<ShareButtonProps> = ({
         >
           Share{shared ? "d" : ""}
         </span>
-        <p className="text-xs self-center">{`(${shareCount})`}</p>
+        <p className="text-xs self-center">{`(${
+          !forHero ? shareCount : heroShare
+        })`}</p>
       </Button>
     </div>
   );

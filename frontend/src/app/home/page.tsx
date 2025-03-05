@@ -1,8 +1,8 @@
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
-import FeedChoice from "@/components/home/FeedChoice";
-import HomeImageSlider from "@/components/home/HomeImageSlider";
-import InfiniteScrollComp from "@/components/home/InfiniteScroll";
-import SearchBar from "@/components/home/SearchBar";
+import FeedChoice from "@/components/home/feed/FeedChoice";
+import HomeImageSlider from "@/components/home/feed/HomeImageSlider";
+import InfiniteScrollComp from "@/components/home/feed/InfiniteScroll";
+import SearchBar from "@/components/home/search/SearchBar";
 import FloatingNavbar from "@/components/navbar/FloatingNav";
 import UserNav from "@/components/navbar/UserNav";
 import { Button } from "@/components/ui/button";

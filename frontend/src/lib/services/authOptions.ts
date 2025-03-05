@@ -4,7 +4,7 @@ import NextAuth, { NextAuthOptions, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { useUserStore } from "@/store/useUserStore";
+import { useUserStore } from "@/store/user/UserStore";
 
 export const authOptions: NextAuthOptions = {
   providers: [

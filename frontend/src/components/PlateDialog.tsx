@@ -8,11 +8,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import Image from "next/image";
-import { Card, CardContent } from "./ui/card";
-import { AspectRatio } from "./ui/aspect-ratio";
-import { DialogDescription } from "@radix-ui/react-dialog";
 import { Button } from "./ui/button";
-import { IconTrash } from "@tabler/icons-react";
 import PlateImageCarousel from "./home/platelist/PlateImageCarousel";
 
 const PlateDialog = ({
@@ -41,7 +37,7 @@ const PlateDialog = ({
           </span>
           <section
             className={`flex flex-col ${
-              isMobile ? "w-full sm:w-60" : "w-24 lg:w-40 xl:w-64"
+              isMobile ? "w-full sm:w-60" : "w-24 lg:w-40 xl:w-44 2xl:w-64"
             } `}
           >
             <p className="font-semibold text-sm lg:text-base xl:text-lg truncate">

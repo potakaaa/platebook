@@ -3,8 +3,8 @@
 import { fetchFeed } from "@/lib/services/api/recipeServices";
 import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import PostCard, { PostCardProps } from "../cards/PostCard";
-import Spinner from "../loader/Spinner";
+import PostCard, { PostCardProps } from "../../cards/PostCard";
+import Spinner from "../../loader/Spinner";
 import useQueryRecipe from "@/hooks/tanstack/recipe/useQueryRecipe";
 
 const InfiniteScrollComp = ({ userId }: { userId?: string }) => {

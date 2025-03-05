@@ -2,18 +2,15 @@
 
 import { CardBody, CardContainer, CardItem } from "../ui/3d-card";
 import Image from "next/image";
-import { Avatar } from "../ui/avatar";
-import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { Button } from "../ui/button";
-import { Disc, Heart, MessageCircleMore, Repeat2, Share } from "lucide-react";
+import { Repeat2 } from "lucide-react";
 import CustomAvatar from "../user/CustomAvatar";
 import LikeButton from "./interaction-buttons/LikeButton";
 import ShareButton from "./interaction-buttons/ShareButton";
 import PlatelistButton from "./interaction-buttons/PlatelistButton";
 import CommentButton from "./interaction-buttons/CommentButton";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export type PostCardProps = {
   id: string;
@@ -82,7 +79,13 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
               {userName}
             </p>
           </div>
-          <Button variant={"outline"} className="">
+          <Button
+            variant={"outline"}
+            className=""
+            onClick={() => {
+              !forHero && router.push(`/home/post/${id}`);
+            }}
+          >
             View Recipe
           </Button>
         </CardItem>

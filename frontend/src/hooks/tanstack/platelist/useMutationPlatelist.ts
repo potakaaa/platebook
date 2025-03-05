@@ -4,11 +4,14 @@ import {
   unlikeRecipe,
   unshareRecipe,
 } from "@/lib/services/api/interactionServices";
-import { addRecipeToPlatelist, removeRecipeFromPlatelist } from "@/lib/services/api/platelistServices";
+import {
+  addRecipeToPlatelist,
+  removeRecipeFromPlatelist,
+} from "@/lib/services/api/platelistServices";
 import { useMutation } from "@tanstack/react-query";
 import React, { use } from "react";
 import useQueryPlatelist from "./useQueryPlatelist";
-import { useUserStore } from "@/store/useUserStore";
+import { useUserStore } from "@/store/user/UserStore";
 
 const useMutationPlatelist = () => {
   const { fetchPlateList } = useUserStore();

@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import { ArrowRightCircleIcon, SearchIcon } from "lucide-react";
-import useSearchStore from "@/store/useSearchState";
+import useSearchStore from "@/store/search/SearchState";
 
 const SearchBar = () => {
   const { searchQuery, setSearchQuery } = useSearchStore();

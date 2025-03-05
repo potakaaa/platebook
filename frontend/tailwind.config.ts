@@ -5,8 +5,9 @@ const svgToDataUri = require("mini-svg-data-uri");
 const {
   default: flattenColorPalette,
 } = require("tailwindcss/lib/util/flattenColorPalette");
+const withMT = require("@material-tailwind/react/utils/withMT");
 
-export default {
+export default withMT({
   darkMode: ["class"],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -149,7 +150,7 @@ export default {
       );
     },
   ],
-} satisfies Config;
+}) satisfies Config;
 
 function addVariablesForColors({ addBase, theme }: any) {
   let allColors = flattenColorPalette(theme("colors"));

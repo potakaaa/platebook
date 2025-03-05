@@ -1,8 +1,7 @@
-'use client';
-import SearchResults from "@/components/home/SearchResults";
-import useSearchStore from "@/store/useSearchState";
+"use client";
+import SearchResults from "@/components/home/search/SearchResults";
+import useSearchStore from "@/store/search/SearchState";
 import React from "react";
-
 
 interface SearchStateProviderProps {
   children: React.ReactNode;

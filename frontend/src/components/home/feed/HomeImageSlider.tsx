@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import { AspectRatio } from "../ui/aspect-ratio";
-import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
+import { AspectRatio } from "../../ui/aspect-ratio";
+import { Carousel, CarouselContent, CarouselItem } from "../../ui/carousel";
 import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
-import { Card, CardContent } from "../ui/card";
+import { Card, CardContent } from "../../ui/card";
 
 const HomeImageSlider = () => {
   return (

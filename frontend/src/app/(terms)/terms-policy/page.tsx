@@ -1,9 +1,13 @@
+import HomeLogo from "@/components/navbar/nav/HomeLogo";
+import { Button } from "@/components/ui/button";
 import React from "react";
 
 const page = () => {
   return (
-    <div className="bg-background rounded-lg font-sans max-h-[80vh] flex items-center justify-center">
-      <div className="rounded-lg p-8 w-full max-w-2xl border-2 overflow-y-auto max-h-[80vh] scroll-smooth shadow-2xl shadow-orange-400">
+    <div className="bg-background rounded-lg flex flex-col items-center justify-center size-full dark:bg-grid-small-white/[0.2] bg-grid-black-small/[0.2] relative gap-10">
+      <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+      <HomeLogo />
+      <div className="rounded-lg p-8 w-full max-w-2xl border-2 overflow-y-auto max-h-[85vh] scroll-smooth shadow-[0px_0px_47px_0px_rgba(255,130,46,0.2)] z-30">
         <h1 className="text-2xl font-bold text-center text-primary mb-1">
           Terms of Service
         </h1>
@@ -103,7 +107,7 @@ const page = () => {
           </p>
         </div>
 
-        <div className="mb-6">
+        <div className="mb-20">
           <h2 className="text-lg font-semibold  text-primary mb-2">
             Intellectual Property
           </h2>
@@ -117,7 +121,7 @@ const page = () => {
           </p>
         </div>
 
-        <div>
+        <div className="">
           <h2
             className="text-2xl font-bold
               text-center text-primary mb-1"
@@ -261,7 +265,7 @@ const page = () => {
           </p>
         </div>
 
-        <div>
+        {/* <div>
           <div className="flex items-center pt-3 pb-1">
             <input
               type="checkbox"
@@ -285,7 +289,10 @@ const page = () => {
               I agree with the Privacy Policy
             </label>
           </div>
-        </div>
+        </div> */}
+        <Button variant="outline" className="w-full mt-6">
+          Back to Log In
+        </Button>
       </div>
     </div>
   );

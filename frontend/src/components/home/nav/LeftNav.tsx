@@ -1,13 +1,13 @@
 "use client";
 import { IconHome, IconLogout, IconSearch } from "@tabler/icons-react";
-import CustomAvatar from "../user/CustomAvatar";
+import CustomAvatar from "../../user/CustomAvatar";
 import NavButtonLeft from "./NavButtonsLeft";
 import { signOut } from "next-auth/react";
-import ThemeToggle from "./buttons/ThemeToggle";
-import HomeLogo from "../navbar/nav/HomeLogo";
-import PostRecipeDialog from "../PostRecipeDialog";
-import { PlateListSidebarToggle } from "./platelist/PlateListSidebar";
-import { useUserStore } from "@/store/useUserStore";
+import ThemeToggle from "../buttons/ThemeToggle";
+import HomeLogo from "../../navbar/nav/HomeLogo";
+import PostRecipeDialog from "../../PostRecipeDialog";
+import { PlateListSidebarToggle } from "../platelist/PlateListSidebar";
+import { useUserStore } from "@/store/user/UserStore";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 

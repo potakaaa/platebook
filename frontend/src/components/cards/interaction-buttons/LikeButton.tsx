@@ -23,6 +23,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
     useMutationUnlike();
   const { mutate: likePost, isPending: likeIsPending } = useMutationLike();
   const [liked, setLiked] = useState<boolean | undefined>(initialLiked);
+  const [heroLike, setHeroLike] = useState(143);
 
   const handleLike = () => {
     if (likeIsPending) return;
@@ -30,6 +31,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
 
     if (forHero) {
       setLiked((prev: boolean | undefined) => !prev);
+      setHeroLike((prev: number) => (prev === 143 ? 144 : 143));
       return;
     }
 
@@ -63,7 +65,9 @@ const LikeButton: React.FC<LikeButtonProps> = ({
       >
         Like{liked ? "d" : ""}
       </span>
-      <p className="text-xs self-center">{`(${likeCount})`}</p>
+      <p className="text-xs self-center">{`(${
+        !forHero ? likeCount : heroLike
+      })`}</p>
     </Button>
   );
 };

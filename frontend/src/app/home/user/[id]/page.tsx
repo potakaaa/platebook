@@ -1,5 +1,5 @@
 "use client";
-import InfiniteScrollComp from "@/components/home/InfiniteScroll";
+import InfiniteScrollComp from "@/components/home/feed/InfiniteScroll";
 import Spinner from "@/components/loader/Spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import useQueryAuth from "@/hooks/tanstack/auth/useQueryAuth";
 import { Frown, UserPen, UserPlus } from "lucide-react";
 import React from "react";
 import EditButton from "./Buttons/EditButton";
-import { useUserStore } from "@/store/useUserStore";
+import { useUserStore } from "@/store/user/UserStore";
 import FollowButton from "./Buttons/FollowButton";
 
 const page = (props: { params: Promise<{ id: string }> }) => {

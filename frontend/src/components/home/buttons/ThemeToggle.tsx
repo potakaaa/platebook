@@ -1,6 +1,6 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import NavButtonLeft from "../NavButtonsLeft";
+import NavButtonLeft from "../nav/NavButtonsLeft";
 import { IconMoon, IconSun } from "@tabler/icons-react";
 
 const ThemeToggle = () => {

@@ -57,7 +57,7 @@ const LandingPage = () => {
           <section
             id="right"
             className="w-full sm:max-w-none lg:max-w-none bg-background dark:bg-grid-small-white/[0.2] bg-grid-small-black/[0.2] relative flex items-center justify-center"
-        >
+          >
             <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
             <div className="flex flex-col w-full h-fit items-center justify-center z-40">
               <HoverMe />
@@ -118,7 +118,7 @@ const LandingPage = () => {
           id="meet-the-team"
           className="w-full mt-32 mb-14 flex flex-col items-center justify-center space-y-8"
         >
-          <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-zinc-600 dark:bg-gradient-to-b dark:from-foreground dark:to-muted">
+          <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/60 dark:bg-gradient-to-b dark:from-foreground dark:to-muted">
             Meet the Team
           </span>
           <div className="flex items-center">

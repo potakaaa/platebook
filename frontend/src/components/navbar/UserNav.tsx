@@ -1,7 +1,7 @@
 import React from "react";
 import { ModeToggle } from "../ui/mode-toggle";
 import HomeLogo from "./nav/HomeLogo";
-import SearchBar from "../home/SearchBar";
+import SearchBar from "../home/search/SearchBar";
 
 const UserNav = () => {
   return (

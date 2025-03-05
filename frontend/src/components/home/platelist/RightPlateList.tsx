@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import PlateDialog from "../PlateDialog";
-import { useUserStore } from "@/store/useUserStore";
-import { Loader2 } from "lucide-react";
+import PlateDialog from "../../PlateDialog";
+import { useUserStore } from "@/store/user/UserStore";
+import { Disc, Loader2 } from "lucide-react";
+import Link from "next/link";
 
 const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
   const { user, plateList, fetchPlateList, isFetchingPlateList } =
@@ -15,7 +16,14 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
   }, [user]);
 
   if (!user) {
-    return <p>You must be logged in to view your Plate List..</p>;
+    return (
+      <div className="flex flex-row w-full items-center justify-center ">
+        <Link href={"/login"} className="hover:underline flex flex-row gap-2">
+          <p className="text-sm">Log In to view Platelist</p>
+          <Disc className="text-primary size-5" />
+        </Link>
+      </div>
+    );
   }
 
   if (isFetchingPlateList) {

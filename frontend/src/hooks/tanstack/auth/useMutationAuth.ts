@@ -1,18 +1,12 @@
-'use client';
+"use client";
 import { useMutation } from "@tanstack/react-query";
 import {
   forgotPasswordRequest,
   forgotPasswordVerify,
-  getUserByID,
   signUp,
-  updateUser,
   verifiedPasswordReset,
 } from "@/lib/services/api/accountServices";
-import {
-  ResetPasswordFormData,
-  SignUpFormData,
-  UpdateUserInputData,
-} from "@/lib/types/authTypes";
+import { ResetPasswordFormData, SignUpFormData } from "@/lib/types/authTypes";
 
 const useMutationAuth = () => {
   const useMutationSignUp = () => {
@@ -63,25 +57,11 @@ const useMutationAuth = () => {
     });
   };
 
-  const useMutationUpdateUser = () => {
-    return useMutation({
-      mutationFn: ({ id, data }: { id: string; data: UpdateUserInputData }) =>
-        updateUser(id, data),
-      onSuccess(data) {
-        console.log("Update User Success:", data);
-      },
-      onError(error) {
-        console.error("Update User Error:", error);
-      },
-    });
-  };
-
   return {
     useMutationSignUp,
     useMutationForgotPasswordRequest,
     useMutationForgotPasswordVerify,
     useMutationVerifiedPasswordReset,
-    useMutationUpdateUser,
   };
 };
 
