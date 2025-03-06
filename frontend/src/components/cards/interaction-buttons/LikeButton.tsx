@@ -24,7 +24,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
     useMutationUnlike();
   const { mutate: likePost, isPending: likeIsPending } = useMutationLike();
   const [liked, setLiked] = useState<boolean | undefined>(initialLiked);
-  const [likeCount, setLikeCount] = useState(initialLikedCount);
+  const [likeCount, setLikeCount] = useState(initialLikedCount ?? 0);
   const [heroLike, setHeroLike] = useState(143);
 
   const handleLike = () => {
@@ -38,21 +38,19 @@ const LikeButton: React.FC<LikeButtonProps> = ({
     }
 
     if (liked === false) {
+      setLikeCount((prev) => (prev ?? 0) + 1);
       likePost(id, {
-        onSuccess: () => {
-          setLikeCount((prev) => (prev ?? 0) + 1);
-        },
         onError: () => {
           setLiked(initialLiked);
+          setLikeCount(initialLikedCount ?? 0);
         },
       });
     } else {
+      setLikeCount((prev) => (prev ?? 0) - 1);
       unlikePost(id, {
-        onSuccess: () => {
-          setLikeCount((prev) => (prev ?? 0) - 1);
-        },
         onError: () => {
           setLiked(initialLiked);
+          setLikeCount(initialLikedCount ?? 0);
         },
       });
     }

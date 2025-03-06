@@ -7,17 +7,23 @@ import CustomAvatar from "@/components/user/CustomAvatar";
 import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
 import useQueryAuth from "@/hooks/tanstack/auth/useQueryAuth";
 import { Frown, UserPen, UserPlus } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import EditButton from "@/components/userPage/EditButton";
 import { useUserStore } from "@/store/user/UserStore";
 import FollowButton from "@/components/userPage/FollowButton";
+import useSearchStore from "@/store/search/SearchState";
 const page = (props: { params: Promise<{ id: string }> }) => {
   const params = React.use(props.params);
+  const { clearSearch } = useSearchStore();
   const { useQueryGetUserbyID } = useQueryAuth();
   const { data: user, isPending, error } = useQueryGetUserbyID(params.id);
   const { user: client } = useUserStore();
 
   const isOwner = client?.id === user?.id;
+
+  useEffect(() => {
+    clearSearch();
+  }, []);
 
   if (isPending)
     return (
@@ -35,10 +41,10 @@ const page = (props: { params: Promise<{ id: string }> }) => {
         <Frown className="size-5 text-primary drop-shadow-sm" />
       </div>
     );
-    
-    const HandleUserEdit = () => {
-      console.log("Edit user");
-    };
+
+  const HandleUserEdit = () => {
+    console.log("Edit user");
+  };
 
   return (
     <div className="flex flex-col w-full min-h-screen justify-start items-center py-10 gap-0 sm:gap-3 md:gap-5">

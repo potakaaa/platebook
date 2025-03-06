@@ -12,10 +12,10 @@ export const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   async (config) => {
-    const session = await getSession();
+    const { accessToken } = useUserStore.getState();
 
-    if (session?.accessToken) {
-      config.headers.Authorization = `Bearer ${session?.accessToken}`;
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
     return config;

@@ -110,15 +110,28 @@ class CustomUserModelSerializer(ModelSerializer):
   
 
   def update(self, instance, validated_data):
-        password = validated_data.pop("password1", None)
-        validated_data.pop("password2", None)  
+    password = validated_data.pop("password1", None)  
+    validated_data.pop("password2", None) 
 
-        user = super().update(instance, validated_data)
+    pfp = validated_data.pop("pfp", None)
+    if pfp:
+        instance.pfp = pfp  
 
-        if password:
-            user.set_password(password)  
-            user.save()
-        return user
+    new_username = validated_data.get("username", instance.username)
+    if new_username != instance.username: 
+        if CustomUserModel.objects.filter(username=new_username).exists():
+            raise serializers.ValidationError({"username": ["This username is already taken."]})
+        instance.username = new_username
+    
+    for attr, value in validated_data.items():
+        setattr(instance, attr, value)
+
+    if password:
+        instance.set_password(password)  
+
+    instance.save()  
+    return instance
+
       
   def save(self, request):
         user = CustomUserModel.objects.create_user(

@@ -44,14 +44,17 @@ const CommentButton = ({
 
   const handlePostComment = () => {
     if (!commentInput.trim()) return;
-
+    setCommentCount((prev = 0) => prev + 1);
     postComment(
       { id, data: commentInput },
       {
         onSuccess: () => {
           setCommentInput("");
-          setCommentCount((prev) => prev + 1);
+
           refetch();
+        },
+        onError: () => {
+          setCommentCount(initialCommentCount);
         },
       }
     );
