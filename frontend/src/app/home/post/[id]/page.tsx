@@ -1,27 +1,91 @@
+'use client';
+import Spinner from "@/components/loader/Spinner";
 import PostCarousel from "@/components/post/PostCarousel";
-import { CircleSmall } from "lucide-react";
-import React from "react";
+import useQueryRecipe from "@/hooks/tanstack/recipe/useQueryRecipe";
+import useSearchStore from "@/store/search/SearchState";
+import { CircleSmall, Edit } from "lucide-react";
+import React, { useEffect } from "react";
+import IngredientComponent from "./components/IngredientComponent";
+import StepComp from "./components/StepComp";
+import { Ingredient, Step } from "@/lib/types/recipeTypes";
+import { useUserStore } from "@/store/user/UserStore";
+import EditButton from "@/components/userPage/EditButton";
+import DeleteButton from "@/components/userPage/DeleteButton";
+import useMutationRecipe from "@/hooks/tanstack/recipe/useMutationRecipe";
+import { useRouter } from "next/navigation";
 
-const page = ({ params }: { params: { id: string } }) => {
+const page = (props: { params: Promise<{ id: string }> }) => {
+  const router = useRouter();
+  const {setSearchQuery} = useSearchStore();
+  const {useQueryFetchRecipe} = useQueryRecipe();
+  const {useMutationDeleteRecipe} = useMutationRecipe();
+  const {mutate: deleteRecipe, isPending: isDeleting} = useMutationDeleteRecipe();
+  const {user} = useUserStore();
+  
+  const params = React.use(props.params);
+
+
+  const {data: recipe, isPending, error} = useQueryFetchRecipe(params.id);
+
+  useEffect(() => {
+    setSearchQuery('');
+  }, []);
+
+  if (isPending) {
+    return (
+      <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden">
+        <Spinner />
+      </div>
+    );
+  }
+
+  const imageUrls = recipe?.images.map((image:any) => image.image_url) || [];
+
+  const handleRecipeEdit = () => {
+    console.log("Edit recipe");
+  };
+
+  const handleRecipeDelete = () => {
+    deleteRecipe(recipe?.id, {
+      onSuccess: () => {
+        router.push('/home');
+      },
+      onError: (error) => {
+        console.error("Error deleting recipe:", error);
+      }
+    })
+  };
+
   return (
     <div className="w-full flex flex-col justify-start items-center gap-5">
       <span
         id="post-name"
         className="text-lg sm:text-xl font-semibold text-center"
       >
-        Post Name
+        {recipe?.title}
+        
       </span>
+      <span
+        id="post-chef"
+        className="text-xs sm:text-sm text-muted-foreground font-semibold"
+      >
+        {recipe?.chef.username}
+      </span>
+      {recipe?.chef.userId === user?.id && (
+        <div id="edit-button" className="w-full flex justify-between items-center">
+          <EditButton onClick={handleRecipeEdit}/>
+          <DeleteButton onClick={handleRecipeDelete} disabled={isDeleting}/>
+        </div>
+      )}
       <section id="carousel" className="w-full">
-        <PostCarousel images={[]} />
+        <PostCarousel images={imageUrls} />
       </section>
       <section id="description" className="gap-0 sm:gap-1 flex flex-col">
         <p className="text-xs sm:text-sm text-muted-foreground font-semibold">
           Description
         </p>
         <p className="text-sm sm:text-base font-normal text-left">
-          This is the desciription This is the desciription This is the
-          desciription This is the desciription This is the desciription This is
-          the desciription
+          {recipe?.description}
         </p>
       </section>
       <span id="divider" className="w-full border-b border-muted" />
@@ -33,18 +97,10 @@ const page = ({ params }: { params: { id: string } }) => {
           Ingredients
         </p>
         <div id="ingredient-list" className="flex flex-col gap-2">
-          <span className="flex flex-row gap-2 items-center ml-2">
-            <CircleSmall className="size-3 sm:size-4 text-primary" />
-            <p className="text-sm sm:text-base">Ingredient 1</p>
-          </span>
-          <span className="flex flex-row gap-2 items-center ml-2">
-            <CircleSmall className="size-3 sm:size-4 text-primary" />
-            <p className="text-sm sm:text-base">Ingredient 1</p>
-          </span>
-          <span className="flex flex-row gap-2 items-center ml-2">
-            <CircleSmall className="size-3 sm:size-4 text-primary" />
-            <p className="text-sm sm:text-base">Ingredient 1</p>
-          </span>
+          
+          {recipe?.ingredients.map((ingredient:Ingredient, index:number) => (
+            <IngredientComponent key={index} {...ingredient} />
+          ))}
         </div>
       </section>
       <span id="divider" className="w-full border-b border-muted" />
@@ -56,16 +112,9 @@ const page = ({ params }: { params: { id: string } }) => {
           Steps
         </p>
         <div id="steps-list" className="flex flex-col gap-2 ml-2">
-          <span className="text-sm sm:text-base">
-            <p className="font-semibold">Step 1:</p> Do this
-          </span>
-          <span className="text-sm sm:text-base">
-            <p className="font-semibold">Step 2:</p> Do this Do this Do this
-          </span>
-          <span className="text-sm sm:text-base">
-            <p className="font-semibold">Step 3:</p> Do this Do this Do this Do
-            this Do this
-          </span>
+          {recipe?.steps.map((step:Step, index:number) => (
+            <StepComp key={step.step_num} {...step} />
+          ))}
         </div>
       </section>
     </div>

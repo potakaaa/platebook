@@ -2,10 +2,16 @@ import { Button } from '@/components/ui/button';
 import { UserPen } from 'lucide-react';
 import React from 'react'
 
-const EditButton = () => {
+
+
+interface EditButtonProps {
+  onClick: () => void;
+}
+      
+const EditButton: React.FC<EditButtonProps> = ({ onClick }) => {
   return (
 
-      <Button variant={"outline"}>
+      <Button variant={"outline"} onClick={onClick}>
         Edit
         <UserPen className="size-6" />
       </Button>

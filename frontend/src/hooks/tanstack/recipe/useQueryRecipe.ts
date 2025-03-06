@@ -6,18 +6,6 @@ import {
   searchRecipe,
 } from "@/lib/services/api/recipeServices";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
-
-interface Pagination {
-  current_page: number;
-  total_pages: number;
-  has_next: boolean;
-}
-
-interface SearchResponse {
-  results: any[];
-  pagination: Pagination;
-}
 
 const useQueryRecipe = () => {
   const useQueryFeed = () => {
@@ -25,6 +13,7 @@ const useQueryRecipe = () => {
       queryKey: ["feed"],
       queryFn: async ({ pageParam = 1 }: { pageParam: number }) => {
         const response = await fetchFeed(pageParam);
+
         return response;
       },
       initialPageParam: 1,
@@ -38,6 +27,7 @@ const useQueryRecipe = () => {
       queryKey: ["user-recipes", id],
       queryFn: async ({ pageParam = 1 }: { pageParam: number }) => {
         const response = await fetchUserRecipes(id, pageParam);
+
         return response;
       },
       initialPageParam: 1,
@@ -65,8 +55,6 @@ const useQueryRecipe = () => {
       queryKey: ["search", search],
       queryFn: async ({ pageParam = 1 }) => {
         const response = await searchRecipe(search, pageParam);
-
-        console.log("Search Response", response);
         return response;
       },
       initialPageParam: 1,
@@ -75,11 +63,13 @@ const useQueryRecipe = () => {
     });
   };
 
-  const useQueryFetchRecipe = (id: number) => {
+  const useQueryFetchRecipe = (id: string) => {
     return useQuery({
       queryKey: ["recipe", id],
       queryFn: async () => {
         const response = await fetchRecipe(id);
+
+        console.log("Recipe Response", response);
         return response;
       },
       enabled: !!id,

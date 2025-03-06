@@ -17,13 +17,14 @@ const ShareButton: React.FC<ShareButtonProps> = ({
   isShared: initialShared,
   forHero,
   id,
-  shareCount = 0,
+  shareCount: initiakShareCount,
 }) => {
   const { useMutationShare, useMutationUnshare } = useMutationInteraction();
   const { mutate: sharePost, isPending: shareIsPending } = useMutationShare();
   const { mutate: unsharePost, isPending: unshareIsPending } =
     useMutationUnshare();
   const [shared, setShared] = useState<boolean | undefined>(initialShared);
+  const [shareCount, setShareCount] = useState(initiakShareCount);
   const [heroShare, setHeroShare] = useState(250);
 
   const handleShare = () => {
@@ -37,10 +38,12 @@ const ShareButton: React.FC<ShareButtonProps> = ({
 
     if (!shared) {
       sharePost(id, {
+        onSuccess: () => setShareCount((prev) => (prev ?? 0) + 1),
         onError: () => setShared(initialShared),
       });
     } else {
       unsharePost(id, {
+        onSuccess: () => setShareCount((prev) => (prev ?? 0) - 1),
         onError: () => setShared(initialShared),
       });
     }

@@ -55,14 +55,13 @@ const PostCarousel = ({ images }: { images: string[] }) => {
         </div>
       )}
     >
-      <img
-        src="https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg"
-        alt="Image 1"
-      />
-      <img
-        src="https://makeyourasia.com/templates/yootheme/cache/09/3-09a03ff0.jpeg"
-        alt="Image 1"
-      />
+     {images.map((image, index)=> (
+       <img
+       src={image}
+       alt={`image-${index}`}
+        key={index}
+     />
+     ))}
     </Carousel>
   );
 };

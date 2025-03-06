@@ -171,12 +171,12 @@ export const searchRecipe = async (search: string, page: number) => {
   }
 };
 
-export const fetchRecipe = async (id: number) => {
+export const fetchRecipe = async (id: string) => {
   try {
     const response = await axiosClient.get(`/recipes/${id}/`);
 
     if (response.status === 200) {
-      return response;
+      return response.data;
     } else {
       console.error("Error: Unexpected response status", response.status);
     }
@@ -204,3 +204,19 @@ export const fetchUserRecipes = async (id: string, page: number) => {
     return [];
   }
 };
+
+export const deleteRecipe = async (id: string) => {
+  try {
+    const response = await axiosClient.delete(`/recipes/${id}/`);
+
+    if (response.status === 204) {
+      return response.data;
+    } else {
+      console.error("Error: Unexpected response status", response.status);
+    }
+  } catch (err) {
+    console.error("Error while deleting recipe:", err);
+
+    return [];
+  }
+}

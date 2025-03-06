@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import React, { useState } from "react";
 import useMutationInteraction from "@/hooks/tanstack/interaction/useMutationInteraction";
+import { set } from "zod";
 
 interface LikeButtonProps {
   isLiked?: boolean;
@@ -16,13 +17,14 @@ const LikeButton: React.FC<LikeButtonProps> = ({
   isLiked: initialLiked,
   forHero,
   id,
-  likeCount = 0,
+  likeCount: initialLikedCount,
 }) => {
   const { useMutationLike, useMutationUnlike } = useMutationInteraction();
   const { mutate: unlikePost, isPending: unlikeIsPending } =
     useMutationUnlike();
   const { mutate: likePost, isPending: likeIsPending } = useMutationLike();
   const [liked, setLiked] = useState<boolean | undefined>(initialLiked);
+  const [likeCount, setLikeCount] = useState(initialLikedCount);
   const [heroLike, setHeroLike] = useState(143);
 
   const handleLike = () => {
@@ -37,12 +39,18 @@ const LikeButton: React.FC<LikeButtonProps> = ({
 
     if (liked === false) {
       likePost(id, {
+        onSuccess: () => {
+          setLikeCount((prev) => (prev ?? 0) + 1);
+        },
         onError: () => {
           setLiked(initialLiked);
         },
       });
     } else {
       unlikePost(id, {
+        onSuccess: () => {
+          setLikeCount((prev) => (prev ?? 0) - 1);
+        },
         onError: () => {
           setLiked(initialLiked);
         },

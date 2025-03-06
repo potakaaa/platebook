@@ -1,4 +1,4 @@
-import { postRecipe } from '@/lib/services/api/recipeServices';
+import { deleteRecipe, postRecipe } from '@/lib/services/api/recipeServices';
 import { SubmitRecipe } from '@/lib/types/recipeTypes';
 import { useMutation } from '@tanstack/react-query';
 import React from 'react'
@@ -15,9 +15,22 @@ const useMutationRecipe = () => {
             },
         });
     }
+
+    const useMutationDeleteRecipe = () => {
+        return useMutation({
+            mutationFn: (id: string) => deleteRecipe(id),
+            onSuccess(data) {
+                console.log("Delete Recipe Success:", data);
+            },
+            onError(error) {
+                console.error("Delete Recipe Error:", error);
+            },
+        });
+    }
     
     return {
-        useMutationPostRecipe
+        useMutationPostRecipe,
+        useMutationDeleteRecipe
     }
 }
 

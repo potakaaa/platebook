@@ -9,6 +9,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.decorators import api_view
 from rest_framework.filters import OrderingFilter
 from django.http import JsonResponse
 from rest_framework.generics import ListAPIView
@@ -151,22 +152,24 @@ class RecipeFeedView(ListAPIView):
 
         return queryset
 
+@api_view(["GET"])
 def search_view(request):
-    search =  request.GET.get('search', '')
+    search = request.GET.get('search', '')
+
     results = Recipe.objects.filter(
         Q(title__icontains=search) | 
         Q(description__icontains=search) |
         Q(chef__username__icontains=search) |
         Q(ingredient__name__icontains=search) |
-        Q(origin_country__icontains=search) 
+        Q(origin_country__icontains=search)
     ).distinct()
 
-    serializer = RecipeListSerializer(results, many=True)
+    paginator = RecipePagination()
+    paginated_results = paginator.paginate_queryset(results, request)
 
-    return JsonResponse ({
-        'search': search,
-        'results': serializer.data
-    })
+    serializer = RecipeListSerializer(paginated_results, many=True)
+
+    return paginator.get_paginated_response(serializer.data)
 
 
 class FollowingFeedView(ListAPIView):
