@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { FormControl, FormItem } from "../ui/form";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
@@ -30,6 +32,12 @@ const CountryCombobox = ({
   }>;
 }) => {
   const { countries, loading, error } = useCountries();
+
+  if (loading) return <p>Loading countries...</p>;
+  if (error) return <p>Failed to load countries.</p>;
+  if (!countries || countries.length === 0)
+    return <p>No countries available.</p>;
+
   return (
     <FormItem>
       <Popover>

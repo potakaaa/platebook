@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import NavButtonLeft from "../home/nav/NavButtonsLeft";
 import {
@@ -26,19 +26,10 @@ import { SubmitRecipe } from "@/lib/types/recipeTypes";
 import { postRecipe } from "@/lib/services/api/recipeServices";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandItem,
-  CommandGroup,
-  CommandList,
-  CommandInput,
-} from "../ui/command";
-import { ChevronsUpDown, Check } from "lucide-react";
-import { useCountries } from "@/hooks/tanstack/countries/useCountries";
-import { cn } from "@/lib/utils";
+import { Trash } from "lucide-react";
 import CountryCombobox from "./CountryCombobox";
+import ToolTipButton from "../home/buttons/ToolTipButton";
+import { FileUpload } from "../ui/file-upload";
 
 const IngredientSchema = z.object({
   name: z
@@ -135,12 +126,20 @@ const PostRecipeDialog = () => {
     name: "steps",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
   const onSubmit = async (data: SubmitRecipe) => {
     try {
+      setLoading(true);
       const response = await postRecipe(data);
 
       if (response?.ok) {
         window.location.reload();
+        setLoading(false);
+        setOpen(false);
+        alert("Posted successfully");
+        console.log("hello");
         return form.reset();
       } else {
         let errorMessage = response?.error;
@@ -164,6 +163,7 @@ const PostRecipeDialog = () => {
         }
 
         form.setError("root", { type: "server", message: errorMessage });
+        setLoading(false);
       }
     } catch (err) {
       console.error("Error posting recipe:", err);
@@ -175,12 +175,12 @@ const PostRecipeDialog = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <NavButtonLeft name="Post Recipe" icon={IconSquareRoundedPlus} />
       </DialogTrigger>
       <DialogContent
-        className="overflow-y-auto max-h-[80vh] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
+        className="overflow-y-auto w-3/6 max-h-[80vh] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
       dark:[&::-webkit-scrollbar-track]:bg-neutral-700
       dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar]:w-2 gap-2"
       >
@@ -236,28 +236,23 @@ const PostRecipeDialog = () => {
               )}
             />
             {/*  Icomponent guro ni  */}
-            <div>
-              <h3>Ingredients</h3>
+            <div className="flex flex-col gap-2">
               {ingredientFields.map((ingredient, index) => (
-                <div key={ingredient.id}>
+                <div key={ingredient.id} className="flex flex-row gap-2">
                   <FormField
                     control={form.control}
                     name={`ingredients.${index}.name`}
                     render={({ field }) => (
-                      <FormItem>
-                        <LabelInputContainer>
-                          <Label htmlFor={`ingredients.${index}.name`}>
-                            Ingredient Name
-                          </Label>
-                          <FormControl>
-                            <InputAnimated
-                              id={`ingredients.${index}.name`}
-                              type="text"
-                              placeholder="Ingredient Name"
-                              {...field}
-                            />
-                          </FormControl>
-                        </LabelInputContainer>
+                      <FormItem className="flex-[3]">
+                        <FormControl>
+                          <Input
+                            id={`ingredients.${index}.name`}
+                            type="text"
+                            placeholder="Ingredient Name"
+                            {...field}
+                          />
+                        </FormControl>
+
                         <FormMessage />
                       </FormItem>
                     )}
@@ -266,63 +261,57 @@ const PostRecipeDialog = () => {
                     control={form.control}
                     name={`ingredients.${index}.quantity`}
                     render={({ field }) => (
-                      <FormItem>
-                        <LabelInputContainer>
-                          <Label htmlFor={`ingredients.${index}.quantity`}>
-                            Quantity
-                          </Label>
-                          <FormControl>
-                            <InputAnimated
-                              id={`ingredients.${index}.quantity`}
-                              type="text"
-                              placeholder="Quantity"
-                              {...field}
-                            />
-                          </FormControl>
-                        </LabelInputContainer>
+                      <FormItem className="flex-[1]">
+                        <FormControl>
+                          <Input
+                            id={`ingredients.${index}.quantity`}
+                            type="text"
+                            placeholder="Quantity"
+                            {...field}
+                          />
+                        </FormControl>
+
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <Button type="button" onClick={() => removeIngredient(index)}>
-                    Remove Ingredient
-                  </Button>
+
+                  <ToolTipButton
+                    btnChildren={<Trash className="size-8 text-destructive" />}
+                    btnVariant="ghost"
+                    btnSize="icon"
+                    tipChildren={<p>Remove Ingredient</p>}
+                    onClick={() => removeIngredient(index)}
+                  />
+
+                  <ToolTipButton
+                    btnChildren={<IconSquareRoundedPlus className="size-8" />}
+                    btnVariant="ghost"
+                    btnSize="icon"
+                    tipChildren={<p>Add Ingredient</p>}
+                    onClick={() => appendIngredient({ name: "", quantity: "" })}
+                  />
                 </div>
               ))}
-              <Button
-                type="button"
-                onClick={() => appendIngredient({ name: "", quantity: "" })}
-              >
-                Add Ingredient
-              </Button>
             </div>
 
-            <div>
-              <h3>Steps</h3>
-              {stepFields.map((step, index) => (
-                <div key={step.id}>
+            <div className="flex flex-col gap-2">
+              {stepFields.map((step: any, index: number) => (
+                <div key={step.id} className="flex flex-row gap-2">
                   <FormField
                     control={form.control}
                     name={`steps.${index}.step_num`}
                     render={({ field }) => (
-                      <FormItem>
-                        <LabelInputContainer>
-                          <Label htmlFor={`steps.${index}.step_num`}>
-                            Step Number
-                          </Label>
-                          <FormControl>
-                            <InputAnimated
-                              id={`steps.${index}.step_num`}
-                              type="number"
-                              value={field.value}
-                              onChange={(e) => {
-                                field.onChange(
-                                  e.target.value ? Number(e.target.value) : 0
-                                );
-                              }}
-                            />
-                          </FormControl>
-                        </LabelInputContainer>
+                      <FormItem className="flex-[1]">
+                        <FormControl>
+                          <Input
+                            id={`steps.${index}.step_num`}
+                            type="number"
+                            readOnly
+                            value={index + 1}
+                            className="text-center"
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -331,40 +320,41 @@ const PostRecipeDialog = () => {
                     control={form.control}
                     name={`steps.${index}.description`}
                     render={({ field }) => (
-                      <FormItem>
-                        <LabelInputContainer>
-                          <Label htmlFor={`steps.${index}.description`}>
-                            Step Description
-                          </Label>
-                          <FormControl>
-                            <InputAnimated
-                              id={`steps.${index}.description`}
-                              type="text"
-                              placeholder="Step Description"
-                              {...field}
-                            />
-                          </FormControl>
-                        </LabelInputContainer>
+                      <FormItem className="flex-[7]">
+                        <FormControl>
+                          <Input
+                            id={`steps.${index}.description`}
+                            type="text"
+                            placeholder="Step Description"
+                            {...field}
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <Button type="button" onClick={() => removeStep(index)}>
-                    Remove Step
-                  </Button>
+                  <ToolTipButton
+                    btnChildren={<Trash className="size-8 text-destructive" />}
+                    btnVariant="ghost"
+                    btnSize="icon"
+                    tipChildren={<p>Remove Step</p>}
+                    onClick={() => removeStep(index)}
+                  />
+
+                  <ToolTipButton
+                    btnChildren={<IconSquareRoundedPlus className="size-8" />}
+                    btnVariant="ghost"
+                    btnSize="icon"
+                    tipChildren={<p>Add Step</p>}
+                    onClick={() => {
+                      appendStep({
+                        step_num: stepFields.length + 1,
+                        description: "",
+                      });
+                    }}
+                  />
                 </div>
               ))}
-              <Button
-                type="button"
-                onClick={() =>
-                  appendStep({
-                    step_num: stepFields.length + 1,
-                    description: "",
-                  })
-                }
-              >
-                Add Step
-              </Button>
             </div>
 
             <FormField
@@ -372,31 +362,41 @@ const PostRecipeDialog = () => {
               name="images"
               render={({ field }) => (
                 <FormItem>
-                  <LabelInputContainer>
-                    <Label htmlFor="images">images</Label>
-                    <FormControl>
-                      <InputAnimated
-                        id="images"
-                        type="file"
-                        placeholder="A catchy images for your followers"
-                        multiple
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.files ? Array.from(e.target.files) : []
-                          )
-                        }
+                  <FormControl>
+                    <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
+                      <FileUpload
+                        onFileChange={(files: File[]) => field.onChange(files)}
                         onBlur={field.onBlur}
                         name={field.name}
                         ref={field.ref}
+                        multiple
+                        id="images"
+                        type="file"
                       />
-                    </FormControl>
-                  </LabelInputContainer>
+                    </div>
+                  </FormControl>
+
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button type="submit"> Submit </Button>
+            {/* <InputAnimated
+              id="images"
+              type="file"
+              placeholder="A catchy images for your followers"
+              multiple
+              onChange={(e) =>
+                field.onChange(e.target.files ? Array.from(e.target.files) : [])
+              }
+              onBlur={field.onBlur}
+              name={field.name}
+              ref={field.ref}
+            /> */}
+
+            <Button type="submit" disabled={loading}>
+              Submit
+            </Button>
           </form>
         </Form>
       </DialogContent>

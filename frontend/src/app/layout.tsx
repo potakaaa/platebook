@@ -50,6 +50,7 @@ export default function RootLayout({
           name="google-site-verification"
           content="6iSXF_4Q3u3eRTJA1mx2MdDE5CjD0pz5BfxIEu0WfWw"
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body
         className={`${poppins.className} antialiased scroll-smooth w-full min-h-screen flex items-center justify-center bg-background overflow-y-auto 
