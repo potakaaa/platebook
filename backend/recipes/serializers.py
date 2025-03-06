@@ -42,6 +42,66 @@ class RecipeListSerializer(serializers.ModelSerializer):
     isLiked = serializers.SerializerMethodField()
     isShared = serializers.SerializerMethodField()
     
+    def update(self, instance, validated_data):
+        ingredients_data = validated_data.pop('ingredients', [])
+        steps_data = validated_data.pop('steps', [])
+        images_data = validated_data.pop('images', []) 
+        
+        instance.title = validated_data.get('title', instance.title)
+        instance.description = validated_data.get('description', instance.description)
+        instance.save()
+
+        existing_ingredient_ids = []
+        for ingredient_data in ingredients_data:
+            ingredient_id = ingredient_data.get('id')
+            if ingredient_id:
+                ingredient = Ingredient.objects.get(id=ingredient_id, recipe=instance)
+                for attr, value in ingredient_data.items():
+                    setattr(ingredient, attr, value)
+                ingredient.save()
+                existing_ingredient_ids.append(ingredient_id)
+            else:
+                new_ingredient = Ingredient.objects.create(recipe=instance, **ingredient_data)
+                existing_ingredient_ids.append(new_ingredient.id)
+
+        Ingredient.objects.filter(recipe=instance).exclude(id__in=existing_ingredient_ids).delete()
+
+        existing_step_ids = []
+        for step_data in steps_data:
+            step_id = step_data.get('id')
+            if step_id:
+                step = Step.objects.get(id=step_id, recipe=instance)
+                for attr, value in step_data.items():
+                    setattr(step, attr, value)
+                step.save()
+                existing_step_ids.append(step_id)
+            else:
+                new_step = Step.objects.create(recipe=instance, **step_data)
+                existing_step_ids.append(new_step.id)
+
+        Step.objects.filter(recipe=instance).exclude(id__in=existing_step_ids).delete()
+
+        existing_image_ids = []
+        for image_data in images_data:
+            image_id = image_data.get('id', None)
+            if image_id:
+                try:
+                    image = RecipeImage.objects.get(id=image_id, recipe=instance)
+                    for attr, value in image_data.items():
+                        setattr(image, attr, value)
+                    image.save()
+                    existing_image_ids.append(image_id)
+                except RecipeImage.DoesNotExist:
+                    pass  
+            else:
+                new_image = RecipeImage.objects.create(recipe=instance, **image_data)
+                existing_image_ids.append(new_image.id)
+
+        RecipeImage.objects.filter(recipe=instance).exclude(id__in=existing_image_ids).delete()
+
+        return instance
+
+    
     def get_likes(self, obj):
         return obj.like_set.count()
     

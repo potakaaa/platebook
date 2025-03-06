@@ -14,16 +14,12 @@ import FollowButton from "@/components/userPage/FollowButton";
 import useSearchStore from "@/store/search/SearchState";
 const page = (props: { params: Promise<{ id: string }> }) => {
   const params = React.use(props.params);
-  const { clearSearch } = useSearchStore();
   const { useQueryGetUserbyID } = useQueryAuth();
   const { data: user, isPending, error } = useQueryGetUserbyID(params.id);
   const { user: client } = useUserStore();
 
   const isOwner = client?.id === user?.id;
 
-  useEffect(() => {
-    clearSearch();
-  }, []);
 
   if (isPending)
     return (

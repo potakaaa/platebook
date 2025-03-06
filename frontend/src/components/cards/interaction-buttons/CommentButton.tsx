@@ -32,7 +32,7 @@ const CommentButton = ({
   const { useQueryGetComments } = useQueryInteraction();
   const { useMutationPostComment } = useMutationInteraction();
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const [commentCount, setCommentCount] = useState(initialCommentCount);
+  const [commentCount, setCommentCount] = useState(initialCommentCount ?? 0);
   const [commentInput, setCommentInput] = useState("");
   const { data, isLoading, isError, error, refetch } = useQueryGetComments(
     id,
@@ -54,7 +54,7 @@ const CommentButton = ({
           refetch();
         },
         onError: () => {
-          setCommentCount(initialCommentCount);
+          setCommentCount(initialCommentCount ?? 0);
         },
       }
     );
