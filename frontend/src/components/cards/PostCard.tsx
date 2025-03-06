@@ -11,6 +11,7 @@ import ShareButton from "./interaction-buttons/ShareButton";
 import PlatelistButton from "./interaction-buttons/PlatelistButton";
 import CommentButton from "./interaction-buttons/CommentButton";
 import { useRouter } from "next/navigation";
+import { on } from "events";
 
 export type PostCardProps = {
   id: string;
@@ -30,7 +31,12 @@ export type PostCardProps = {
   sharer?: string;
 };
 
-const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
+const PostCard = (props: {
+  postItems: PostCardProps;
+  onAvatarClick?: () => void;
+  onRecipeClick?: () => void;
+}) => {
+  const { postItems, onAvatarClick, onRecipeClick } = props;
   const {
     id,
     userId,
@@ -49,6 +55,25 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
     sharer,
   } = postItems;
   const router = useRouter();
+
+  const handleAvatarClick = () => {
+    if (onAvatarClick) {
+      onAvatarClick();
+      setTimeout(() => router.push(`/home/user/${userId}`), 0);
+    } else {
+      router.push(`/home/user/${userId}`);
+    }
+  };
+
+  const handleRecipeClick = () => {
+    if (onRecipeClick) {
+      onRecipeClick();
+      setTimeout(() => router.push(`/home/post/${id}`), 0);
+    } else {
+      router.push(`/home/post/${id}`);
+    }
+  };
+
   return (
     <CardContainer className="inter-var flex flex-col h-full w-full">
       {sharer && (
@@ -73,7 +98,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             <CustomAvatar
               userName={userName}
               userImage={userImage}
-              onClick={() => router.push(`/home/user/${userId}`)}
+              onClick={handleAvatarClick}
             />
             <p className="text-xs sm:text-sm lg:text-base font-semibold">
               {userName}
@@ -83,7 +108,7 @@ const PostCard = ({ postItems }: { postItems: PostCardProps }) => {
             variant={"outline"}
             className=""
             onClick={() => {
-              !forHero && router.push(`/home/post/${id}`);
+              if (!forHero) handleRecipeClick();
             }}
           >
             View Recipe

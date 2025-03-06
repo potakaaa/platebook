@@ -3,14 +3,12 @@ import InfiniteScrollComp from "@/components/home/feed/InfiniteScroll";
 import Spinner from "@/components/loader/Spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import CustomAvatar from "@/components/user/CustomAvatar";
-import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
 import useQueryAuth from "@/hooks/tanstack/auth/useQueryAuth";
-import { Frown, UserPen, UserPlus } from "lucide-react";
+import { Frown, UserPlus } from "lucide-react";
 import React from "react";
-import EditButton from "../../../../components/userPage/EditButton";
+import EditButton from "@/components/userPage/EditButton";
 import { useUserStore } from "@/store/user/UserStore";
-import FollowButton from "../../../../components/userPage/FollowButton";
+import FollowButton from "@/components/userPage/FollowButton";
 
 const page = (props: { params: Promise<{ id: string }> }) => {
   const params = React.use(props.params);
@@ -36,6 +34,10 @@ const page = (props: { params: Promise<{ id: string }> }) => {
         <Frown className="size-5 text-primary drop-shadow-sm" />
       </div>
     );
+
+  const HandleUserEdit = () => {
+    console.log("Edit user");
+  };
 
   return (
     <div className="flex flex-col w-full min-h-screen justify-start items-center py-10 gap-0 sm:gap-3 md:gap-5">

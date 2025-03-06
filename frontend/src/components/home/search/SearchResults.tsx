@@ -11,13 +11,13 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const SearchResults = () => {
   const { useQuerySearchRecipe } = useQueryRecipe();
-  const { searchQuery } = useSearchStore();
+  const { searchQuery, isSearching, clearSearch } = useSearchStore();
   const queryClient = useQueryClient();
+
+  if (!isSearching) return null;
 
   const { data, fetchNextPage, hasNextPage, isFetching, refetch } =
     useQuerySearchRecipe(searchQuery);
-
-  console.log("search api responjse", data);
 
   const posts: PostCardProps[] =
     data?.pages.flatMap((page) =>
@@ -75,7 +75,12 @@ const SearchResults = () => {
     >
       <div className="flex flex-col w-full space-y-5">
         {posts.map((post, index) => (
-          <PostCard key={index} postItems={post} />
+          <PostCard
+            key={index}
+            postItems={post}
+            onAvatarClick={clearSearch}
+            onRecipeClick={clearSearch}
+          />
         ))}
       </div>
     </InfiniteScroll>

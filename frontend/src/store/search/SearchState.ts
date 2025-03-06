@@ -12,7 +12,10 @@ const useSearchStore = create<SearchState>((set) => ({
   searchQuery: "",
 
   setSearchQuery: (query) =>
-    set({ searchQuery: query, isSearching: query.length > 0 }),
+    set((state) => {
+      const isSearching = query.length > 0;
+      return { searchQuery: query, isSearching };
+    }),
 
   clearSearch: () => set({ searchQuery: "", isSearching: false }),
 }));

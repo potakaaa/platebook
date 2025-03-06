@@ -103,17 +103,20 @@ export const authOptions: NextAuthOptions = {
 
         try {
           const response = await axiosClient.post("social/login/google/", {
+
             access_token,
             refresh_token,
           });
           const apiAccessToken = response.data.access_token;
           const apiRefreshToken = response.data.refresh_token;
+          const id = response.data.user?.id;
 
           if (!apiAccessToken) {
             console.error("No access token found in response");
             return false;
           }
           (user as AuthUser).image = response.data.user?.pfp_url || null;
+          (user as AuthUser).id = id;
           (user as AuthUser).accessToken = apiAccessToken;
           (user as AuthUser).refreshToken = apiRefreshToken;
           return true;
@@ -158,13 +161,19 @@ export const authOptions: NextAuthOptions = {
         image: typeof token.image === "string" ? token.image : null,
       };
 
-      const { setSession, user: storedSession } = useUserStore.getState();
+      const {
+        setSession,
+        user: storedSession,
+        setAccessToken,
+        accessToken,
+      } = useUserStore.getState();
       if (
         !storedSession ||
         storedSession.id !== session.user.id ||
         storedSession.name !== session.user.name ||
         storedSession.email !== session.user.email ||
-        storedSession.image !== session.user.image
+        storedSession.image !== session.user.image ||
+        accessToken !== session.accessToken
       ) {
         setSession({
           id: session.user?.id,
@@ -172,6 +181,8 @@ export const authOptions: NextAuthOptions = {
           email: session.user?.email,
           image: session.user?.image,
         });
+
+        setAccessToken(session.accessToken);
       }
 
       return session;

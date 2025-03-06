@@ -16,20 +16,15 @@ import { useRouter } from "next/navigation";
 
 const page = (props: { params: Promise<{ id: string }> }) => {
   const router = useRouter();
-  const {setSearchQuery} = useSearchStore();
-  const {useQueryFetchRecipe} = useQueryRecipe();
-  const {useMutationDeleteRecipe} = useMutationRecipe();
-  const {mutate: deleteRecipe, isPending: isDeleting} = useMutationDeleteRecipe();
-  const {user} = useUserStore();
-  
+  const { useQueryFetchRecipe } = useQueryRecipe();
+  const { useMutationDeleteRecipe } = useMutationRecipe();
+  const { mutate: deleteRecipe, isPending: isDeleting } =
+    useMutationDeleteRecipe();
+  const { user } = useUserStore();
+
   const params = React.use(props.params);
 
-
-  const {data: recipe, isPending, error} = useQueryFetchRecipe(params.id);
-
-  useEffect(() => {
-    setSearchQuery('');
-  }, []);
+  const { data: recipe, isPending, error } = useQueryFetchRecipe(params.id);
 
   if (isPending) {
     return (
@@ -39,7 +34,9 @@ const page = (props: { params: Promise<{ id: string }> }) => {
     );
   }
 
-  const imageUrls = recipe?.images.map((image:any) => image.image_url) || [];
+  console.log("Recipe:", recipe);
+
+  const imageUrls = recipe?.images.map((image: any) => image.image_url) || [];
 
   const handleRecipeEdit = () => {
     console.log("Edit recipe");
@@ -48,12 +45,12 @@ const page = (props: { params: Promise<{ id: string }> }) => {
   const handleRecipeDelete = () => {
     deleteRecipe(recipe?.id, {
       onSuccess: () => {
-        router.push('/home');
+        router.push("/home");
       },
       onError: (error) => {
         console.error("Error deleting recipe:", error);
-      }
-    })
+      },
+    });
   };
 
   return (
@@ -63,7 +60,6 @@ const page = (props: { params: Promise<{ id: string }> }) => {
         className="text-lg sm:text-xl font-semibold text-center"
       >
         {recipe?.title}
-        
       </span>
       <span
         id="post-chef"
@@ -72,9 +68,12 @@ const page = (props: { params: Promise<{ id: string }> }) => {
         {recipe?.chef.username}
       </span>
       {recipe?.chef.userId === user?.id && (
-        <div id="edit-button" className="w-full flex justify-between items-center">
-          <EditButton onClick={handleRecipeEdit}/>
-          <DeleteButton onClick={handleRecipeDelete} disabled={isDeleting}/>
+        <div
+          id="edit-button"
+          className="w-full flex justify-between items-center"
+        >
+          <EditButton onClick={handleRecipeEdit} />
+          <DeleteButton onClick={handleRecipeDelete} disabled={isDeleting} />
         </div>
       )}
       <section id="carousel" className="w-full">
@@ -97,8 +96,7 @@ const page = (props: { params: Promise<{ id: string }> }) => {
           Ingredients
         </p>
         <div id="ingredient-list" className="flex flex-col gap-2">
-          
-          {recipe?.ingredients.map((ingredient:Ingredient, index:number) => (
+          {recipe?.ingredients.map((ingredient: Ingredient, index: number) => (
             <IngredientComponent key={index} {...ingredient} />
           ))}
         </div>
@@ -112,7 +110,7 @@ const page = (props: { params: Promise<{ id: string }> }) => {
           Steps
         </p>
         <div id="steps-list" className="flex flex-col gap-2 ml-2">
-          {recipe?.steps.map((step:Step, index:number) => (
+          {recipe?.steps.map((step: Step, index: number) => (
             <StepComp key={step.step_num} {...step} />
           ))}
         </div>
