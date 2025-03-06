@@ -13,6 +13,7 @@ import EditButton from "@/components/userPage/EditButton";
 import DeleteButton from "@/components/userPage/DeleteButton";
 import useMutationRecipe from "@/hooks/tanstack/recipe/useMutationRecipe";
 import { useRouter } from "next/navigation";
+import EditRecipeDialog from "@/components/post/EditRecipeDialog";
 
 const page = (props: { params: Promise<{ id: string }> }) => {
   const router = useRouter();
@@ -37,10 +38,6 @@ const page = (props: { params: Promise<{ id: string }> }) => {
   console.log("Recipe:", recipe);
 
   const imageUrls = recipe?.images.map((image: any) => image.image_url) || [];
-
-  const handleRecipeEdit = () => {
-    console.log("Edit recipe");
-  };
 
   const handleRecipeDelete = () => {
     deleteRecipe(recipe?.id, {
@@ -72,7 +69,7 @@ const page = (props: { params: Promise<{ id: string }> }) => {
           id="edit-button"
           className="w-full flex justify-between items-center"
         >
-          <EditButton onClick={handleRecipeEdit} />
+          <EditRecipeDialog recipe={recipe} />
           <DeleteButton onClick={handleRecipeDelete} disabled={isDeleting} />
         </div>
       )}

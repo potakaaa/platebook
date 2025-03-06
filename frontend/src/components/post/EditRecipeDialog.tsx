@@ -25,6 +25,7 @@ import ToolTipButton from "../home/buttons/ToolTipButton";
 import { FileUpload } from "../ui/file-upload";
 import useMutationRecipe from "@/hooks/tanstack/recipe/useMutationRecipe";
 import { useQueryClient } from "@tanstack/react-query";
+import EditButton from "../userPage/EditButton";
 
 const IngredientSchema = z.object({
   name: z
@@ -90,21 +91,18 @@ const postRecipeSchema = z.object({
     }),
 });
 
-const PostRecipeDialog = () => {
+interface EditRecipeDialogProps {
+    recipe: SubmitRecipe;
+}
+
+const EditRecipeDialog:React.FC<EditRecipeDialogProps> = ({recipe}) => {
   const { useMutationPostRecipe } = useMutationRecipe();
   const { mutate: postRecipe, isPending } = useMutationPostRecipe();
   const queryClient = useQueryClient();
 
   const form = useForm({
     resolver: zodResolver(postRecipeSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      origin_country: "",
-      steps: [{ step_num: 1, description: "" }],
-      ingredients: [{ name: "", quantity: "" }],
-      images: null,
-    },
+    defaultValues: recipe,
   });
 
   const {
@@ -142,7 +140,7 @@ const PostRecipeDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <NavButtonLeft name="Post Recipe" icon={IconSquareRoundedPlus} />
+        <EditButton onClick={()=>{}}/>
       </DialogTrigger>
       <DialogContent
         className="overflow-y-auto w-3/6 max-h-[80vh] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
@@ -369,4 +367,4 @@ const PostRecipeDialog = () => {
   );
 };
 
-export default PostRecipeDialog;
+export default EditRecipeDialog;

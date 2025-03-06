@@ -1,18 +1,24 @@
 "use client";
 
-import { fetchFeed } from "@/lib/services/api/recipeServices";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard, { PostCardProps } from "../../cards/PostCard";
 import Spinner from "../../loader/Spinner";
 import useQueryRecipe from "@/hooks/tanstack/recipe/useQueryRecipe";
+import { useQueryClient } from "@tanstack/react-query";
 
 const InfiniteScrollComp = ({ userId }: { userId?: string }) => {
   const { useQueryFeed, useQueryFetchUserRecipes } = useQueryRecipe();
+  const queryClient = useQueryClient();
 
   const { data, fetchNextPage, hasNextPage, isFetching, refetch } = userId
     ? useQueryFetchUserRecipes(userId)
     : useQueryFeed();
+
+  const refreshFunction = () => {
+    queryClient.invalidateQueries({ queryKey: ["feed", "following-feed"] });
+    refetch();
+  };
 
   const posts: PostCardProps[] =
     data?.pages.flatMap((page) =>
@@ -56,7 +62,7 @@ const InfiniteScrollComp = ({ userId }: { userId?: string }) => {
           Come back for more recipes!
         </p>
       }
-      refreshFunction={refetch}
+      refreshFunction={refreshFunction}
       pullDownToRefresh
       pullDownToRefreshThreshold={50}
       pullDownToRefreshContent={
