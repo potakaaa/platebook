@@ -126,15 +126,7 @@ const EditRecipeDialog:React.FC<EditRecipeDialogProps> = ({recipe}) => {
   const [open, setOpen] = useState(false);
 
   const onSubmit = async (data: SubmitRecipe) => {
-    postRecipe(data, {
-      onSuccess: () => {
-        form.reset();
-
-        setOpen(false);
-
-        queryClient.invalidateQueries({ queryKey: ["feed"] });
-      },
-    });
+    //
   };
 
   return (

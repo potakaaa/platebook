@@ -73,7 +73,7 @@ export const postRecipe = async (data: SubmitRecipe) => {
   }
 };
 
-const postRecipeImages = async (id: number, images: File[]) => {
+const postRecipeImages = async (id: string, images: File[]) => {
   try {
     const formData = new FormData();
 
@@ -103,17 +103,13 @@ const postRecipeImages = async (id: number, images: File[]) => {
   }
 };
 
-const postRecipeSteps = async (id: number, steps: Step[]) => {
+const postRecipeSteps = async (id: string, steps: Step[]) => {
   try {
-    const response = await axiosClient.post(
-      `/recipes/${id}/steps/`,
-      steps, 
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axiosClient.post(`/recipes/${id}/steps/`, steps, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     return response;
   } catch (error: any) {
@@ -126,11 +122,11 @@ const postRecipeSteps = async (id: number, steps: Step[]) => {
   }
 };
 
-const postRecipeIngredients = async (id: number, ingredients: Ingredient[]) => {
+const postRecipeIngredients = async (id: string, ingredients: Ingredient[]) => {
   try {
     const response = await axiosClient.post(
       `/recipes/${id}/ingredients/`,
-      ingredients,  
+      ingredients,
       {
         headers: {
           "Content-Type": "application/json",
@@ -148,8 +144,6 @@ const postRecipeIngredients = async (id: number, ingredients: Ingredient[]) => {
     throw new Error("An unknown error occurred.");
   }
 };
-
-
 
 export const searchRecipe = async (search: string, page: number) => {
   try {
@@ -219,4 +213,19 @@ export const deleteRecipe = async (id: string) => {
 
     return [];
   }
-}
+};
+
+export const editRecipe = async (id: string, data: any) => {
+  try {
+    const response = await axiosClient.put(`/api/recipes/${id}/`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating recipe:", error);
+    throw error;
+  }
+};
