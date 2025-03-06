@@ -47,7 +47,7 @@ const FollowingTab = () => {
       next={fetchNextPage}
       hasMore={!!hasNextPage}
       loader={
-        <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden">
+        <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden min-w-screen-md lg:min-w-2xl px-5 2xl:min-w-2xl">
           <Spinner />
         </div>
       }

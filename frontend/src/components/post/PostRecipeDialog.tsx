@@ -2,22 +2,42 @@
 
 import { Dialog, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
 import React from "react";
-import { Button } from "./ui/button";
-import NavButtonLeft from "./home/nav/NavButtonsLeft";
+import { Button } from "../ui/button";
+import NavButtonLeft from "../home/nav/NavButtonsLeft";
 import {
   IconSquareRoundedArrowDown,
   IconSquareRoundedPlus,
 } from "@tabler/icons-react";
-import { DialogContent } from "./ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+import { DialogContent } from "../ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
 import { z } from "zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "./ui/label";
-import { InputAnimated } from "./ui/input-animated";
-import { LabelInputContainer } from "./ui/label-input-container";
+import { Label } from "../ui/label";
+import { InputAnimated } from "../ui/input-animated";
+import { LabelInputContainer } from "../ui/label-input-container";
 import { SubmitRecipe } from "@/lib/types/recipeTypes";
 import { postRecipe } from "@/lib/services/api/recipeServices";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandItem,
+  CommandGroup,
+  CommandList,
+  CommandInput,
+} from "../ui/command";
+import { ChevronsUpDown, Check } from "lucide-react";
+import { useCountries } from "@/hooks/tanstack/countries/useCountries";
+import { cn } from "@/lib/utils";
 
 const IngredientSchema = z.object({
   name: z
@@ -114,6 +134,8 @@ const PostRecipeDialog = () => {
     name: "steps",
   });
 
+  const { countries: data, loading, error } = useCountries();
+  const countries = data?.name?.common ? Object.values(data.name.common) : [];
   const onSubmit = async (data: SubmitRecipe) => {
     try {
       const response = await postRecipe(data);
@@ -158,26 +180,31 @@ const PostRecipeDialog = () => {
       <DialogTrigger asChild>
         <NavButtonLeft name="Post Recipe" icon={IconSquareRoundedPlus} />
       </DialogTrigger>
-      <DialogContent className="overflow-y-auto max-h-[80vh]">
-        <DialogTitle>POST RECIPE</DialogTitle>
+      <DialogContent
+        className="overflow-y-auto max-h-[80vh] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
+      dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+      dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar]:w-2 gap-2"
+      >
+        <DialogTitle className="text-center font-bold">Create Post</DialogTitle>
+        <span className="border-b border-muted mb-2" />
         <Form {...form}>
-          <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            noValidate
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-3"
+          >
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <LabelInputContainer>
-                    <Label htmlFor="title">Title</Label>
-                    <FormControl>
-                      <InputAnimated
-                        id="title"
-                        type="text"
-                        placeholder="A catchy title for your followers"
-                        {...field}
-                      />
-                    </FormControl>
-                  </LabelInputContainer>
+                  <Input
+                    placeholder="Enter title here..."
+                    className="py-5"
+                    id="title"
+                    type="text"
+                    {...field}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -188,17 +215,12 @@ const PostRecipeDialog = () => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <LabelInputContainer>
-                    <Label htmlFor="description">description</Label>
-                    <FormControl>
-                      <InputAnimated
-                        id="description"
-                        type="text"
-                        placeholder="A catchy description for your followers"
-                        {...field}
-                      />
-                    </FormControl>
-                  </LabelInputContainer>
+                  <Textarea
+                    placeholder="Enter your recipe description here..."
+                    id="description"
+                    className="min-h-44"
+                    {...field}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -209,18 +231,59 @@ const PostRecipeDialog = () => {
               name="origin_country"
               render={({ field }) => (
                 <FormItem>
-                  <LabelInputContainer>
-                    <Label htmlFor="origin_country">origin country</Label>
-                    <FormControl>
-                      <InputAnimated
-                        id="origin_country"
-                        type="text"
-                        placeholder="A catchy origin_country for your followers"
-                        {...field}
-                      />
-                    </FormControl>
-                  </LabelInputContainer>
-                  <FormMessage />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? countries.find(
+                                (country: string) => field.value === country
+                              )?.country
+                            : "Select country of origin..."}
+                          <ChevronsUpDown className="opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Search framework..."
+                          className="h-9"
+                        />
+                        <CommandList>
+                          <CommandEmpty>Country not found.</CommandEmpty>
+                          <CommandGroup>
+                            {countries.map((country: string, index: number) => (
+                              <CommandItem
+                                key={index}
+                                value={country}
+                                onSelect={(currentValue) => {
+                                  form.setValue("origin_country", country);
+                                }}
+                              >
+                                {country}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    field.value === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                 </FormItem>
               )}
             />

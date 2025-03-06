@@ -25,7 +25,7 @@ const LandingPage = () => {
         <div className="flex-grow" />{" "}
         {/* This ensures content can fill the space above */}
       </section>
-      <div className="flex flex-col items-center justify-center mx-7 lg:mx-16 xl:mx-28 2xl:mx-48 my-5">
+      <div className="flex flex-col items-center justify-center mx-7 lg:mx-12 xl:mx-24 2xl:mx-32 my-5">
         <section
           id="hero"
           className="flex flex-col my-10 lg:my-0 lg:flex-row  justify-around w-full pb-14 2xl:pb-28"

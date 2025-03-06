@@ -35,7 +35,7 @@ const InfiniteScrollComp = ({ userId }: { userId?: string }) => {
 
   if (isFetching && posts.length === 0) {
     return (
-      <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden">
+      <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden min-w-screen-md lg:min-w-2xl px-5 2xl:min-w-2xl">
         <Spinner />
       </div>
     );
