@@ -38,6 +38,7 @@ import {
 import { ChevronsUpDown, Check } from "lucide-react";
 import { useCountries } from "@/hooks/tanstack/countries/useCountries";
 import { cn } from "@/lib/utils";
+import CountryCombobox from "./CountryCombobox";
 
 const IngredientSchema = z.object({
   name: z
@@ -134,7 +135,6 @@ const PostRecipeDialog = () => {
     name: "steps",
   });
 
-  const { countries, loading, error } = useCountries();
   const onSubmit = async (data: SubmitRecipe) => {
     try {
       const response = await postRecipe(data);
@@ -229,61 +229,10 @@ const PostRecipeDialog = () => {
               control={form.control}
               name="origin_country"
               render={({ field }) => (
-                <FormItem>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-full justify-between",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value
-                            ? countries.find(
-                                (country: string) => field.value === country
-                              )
-                            : "Select country of origin..."}
-                          <ChevronsUpDown className="opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
-                      <Command>
-                        <CommandInput
-                          placeholder="Search framework..."
-                          className="h-9"
-                        />
-                        <CommandList>
-                          <CommandEmpty>Country not found.</CommandEmpty>
-                          <CommandGroup>
-                            {countries.map((country: string, index: number) => (
-                              <CommandItem
-                                key={index}
-                                value={country}
-                                onSelect={(currentValue) => {
-                                  form.setValue("origin_country", country);
-                                }}
-                              >
-                                {country}
-                                <Check
-                                  className={cn(
-                                    "ml-auto",
-                                    country === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                </FormItem>
+                <CountryCombobox
+                  value={field.value}
+                  setFormValue={form.setValue}
+                />
               )}
             />
             {/*  Icomponent guro ni  */}

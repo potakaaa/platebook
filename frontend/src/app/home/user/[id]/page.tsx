@@ -8,9 +8,10 @@ import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
 import useQueryAuth from "@/hooks/tanstack/auth/useQueryAuth";
 import { Frown, UserPen, UserPlus } from "lucide-react";
 import React from "react";
-import EditButton from "@/components/userPage/EditButton";
+import EditButton from "../../../../components/userPage/EditButton";
 import { useUserStore } from "@/store/user/UserStore";
-import FollowButton from "@/components/userPage/FollowButton";
+import FollowButton from "../../../../components/userPage/FollowButton";
+
 const page = (props: { params: Promise<{ id: string }> }) => {
   const params = React.use(props.params);
   const { useQueryGetUserbyID } = useQueryAuth();
@@ -28,17 +29,13 @@ const page = (props: { params: Promise<{ id: string }> }) => {
       </div>
     );
 
-  if (error)
+  if (1 === 1)
     return (
       <div className="flex flex-row gap-2 mt-10">
         <p>Error loading user</p>
         <Frown className="size-5 text-primary drop-shadow-sm" />
       </div>
     );
-    
-    const HandleUserEdit = () => {
-      console.log("Edit user");
-    };
 
   return (
     <div className="flex flex-col w-full min-h-screen justify-start items-center py-10 gap-0 sm:gap-3 md:gap-5">
@@ -98,7 +95,7 @@ const page = (props: { params: Promise<{ id: string }> }) => {
           </Button>
 
           {isOwner ? (
-            <EditButton onClick={HandleUserEdit} />
+            <EditButton onClick={() => console.log(1)} />
           ) : (
             <FollowButton id={params.id} isFollowing={user.isFollowing} />
           )}
