@@ -134,8 +134,7 @@ const PostRecipeDialog = () => {
     name: "steps",
   });
 
-  const { countries: data, loading, error } = useCountries();
-  const countries = data?.name?.common ? Object.values(data.name.common) : [];
+  const { countries, loading, error } = useCountries();
   const onSubmit = async (data: SubmitRecipe) => {
     try {
       const response = await postRecipe(data);
@@ -245,13 +244,13 @@ const PostRecipeDialog = () => {
                           {field.value
                             ? countries.find(
                                 (country: string) => field.value === country
-                              )?.country
+                              )
                             : "Select country of origin..."}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
+                    <PopoverContent className="w-full p-0">
                       <Command>
                         <CommandInput
                           placeholder="Search framework..."
@@ -272,7 +271,7 @@ const PostRecipeDialog = () => {
                                 <Check
                                   className={cn(
                                     "ml-auto",
-                                    field.value === field.value
+                                    country === field.value
                                       ? "opacity-100"
                                       : "opacity-0"
                                   )}
