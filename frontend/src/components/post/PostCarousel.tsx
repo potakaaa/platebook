@@ -55,13 +55,15 @@ const PostCarousel = ({ images }: { images: string[] }) => {
         </div>
       )}
     >
-     {images.map((image, index)=> (
-       <img
-       src={image}
-       alt={`image-${index}`}
-        key={index}
-     />
-     ))}
+      {images.map((image, index) => (
+        <Image
+          src={image}
+          alt={`image-${index}`}
+          key={index}
+          width={500}
+          height={500}
+        />
+      ))}
     </Carousel>
   );
 };

@@ -54,14 +54,17 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
     });
 
     return (
-      <div className="w-full" {...getRootProps()}>
+      <div
+        className="w-full max-w-md flex items-center justify-center"
+        {...getRootProps()}
+      >
         <motion.div
           onClick={handleClick}
           whileHover="animate"
           className="p-10 group/file block rounded-lg cursor-pointer w-full relative overflow-hidden"
         >
           <input
-            ref={ref}
+            ref={fileInputRef}
             id="file-upload-handle"
             type="file"
             onChange={(e) => handleFileChange(Array.from(e.target.files || []))}
@@ -196,3 +199,6 @@ export function GridPattern() {
     </div>
   );
 }
+
+FileUpload.displayName = "FileUpload";
+GridPattern.displayName = "GridPattern";

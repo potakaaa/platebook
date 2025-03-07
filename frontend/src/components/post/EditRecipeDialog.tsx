@@ -92,10 +92,10 @@ const postRecipeSchema = z.object({
 });
 
 interface EditRecipeDialogProps {
-    recipe: SubmitRecipe;
+  recipe: SubmitRecipe;
 }
 
-const EditRecipeDialog:React.FC<EditRecipeDialogProps> = ({recipe}) => {
+const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe }) => {
   const { useMutationPostRecipe } = useMutationRecipe();
   const { mutate: postRecipe, isPending } = useMutationPostRecipe();
   const queryClient = useQueryClient();
@@ -132,10 +132,10 @@ const EditRecipeDialog:React.FC<EditRecipeDialogProps> = ({recipe}) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <EditButton onClick={()=>{}}/>
+        <EditButton onClick={() => {}} />
       </DialogTrigger>
       <DialogContent
-        className="overflow-y-auto w-3/6 max-h-[80vh] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
+        className="overflow-y-auto overflow-x-hidden w-3/6 max-h-[80vh] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
       dark:[&::-webkit-scrollbar-track]:bg-neutral-700
       dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar]:w-2 gap-2"
       >
@@ -318,7 +318,7 @@ const EditRecipeDialog:React.FC<EditRecipeDialogProps> = ({recipe}) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
+                    <div className="w-full min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
                       <FileUpload
                         onFileChange={(files: File[]) => field.onChange(files)}
                         onBlur={field.onBlur}
@@ -335,20 +335,6 @@ const EditRecipeDialog:React.FC<EditRecipeDialogProps> = ({recipe}) => {
                 </FormItem>
               )}
             />
-
-            {/* <InputAnimated
-              id="images"
-              type="file"
-              placeholder="A catchy images for your followers"
-              multiple
-              onChange={(e) =>
-                field.onChange(e.target.files ? Array.from(e.target.files) : [])
-              }
-              onBlur={field.onBlur}
-              name={field.name}
-              ref={field.ref}
-            /> */}
-
             <Button type="submit" disabled={isPending}>
               Submit
             </Button>
