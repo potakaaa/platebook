@@ -1,3 +1,4 @@
+import json
 from rest_framework import serializers
 from .models import Recipe, Ingredient, Step, RecipeImage
 from accounts.models import CustomUserModel
@@ -43,61 +44,40 @@ class RecipeListSerializer(serializers.ModelSerializer):
     isShared = serializers.SerializerMethodField()
     
     def update(self, instance, validated_data):
-        ingredients_data = validated_data.pop('ingredients', [])
-        steps_data = validated_data.pop('steps', [])
-        images_data = validated_data.pop('images', []) 
+        request = self.context['request']
         
-        instance.title = validated_data.get('title', instance.title)
-        instance.description = validated_data.get('description', instance.description)
+        ingredients_data = json.loads(request.data.get("ingredients", "[]"))
+        steps_data = json.loads(request.data.get("steps", "[]"))
+        images_data = request.FILES.getlist("images", [])
+        
+        existing_ingredient_ids = request.data.getlist("existing_ingredients", [])
+        existing_step_ids = request.data.getlist("existing_steps", [])
+        existing_image_ids = request.data.getlist("existing_images", [])
+
+        instance.title = validated_data.get("title", instance.title)
+        instance.description = validated_data.get("description", instance.description)
         instance.save()
 
-        existing_ingredient_ids = []
+        existing_ingredient_objs = Ingredient.objects.filter(id__in=existing_ingredient_ids, recipe=instance)
+        
         for ingredient_data in ingredients_data:
-            ingredient_id = ingredient_data.get('id')
-            if ingredient_id:
-                ingredient = Ingredient.objects.get(id=ingredient_id, recipe=instance)
-                for attr, value in ingredient_data.items():
-                    setattr(ingredient, attr, value)
-                ingredient.save()
-                existing_ingredient_ids.append(ingredient_id)
-            else:
-                new_ingredient = Ingredient.objects.create(recipe=instance, **ingredient_data)
-                existing_ingredient_ids.append(new_ingredient.id)
+            Ingredient.objects.create(recipe=instance, **ingredient_data)
 
-        Ingredient.objects.filter(recipe=instance).exclude(id__in=existing_ingredient_ids).delete()
+        Ingredient.objects.filter(recipe=instance).exclude(id__in=existing_ingredient_objs.values_list("id", flat=True)).delete()
 
-        existing_step_ids = []
+        existing_step_objs = Step.objects.filter(id__in=existing_step_ids, recipe=instance)
+
         for step_data in steps_data:
-            step_id = step_data.get('id')
-            if step_id:
-                step = Step.objects.get(id=step_id, recipe=instance)
-                for attr, value in step_data.items():
-                    setattr(step, attr, value)
-                step.save()
-                existing_step_ids.append(step_id)
-            else:
-                new_step = Step.objects.create(recipe=instance, **step_data)
-                existing_step_ids.append(new_step.id)
+            Step.objects.create(recipe=instance, **step_data)
 
-        Step.objects.filter(recipe=instance).exclude(id__in=existing_step_ids).delete()
+        Step.objects.filter(recipe=instance).exclude(id__in=existing_step_objs.values_list("id", flat=True)).delete()
 
-        existing_image_ids = []
-        for image_data in images_data:
-            image_id = image_data.get('id', None)
-            if image_id:
-                try:
-                    image = RecipeImage.objects.get(id=image_id, recipe=instance)
-                    for attr, value in image_data.items():
-                        setattr(image, attr, value)
-                    image.save()
-                    existing_image_ids.append(image_id)
-                except RecipeImage.DoesNotExist:
-                    pass  
-            else:
-                new_image = RecipeImage.objects.create(recipe=instance, **image_data)
-                existing_image_ids.append(new_image.id)
+        existing_image_objs = RecipeImage.objects.filter(id__in=existing_image_ids, recipe=instance)
 
-        RecipeImage.objects.filter(recipe=instance).exclude(id__in=existing_image_ids).delete()
+        for img_file in images_data:
+            RecipeImage.objects.create(recipe=instance, image=img_file)
+
+        RecipeImage.objects.filter(recipe=instance).exclude(id__in=existing_image_objs.values_list("id", flat=True)).delete()
 
         return instance
 

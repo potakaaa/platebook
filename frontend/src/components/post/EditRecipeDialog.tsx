@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import NavButtonLeft from "../home/nav/NavButtonsLeft";
 import { IconSquareRoundedPlus } from "@tabler/icons-react";
@@ -16,17 +16,30 @@ import {
 import { z } from "zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EditRecipe, RecipeImage, SubmitRecipe } from "@/lib/types/recipeTypes";
+import {
+  EditRecipe,
+  SubmitEditRecipe,
+  SubmitRecipe,
+} from "@/lib/types/recipeTypes";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Trash } from "lucide-react";
 import CountryCombobox from "./CountryCombobox";
 import ToolTipButton from "../home/buttons/ToolTipButton";
+import { FileUpload } from "../ui/file-upload";
 import useMutationRecipe from "@/hooks/tanstack/recipe/useMutationRecipe";
 import { useQueryClient } from "@tanstack/react-query";
 import EditButton from "../userPage/EditButton";
+import { urlToFile } from "@/lib/utils/urlToFile";
+
+/*
+
+FIND WAY TO PERSIST INGREDIENT IDS AND STEP IDS
+
+*/
 
 const IngredientSchema = z.object({
+  //id: z.string().optional(),
   name: z
     .string()
     .min(1, "Ingredient name is required")
@@ -38,6 +51,7 @@ const IngredientSchema = z.object({
 });
 
 const StepSchema = z.object({
+  //id: z.string().optional(),
   step_num: z
     .number()
     .min(1, "Step number must be at least 1")
@@ -48,7 +62,7 @@ const StepSchema = z.object({
     .max(500, "Step description cannot be longer than 500 characters"),
 });
 
-const postRecipeSchema = z.object({
+const editRecipeSchema = z.object({
   title: z
     .string()
     .min(1, "Title is required")
@@ -83,31 +97,68 @@ const postRecipeSchema = z.object({
     .min(1, "At least one ingredient is required"),
 
   images: z
-    .array(
-      z.union([
-        z.instanceof(File),
-        z.object({ id: z.string(), image_url: z.string().url() }),
-      ])
-    )
-    .min(1, "At least one image is required")
-    .nullable(),
+    .array(z.instanceof(File))
+    .refine((files) => (files ? files.length > 0 : true), {
+      message: "At least one image is required",
+    }),
 });
 
 interface EditRecipeDialogProps {
-  recipe: SubmitRecipe;
+  recipe: EditRecipe;
   id: string;
 }
 
 const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
   const { useMutationEditRecipe } = useMutationRecipe();
-  const { mutate: editRecipe, isPending } = useMutationEditRecipe();
-  const queryClient = useQueryClient();
+  const { mutate: postRecipe, isPending } = useMutationEditRecipe();
+
+  const [preprocessedImages, setPreprocessedImages] = useState<
+    { id: string; file: File }[]
+  >([]);
+
+  useEffect(() => {
+    const processImages = async () => {
+      console.log(recipe.images);
+      if (recipe.images && recipe.images.length > 0) {
+        const filesWithIds = await Promise.all(
+          recipe.images.map(async (img, index) => {
+            const file = await urlToFile(
+              img.image_url,
+              `recipe_image_${index}.jpg`
+            );
+            return { id: img.id || `default_id_${index}`, file };
+          })
+        );
+        console.log("Files with IDs", filesWithIds);
+        setPreprocessedImages(filesWithIds);
+
+        form.setValue(
+          "images",
+          filesWithIds.map((file) => file.file)
+        );
+      }
+    };
+
+    processImages();
+  }, [recipe]);
 
   const form = useForm({
-    resolver: zodResolver(postRecipeSchema),
+    resolver: zodResolver(editRecipeSchema),
     defaultValues: {
-      ...recipe,
-      images: recipe.images ?? [],
+      title: recipe.title,
+      description: recipe.description,
+      origin_country: recipe.origin_country,
+      ingredients: recipe.ingredients.map((ingredient) => ({
+        id: ingredient.id || `temp_id_${Math.random()}`,
+        name: ingredient.name,
+        quantity: ingredient.quantity,
+      })),
+      steps: recipe.steps.map((step) => ({
+        id: step.id || `temp_id_${Math.random()}`,
+        step_num: step.step_num,
+        description: step.description,
+      })),
+      images: [],
     },
   });
 
@@ -131,53 +182,54 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
 
   const [open, setOpen] = useState(false);
 
-  const onSubmit = async (data: any) => {
-    console.log("Form Data Before Submission:", data);
-    try {
-      console.log("Form Data Before Submission:", data);
+  const onSubmit = async (data: SubmitEditRecipe) => {
+    console.log("Data being submitted:", data);
 
-      const formattedData: { id: string; data: EditRecipe } = {
-        id,
-        data: {
-          ...data,
-          ingredients: data.ingredients.map((ingredient: any) => ({
-            id: ingredient.id || undefined,
-            name: ingredient.name,
-            quantity: ingredient.quantity,
-          })),
+    const formData = new FormData();
 
-          steps: data.steps.map((step: any, index: any) => ({
-            id: step.id || undefined,
-            step_num: index + 1,
-            description: step.description,
-          })),
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("origin_country", data.origin_country);
 
-          images: (data.images ?? []).map((image: any) => {
-            if (image instanceof File) {
-              return image;
-            } else {
-              return {
-                id: (image as RecipeImage).id,
-                image_url: (image as RecipeImage).image_url,
-              };
-            }
-          }),
-        },
-      };
+    const newIngredients = data.ingredients.filter(
+      (ing) => ing.id && !ing.id.startsWith("temp_id")
+    );
+    const existingIngredientIds = data.ingredients
+      .filter((ing) => ing.id && !ing.id.startsWith("temp_id"))
+      .map((ing) => ing.id);
 
-      console.log("Formatted Data for Submission:", formattedData);
+    formData.append("ingredients", JSON.stringify(newIngredients));
+    existingIngredientIds.forEach((id) => {
+      if (id) {
+        formData.append("existing_ingredients", id);
+      }
+    });
 
-      // editRecipe(formattedData, {
-      //   onSuccess: () => {
-      //     setOpen(false);
-      //   },
-      //   onError: (error) => {
-      //     console.error("Failed to update recipe:", error);
-      //   },
-      // });
-    } catch (error) {
-      console.error("Unexpected error:", error);
+    const newSteps = data.steps.filter(
+      (step) => step.id && !step.id.startsWith("temp_id")
+    );
+    const existingStepIds = data.steps
+      .filter((step) => step.id && !step.id.startsWith("temp_id"))
+      .map((step) => step.id);
+
+    formData.append("steps", JSON.stringify(newSteps));
+    existingStepIds.forEach((id) => {
+      if (id) {
+        formData.append("existing_steps", id);
+      }
+    });
+
+    data.images?.forEach((image) => {
+      if (image instanceof File) {
+        formData.append("images", image);
+      }
+    });
+
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
     }
+
+    // postRecipe({ id, data: formData });
   };
 
   return (
@@ -195,11 +247,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
         <Form {...form}>
           <form
             noValidate
-            onSubmit={(e) => {
-              e.preventDefault();
-              console.log("Submit Clicked");
-              form.handleSubmit(onSubmit)(e);
-            }}
+            onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-3"
           >
             <FormField
@@ -369,7 +417,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
               ))}
             </div>
 
-            {/* <FormField
+            <FormField
               control={form.control}
               name="images"
               render={({ field }) => (
@@ -377,6 +425,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                   <FormControl>
                     <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
                       <FileUpload
+                        initialFiles={field.value}
                         onFileChange={(files: File[]) => field.onChange(files)}
                         onBlur={field.onBlur}
                         name={field.name}
@@ -385,28 +434,13 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                         id="images"
                         type="file"
                       />
-
-                 
                     </div>
                   </FormControl>
 
                   <FormMessage />
                 </FormItem>
               )}
-            /> */}
-
-            {/* <InputAnimated
-              id="images"
-              type="file"
-              placeholder="A catchy images for your followers"
-              multiple
-              onChange={(e) =>
-                field.onChange(e.target.files ? Array.from(e.target.files) : [])
-              }
-              onBlur={field.onBlur}
-              name={field.name}
-              ref={field.ref}
-            /> */}
+            />
 
             <Button type="submit" disabled={isPending}>
               Submit

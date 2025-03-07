@@ -1,8 +1,11 @@
 import { cn } from "@/lib/utils";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { IconUpload } from "@tabler/icons-react";
 import { useDropzone } from "react-dropzone";
+import Image from "next/image";
+import { Trash } from "lucide-react";
+import { Button } from "./button";
 
 const mainVariant = {
   initial: {
@@ -28,16 +31,21 @@ const secondaryVariant = {
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   onFileChange?: (files: File[]) => void; // Custom onFileChange prop
+  initialFiles?: File[];
 }
 
 export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, onFileChange, ...props }, ref) => {
-    const [files, setFiles] = useState<File[]>([]);
+  ({ className, type, onFileChange, initialFiles = [], ...props }, ref) => {
+    const [files, setFiles] = useState<File[]>(initialFiles);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      setFiles(initialFiles);
+    }, [initialFiles]);
 
     const handleFileChange = (newFiles: File[]) => {
       setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-      onFileChange && onFileChange(newFiles);
+      onFileChange && onFileChange([...files, ...newFiles]);
     };
 
     const handleClick = () => {
@@ -54,14 +62,17 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
     });
 
     return (
-      <div className="w-full" {...getRootProps()}>
+      <div
+        className="w-full max-w-md flex items-center justify-center"
+        {...getRootProps()}
+      >
         <motion.div
           onClick={handleClick}
           whileHover="animate"
           className="p-10 group/file block rounded-lg cursor-pointer w-full relative overflow-hidden"
         >
           <input
-            ref={ref}
+            ref={fileInputRef}
             id="file-upload-handle"
             type="file"
             onChange={(e) => handleFileChange(Array.from(e.target.files || []))}
@@ -81,55 +92,82 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
             </p>
             <div className="relative w-full mt-10 max-w-xl mx-auto">
               {files.length > 0 &&
-                files.map((file, idx) => (
-                  <motion.div
-                    key={"file" + idx}
-                    layoutId={idx === 0 ? "file-upload" : "file-upload-" + idx}
-                    className={cn(
-                      "relative overflow-hidden z-40 bg-white dark:bg-neutral-900 flex flex-col items-start justify-start md:h-24 p-4 mt-4 w-full mx-auto rounded-md",
-                      "shadow-sm"
-                    )}
-                  >
-                    <div className="flex justify-between w-full items-center gap-4">
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        layout
-                        className="text-base text-neutral-700 dark:text-neutral-300 truncate max-w-xs"
+                files.map((file, idx) => {
+                  const image = URL.createObjectURL(file);
+                  return (
+                    <motion.div
+                      key={"file" + idx}
+                      layoutId={
+                        idx === 0 ? "file-upload" : "file-upload-" + idx
+                      }
+                      className={cn(
+                        "relative overflow-hidden z-40 bg-white dark:bg-neutral-900 flex items-center justify-between p-4 mt-4 w-full mx-auto rounded-md",
+                        "shadow-sm gap-3"
+                      )}
+                    >
+                      <div className="flex flex-row gap-3 items-center mx-auto rounded-md relative overflow-hidden">
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          layout
+                          className="size-24 rounded-md shadow-md w-40 max-w-40 flex-[1] overflow-hidden"
+                        >
+                          <Image
+                            src={image}
+                            alt={file.name}
+                            width={500}
+                            height={500}
+                            className="object-cover size-full"
+                            onLoad={() => URL.revokeObjectURL(image)}
+                          />
+                        </motion.div>
+                        <div className="flex flex-col justify-start w-52 flex-[2]">
+                          <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            layout
+                            className="text-base text-neutral-700 dark:text-neutral-300 truncate max-w-xs"
+                          >
+                            {file.name}
+                          </motion.p>
+                          <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            layout
+                            className="rounded-lg py-1 w-fit flex-shrink-0 text-sm text-neutral-600 dark:bg-neutral-800 dark:text-white shadow-input"
+                          >
+                            {(file.size / (1024 * 1024)).toFixed(2)} MB
+                          </motion.p>
+                          <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            layout
+                            className="px-1 py-0.5 rounded-md bg-gray-100 dark:bg-neutral-800 text-xs text-neutral-600 dark:text-neutral-400"
+                          >
+                            {file.type}
+                          </motion.p>
+                        </div>
+                      </div>
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant={"ghost"}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setFiles((prevFiles) =>
+                            prevFiles.filter((_, fileIdx) => fileIdx !== idx)
+                          );
+                        }}
                       >
-                        {file.name}
-                      </motion.p>
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        layout
-                        className="rounded-lg px-2 py-1 w-fit flex-shrink-0 text-sm text-neutral-600 dark:bg-neutral-800 dark:text-white shadow-input"
-                      >
-                        {(file.size / (1024 * 1024)).toFixed(2)} MB
-                      </motion.p>
-                    </div>
+                        <Trash className="size-4 text-neutral-600 hover:text-destructive transition-colors duration-200 dark:text-neutral-400" />
+                      </Button>
+                    </motion.div>
 
-                    <div className="flex text-sm md:flex-row flex-col items-start md:items-center w-full mt-2 justify-between text-neutral-600 dark:text-neutral-400">
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        layout
-                        className="px-1 py-0.5 rounded-md bg-gray-100 dark:bg-neutral-800 "
-                      >
-                        {file.type}
-                      </motion.p>
+                    //   <div className="flex text-sm md:flex-row flex-col items-start md:items-center w-full mt-2 justify-between text-neutral-600 dark:text-neutral-400">
 
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        layout
-                      >
-                        modified{" "}
-                        {new Date(file.lastModified).toLocaleDateString()}
-                      </motion.p>
-                    </div>
-                  </motion.div>
-                ))}
+                    //   </div>
+                  );
+                })}
               {!files.length && (
                 <motion.div
                   layoutId="file-upload"
@@ -196,3 +234,6 @@ export function GridPattern() {
     </div>
   );
 }
+
+FileUpload.displayName = "FileUpload";
+GridPattern.displayName = "GridPattern";

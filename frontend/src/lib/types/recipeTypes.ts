@@ -20,7 +20,16 @@ export type EditRecipe = {
   origin_country: string;
   steps: Step[];
   ingredients: Ingredient[];
-  images: (RecipeImage | File)[];
+  images: RecipeImage[];
+};
+
+export type SubmitEditRecipe = {
+  title: string;
+  description: string;
+  origin_country: string;
+  steps: Step[];
+  ingredients: Ingredient[];
+  images: File[] | RecipeImage[] | null;
 };
 
 export type Ingredient = {
