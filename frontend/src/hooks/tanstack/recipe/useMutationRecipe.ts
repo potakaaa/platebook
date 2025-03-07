@@ -48,6 +48,7 @@ const useMutationRecipe = () => {
   return {
     useMutationPostRecipe,
     useMutationDeleteRecipe,
+    useMutationEditRecipe,
   };
 };
 

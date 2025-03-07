@@ -16,13 +16,12 @@ import {
 import { z } from "zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitRecipe } from "@/lib/types/recipeTypes";
+import { EditRecipe, RecipeImage, SubmitRecipe } from "@/lib/types/recipeTypes";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Trash } from "lucide-react";
 import CountryCombobox from "./CountryCombobox";
 import ToolTipButton from "../home/buttons/ToolTipButton";
-import { FileUpload } from "../ui/file-upload";
 import useMutationRecipe from "@/hooks/tanstack/recipe/useMutationRecipe";
 import { useQueryClient } from "@tanstack/react-query";
 import EditButton from "../userPage/EditButton";
@@ -84,25 +83,32 @@ const postRecipeSchema = z.object({
     .min(1, "At least one ingredient is required"),
 
   images: z
-    .array(z.instanceof(File))
-    .nullable()
-    .refine((files) => (files ? files.length > 0 : true), {
-      message: "At least one image is required",
-    }),
+    .array(
+      z.union([
+        z.instanceof(File),
+        z.object({ id: z.string(), image_url: z.string().url() }),
+      ])
+    )
+    .min(1, "At least one image is required")
+    .nullable(),
 });
 
 interface EditRecipeDialogProps {
-    recipe: SubmitRecipe;
+  recipe: SubmitRecipe;
+  id: string;
 }
 
-const EditRecipeDialog:React.FC<EditRecipeDialogProps> = ({recipe}) => {
-  const { useMutationPostRecipe } = useMutationRecipe();
-  const { mutate: postRecipe, isPending } = useMutationPostRecipe();
+const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
+  const { useMutationEditRecipe } = useMutationRecipe();
+  const { mutate: editRecipe, isPending } = useMutationEditRecipe();
   const queryClient = useQueryClient();
 
   const form = useForm({
     resolver: zodResolver(postRecipeSchema),
-    defaultValues: recipe,
+    defaultValues: {
+      ...recipe,
+      images: recipe.images ?? [],
+    },
   });
 
   const {
@@ -125,14 +131,59 @@ const EditRecipeDialog:React.FC<EditRecipeDialogProps> = ({recipe}) => {
 
   const [open, setOpen] = useState(false);
 
-  const onSubmit = async (data: SubmitRecipe) => {
-    //
+  const onSubmit = async (data: any) => {
+    console.log("Form Data Before Submission:", data);
+    try {
+      console.log("Form Data Before Submission:", data);
+
+      const formattedData: { id: string; data: EditRecipe } = {
+        id,
+        data: {
+          ...data,
+          ingredients: data.ingredients.map((ingredient: any) => ({
+            id: ingredient.id || undefined,
+            name: ingredient.name,
+            quantity: ingredient.quantity,
+          })),
+
+          steps: data.steps.map((step: any, index: any) => ({
+            id: step.id || undefined,
+            step_num: index + 1,
+            description: step.description,
+          })),
+
+          images: (data.images ?? []).map((image: any) => {
+            if (image instanceof File) {
+              return image;
+            } else {
+              return {
+                id: (image as RecipeImage).id,
+                image_url: (image as RecipeImage).image_url,
+              };
+            }
+          }),
+        },
+      };
+
+      console.log("Formatted Data for Submission:", formattedData);
+
+      // editRecipe(formattedData, {
+      //   onSuccess: () => {
+      //     setOpen(false);
+      //   },
+      //   onError: (error) => {
+      //     console.error("Failed to update recipe:", error);
+      //   },
+      // });
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <EditButton onClick={()=>{}}/>
+        <EditButton onClick={() => {}} />
       </DialogTrigger>
       <DialogContent
         className="overflow-y-auto w-3/6 max-h-[80vh] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
@@ -144,7 +195,11 @@ const EditRecipeDialog:React.FC<EditRecipeDialogProps> = ({recipe}) => {
         <Form {...form}>
           <form
             noValidate
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={(e) => {
+              e.preventDefault();
+              console.log("Submit Clicked");
+              form.handleSubmit(onSubmit)(e);
+            }}
             className="flex flex-col gap-3"
           >
             <FormField
@@ -186,7 +241,9 @@ const EditRecipeDialog:React.FC<EditRecipeDialogProps> = ({recipe}) => {
               render={({ field }) => (
                 <CountryCombobox
                   value={field.value}
-                  setFormValue={form.setValue}
+                  setFormValue={(value: string) =>
+                    form.setValue("origin_country", value)
+                  }
                 />
               )}
             />
@@ -312,7 +369,7 @@ const EditRecipeDialog:React.FC<EditRecipeDialogProps> = ({recipe}) => {
               ))}
             </div>
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="images"
               render={({ field }) => (
@@ -328,13 +385,15 @@ const EditRecipeDialog:React.FC<EditRecipeDialogProps> = ({recipe}) => {
                         id="images"
                         type="file"
                       />
+
+                 
                     </div>
                   </FormControl>
 
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* <InputAnimated
               id="images"

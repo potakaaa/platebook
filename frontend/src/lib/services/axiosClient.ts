@@ -66,6 +66,7 @@ axiosClient.interceptors.response.use(
             image: session.user?.image,
             redirect: false,
           });
+          useUserStore.getState().setAccessToken(refreshResponse.data.access);
           originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.access}`;
 
           return axiosClient(originalRequest);

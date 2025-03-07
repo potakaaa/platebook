@@ -16,20 +16,15 @@ import {
   CommandList,
 } from "../ui/command";
 import { UseFormSetValue } from "react-hook-form";
+import { RecipeImage } from "@/lib/types/recipeTypes";
+import { value } from "@material-tailwind/react/types/components/chip";
 
 const CountryCombobox = ({
   value,
   setFormValue,
 }: {
   value: string;
-  setFormValue: UseFormSetValue<{
-    description: string;
-    title: string;
-    origin_country: string;
-    steps: { step_num: number; description: string }[];
-    ingredients: { name: string; quantity: string }[];
-    images: File[] | null;
-  }>;
+  setFormValue: (value: string) => void;
 }) => {
   const { countries, loading, error } = useCountries();
 
@@ -68,8 +63,8 @@ const CountryCombobox = ({
                   <CommandItem
                     key={index}
                     value={country}
-                    onSelect={(currentValue) => {
-                      setFormValue("origin_country", country);
+                    onSelect={() => {
+                      setFormValue(country);
                     }}
                   >
                     {country}

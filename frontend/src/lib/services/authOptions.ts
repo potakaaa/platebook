@@ -103,7 +103,6 @@ export const authOptions: NextAuthOptions = {
 
         try {
           const response = await axiosClient.post("social/login/google/", {
-
             access_token,
             refresh_token,
           });
@@ -186,6 +185,12 @@ export const authOptions: NextAuthOptions = {
       }
 
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      if (url.includes("google")) {
+        return "/home";
+      }
+      return baseUrl;
     },
   },
 };

@@ -84,7 +84,6 @@ const postRecipeSchema = z.object({
 
   images: z
     .array(z.instanceof(File))
-    .nullable()
     .refine((files) => (files ? files.length > 0 : true), {
       message: "At least one image is required",
     }),
@@ -103,7 +102,7 @@ const PostRecipeDialog = () => {
       origin_country: "",
       steps: [{ step_num: 1, description: "" }],
       ingredients: [{ name: "", quantity: "" }],
-      images: null,
+      images: [],
     },
   });
 
@@ -196,7 +195,9 @@ const PostRecipeDialog = () => {
               render={({ field }) => (
                 <CountryCombobox
                   value={field.value}
-                  setFormValue={form.setValue}
+                  setFormValue={(value: string) =>
+                    form.setValue("origin_country", value)
+                  }
                 />
               )}
             />
