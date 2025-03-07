@@ -1,30 +1,21 @@
-'use client';
+"use client";
+
 import Spinner from "@/components/loader/Spinner";
 import PostCarousel from "@/components/post/PostCarousel";
 import useQueryRecipe from "@/hooks/tanstack/recipe/useQueryRecipe";
-import useSearchStore from "@/store/search/SearchState";
-import { CircleSmall, Edit } from "lucide-react";
-import React, { useEffect } from "react";
-import IngredientComponent from "./components/IngredientComponent";
-import StepComp from "./components/StepComp";
+import React from "react";
+import IngredientComponent from "@/components/post/IngredientComponent";
+import StepComp from "@/components/post/StepComp";
 import { Ingredient, Step } from "@/lib/types/recipeTypes";
 import { useUserStore } from "@/store/user/UserStore";
-import EditButton from "@/components/userPage/EditButton";
 import DeleteButton from "@/components/userPage/DeleteButton";
-import useMutationRecipe from "@/hooks/tanstack/recipe/useMutationRecipe";
-import { useRouter } from "next/navigation";
 import EditRecipeDialog from "@/components/post/EditRecipeDialog";
+import PostEditButton from "@/components/post/PostEditButton";
 
 const page = (props: { params: Promise<{ id: string }> }) => {
-  const router = useRouter();
-  const { useQueryFetchRecipe } = useQueryRecipe();
-  const { useMutationDeleteRecipe } = useMutationRecipe();
-  const { mutate: deleteRecipe, isPending: isDeleting } =
-    useMutationDeleteRecipe();
-  const { user } = useUserStore();
-
   const params = React.use(props.params);
 
+  const { useQueryFetchRecipe } = useQueryRecipe();
   const { data: recipe, isPending, error } = useQueryFetchRecipe(params.id);
 
   if (isPending) {
@@ -38,17 +29,6 @@ const page = (props: { params: Promise<{ id: string }> }) => {
   console.log("Recipe:", recipe);
 
   const imageUrls = recipe?.images.map((image: any) => image.image_url) || [];
-
-  const handleRecipeDelete = () => {
-    deleteRecipe(recipe?.id, {
-      onSuccess: () => {
-        router.push("/home");
-      },
-      onError: (error) => {
-        console.error("Error deleting recipe:", error);
-      },
-    });
-  };
 
   return (
     <div className="w-full flex flex-col justify-start items-center gap-5">
@@ -64,15 +44,7 @@ const page = (props: { params: Promise<{ id: string }> }) => {
       >
         {recipe?.chef.username}
       </span>
-      {recipe?.chef.userId === user?.id && (
-        <div
-          id="edit-button"
-          className="w-full flex justify-between items-center"
-        >
-          <EditRecipeDialog recipe={recipe} />
-          <DeleteButton onClick={handleRecipeDelete} disabled={isDeleting} />
-        </div>
-      )}
+      <PostEditButton id={params.id} />
       <section id="carousel" className="w-full">
         <PostCarousel images={imageUrls} />
       </section>
