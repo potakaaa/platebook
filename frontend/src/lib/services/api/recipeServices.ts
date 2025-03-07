@@ -1,4 +1,9 @@
-import { Ingredient, Step, SubmitRecipe } from "@/lib/types/recipeTypes";
+import {
+  EditRecipe,
+  Ingredient,
+  Step,
+  SubmitRecipe,
+} from "@/lib/types/recipeTypes";
 import { axiosClient } from "../axiosClient";
 import exp from "constants";
 
@@ -38,7 +43,6 @@ export const fetchFollowingFeed = async (page = 1) => {
     );
   }
 };
-
 
 export const postRecipe = async (data: SubmitRecipe) => {
   try {
@@ -215,9 +219,9 @@ export const deleteRecipe = async (id: string) => {
   }
 };
 
-export const editRecipe = async (id: string, data: any) => {
+export const editRecipe = async (id: string, data: FormData) => {
   try {
-    const response = await axiosClient.put(`/api/recipes/${id}/`, data, {
+    const response = await axiosClient.put(`/recipes/${id}/`, data, {
       headers: {
         "Content-Type": "application/json",
       },

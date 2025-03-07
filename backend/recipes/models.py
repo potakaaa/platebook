@@ -1,5 +1,6 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
+import cloudinary.uploader
 
 # Create your models here.
 class Recipe(models.Model):
@@ -44,3 +45,10 @@ class RecipeImage(models.Model):
 
     def __str__(self):
         return self.image.url
+    
+    def delete(self, *args, **kwargs):
+
+        if self.image:
+            public_id = self.image.public_id  
+            cloudinary.uploader.destroy(public_id)  
+        super().delete(*args, **kwargs) 

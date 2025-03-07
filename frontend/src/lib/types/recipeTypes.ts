@@ -29,7 +29,7 @@ export type SubmitEditRecipe = {
   origin_country: string;
   steps: Step[];
   ingredients: Ingredient[];
-  images: File[] | RecipeImage[] | null;
+  images: File[];
 };
 
 export type Ingredient = {

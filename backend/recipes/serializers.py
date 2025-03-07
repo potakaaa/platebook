@@ -52,8 +52,7 @@ class RecipeListSerializer(serializers.ModelSerializer):
         
         existing_ingredient_ids = request.data.getlist("existing_ingredients", [])
         existing_step_ids = request.data.getlist("existing_steps", [])
-        existing_image_ids = request.data.getlist("existing_images", [])
-
+       
         instance.title = validated_data.get("title", instance.title)
         instance.description = validated_data.get("description", instance.description)
         instance.save()
@@ -72,12 +71,10 @@ class RecipeListSerializer(serializers.ModelSerializer):
 
         Step.objects.filter(recipe=instance).exclude(id__in=existing_step_objs.values_list("id", flat=True)).delete()
 
-        existing_image_objs = RecipeImage.objects.filter(id__in=existing_image_ids, recipe=instance)
+        RecipeImage.objects.filter(recipe=instance).delete()  
 
         for img_file in images_data:
             RecipeImage.objects.create(recipe=instance, image=img_file)
-
-        RecipeImage.objects.filter(recipe=instance).exclude(id__in=existing_image_objs.values_list("id", flat=True)).delete()
 
         return instance
 

@@ -39,7 +39,7 @@ FIND WAY TO PERSIST INGREDIENT IDS AND STEP IDS
 */
 
 const IngredientSchema = z.object({
-  //id: z.string().optional(),
+  id: z.string().optional(),
   name: z
     .string()
     .min(1, "Ingredient name is required")
@@ -51,7 +51,7 @@ const IngredientSchema = z.object({
 });
 
 const StepSchema = z.object({
-  //id: z.string().optional(),
+  id: z.string().optional(),
   step_num: z
     .number()
     .min(1, "Step number must be at least 1")
@@ -129,7 +129,6 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
             return { id: img.id || `default_id_${index}`, file };
           })
         );
-        console.log("Files with IDs", filesWithIds);
         setPreprocessedImages(filesWithIds);
 
         form.setValue(
@@ -149,12 +148,12 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
       description: recipe.description,
       origin_country: recipe.origin_country,
       ingredients: recipe.ingredients.map((ingredient) => ({
-        id: ingredient.id || `temp_id_${Math.random()}`,
+        id: String(ingredient.id),
         name: ingredient.name,
         quantity: ingredient.quantity,
       })),
       steps: recipe.steps.map((step) => ({
-        id: step.id || `temp_id_${Math.random()}`,
+        id: String(step.id),
         step_num: step.step_num,
         description: step.description,
       })),
@@ -192,7 +191,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
     formData.append("origin_country", data.origin_country);
 
     const newIngredients = data.ingredients.filter(
-      (ing) => ing.id && !ing.id.startsWith("temp_id")
+      (ing) => ing.id === undefined
     );
     const existingIngredientIds = data.ingredients
       .filter((ing) => ing.id && !ing.id.startsWith("temp_id"))
@@ -205,9 +204,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
       }
     });
 
-    const newSteps = data.steps.filter(
-      (step) => step.id && !step.id.startsWith("temp_id")
-    );
+    const newSteps = data.steps.filter((step) => step.id === undefined);
     const existingStepIds = data.steps
       .filter((step) => step.id && !step.id.startsWith("temp_id"))
       .map((step) => step.id);
@@ -229,7 +226,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
       console.log(pair[0], pair[1]);
     }
 
-    // postRecipe({ id, data: formData });
+    postRecipe({ id, data: formData });
   };
 
   return (
@@ -295,7 +292,6 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                 />
               )}
             />
-            {/*  Icomponent guro ni  */}
             <div className="flex flex-col gap-2">
               {ingredientFields.map((ingredient, index) => (
                 <div key={ingredient.id} className="flex flex-row gap-2">
@@ -327,6 +323,26 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                             id={`ingredients.${index}.quantity`}
                             type="text"
                             placeholder="Quantity"
+                            {...field}
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Hidden input to store ingredient id */}
+                  <FormField
+                    control={form.control}
+                    name={`ingredients.${index}.id`}
+                    render={({ field }) => (
+                      <FormItem className="flex-[1]">
+                        <FormControl>
+                          <Input
+                            id={`ingredients.${index}.id`}
+                            type="hidden"
+                            placeholder="Id"
                             {...field}
                           />
                         </FormControl>
@@ -387,6 +403,26 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                             type="text"
                             placeholder="Step Description"
                             {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Hidden input to store step id */}
+                  <FormField
+                    control={form.control}
+                    name={`steps.${index}.id`}
+                    render={({ field }) => (
+                      <FormItem className="flex-[1]">
+                        <FormControl>
+                          <Input
+                            id={`steps.${index}.id`}
+                            type="hidden"
+                            readOnly
+                            value={field.value}
+                            className="text-center"
                           />
                         </FormControl>
                         <FormMessage />
