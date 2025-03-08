@@ -35,9 +35,7 @@ import { profile } from "console";
 
 const editUserSchema = z.object({
   username: z.string().nonempty(),
-  pfp: z.instanceof(File),
-  password1: z.string().nonempty(),
-  password2: z.string().nonempty(),
+  pfp: z.array(z.instanceof(File)).optional(),
 });
 
 interface EditUserDialogProps {
@@ -52,18 +50,44 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
     resolver: zodResolver(editUserSchema),
     defaultValues: {
         username: user.username,
-
-        password1: "",
-      
+        pfp: [],
     },
   });
 
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    console.log(user);
+    if (open) {
+      form.reset({
+        username: user.username,
+        pfp: undefined,
+      });
+    }
+  }, [open]);
+
+  useEffect(() => {
+
+    console.log("PROCESSING IMAGE: ", user.pfp_url);
+
+    const processImages = async () => {
+      if (user.pfp_url) {
+
+        const pfpFile = await urlToFile(user.pfp_url, `${user.username || "profile_picture"}.jpg`);
+        console.log("PFP FILE: ", pfpFile);
+        form.setValue("pfp", [pfpFile]); 
+
+        console.log("FORM: ", form.getValues());
+      }
+    };
+  
+    processImages();
+  }, [user.pfp_url, form]);  
+  
+
   const onSubmit = form.handleSubmit((data) => {
 
   });
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -87,23 +111,17 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
                     <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
                       <FileUpload
                         multiple={false}
-                        initialFiles={
-                          Array.isArray(field.value) ? field.value : []
-                        }
+                        initialFiles={field.value} 
                         onFileChange={(files: (File | RecipeImage)[]) => {
-                          if (files.every((file) => file instanceof File)) {
-                            field.onChange(files as File[]);
-                          } else {
-                            field.onChange(files as RecipeImage[]);
-                          }
+                          const file = files[0] instanceof File ? files[0] : null;
+                          field.onChange(file);
                         }}
                         onBlur={field.onBlur}
                         name={field.name}
                         ref={field.ref}
-
-                        id="images"
+                        id="pfp"
                         type="file"
-                        fileType="image"
+                        fileType="file"
                       />
                     </div>
                   </FormControl>
@@ -129,39 +147,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="password1"
-              render={({ field }) => (
-                <FormItem>
-                  <Input
-                    placeholder="Enter password1 here..."
-                    className="py-5"
-                    id="password1"
-                    type="password"
-                    {...field}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password2"
-              render={({ field }) => (
-                <FormItem>
-                  <Input
-                    placeholder="Enter password2 here..."
-                    className="py-5"
-                    id="password2"
-                    type="password"
-                    {...field}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+           
             <Button type="submit" disabled={isPending}>
               Submit
             </Button>

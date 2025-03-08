@@ -55,8 +55,11 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
     const [files, setFiles] = useState<(RecipeImage | File)[]>(initialFiles);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    console.log("initialFiles", initialFiles);
+
     useEffect(() => {
       if (initialFiles.length > 0) {
+        console.log("initialFiles", initialFiles);
         setFiles(initialFiles);
       }
     }, [initialFiles]);
