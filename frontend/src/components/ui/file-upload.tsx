@@ -32,18 +32,31 @@ const secondaryVariant = {
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   onFileChange?: (files: (RecipeImage | File)[]) => void; // Custom onFileChange prop
-  initialFiles?:(RecipeImage | File)[];
+  onFileRemove?: (file: RecipeImage | File) => void;
+  initialFiles?: (RecipeImage | File)[];
   fileType?: "image" | "file";
+  multiple?: boolean;
 }
 
 export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, onFileChange, initialFiles = [], fileType, ...props }, ref) => {
+  (
+    {
+      className,
+      type,
+      onFileChange,
+      onFileRemove,
+      initialFiles = [],
+      fileType,
+      multiple = true,
+      ...props
+    },
+    ref
+  ) => {
     const [files, setFiles] = useState<(RecipeImage | File)[]>(initialFiles);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-      if (initialFiles.length > 0)
-      {
+      if (initialFiles.length > 0) {
         setFiles(initialFiles);
       }
     }, [initialFiles]);
@@ -53,15 +66,25 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
       onFileChange && onFileChange([...files, ...newFiles]);
     };
 
+    const handleRemoveFile = (fileToRemove: RecipeImage | File) => {
+      const updatedFiles = files.filter((file) => file !== fileToRemove);
+      setFiles(updatedFiles);
+      onFileChange && onFileChange(updatedFiles);
+      onFileRemove && onFileRemove(fileToRemove);
+    };
+
     const handleClick = () => {
       fileInputRef.current?.click();
     };
 
     const { getRootProps, isDragActive } = useDropzone({
-      multiple: true,
+      multiple: multiple,
       noClick: true,
       onDrop: (acceptedFiles) => {
-        const newFiles = acceptedFiles.map((file) => ({id: undefined, image: file }));
+        const newFiles = acceptedFiles.map((file) => ({
+          id: undefined,
+          image: file,
+        }));
         handleFileChange(newFiles);
       },
       onDropRejected: (error) => {
@@ -106,10 +129,25 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
             <div className="relative w-full mt-10 max-w-xl mx-auto">
               {files.length > 0 &&
                 files.map((file, idx) => {
-                  const fileURL = fileType === "image" && "image" in file && (file as RecipeImage).image ? URL.createObjectURL((file as RecipeImage).image as Blob) : URL.createObjectURL(file as File);
-                      const fileName =fileType === "image" && "image" in file ? (file as RecipeImage).image?.name : (file as File).name;
-                      const fileSize = fileType === "image" && "image" in file ?(((file as RecipeImage).image?.size ?? 0) / (1024 * 1024) ).toFixed(2): ((file as File).size / (1024 * 1024)).toFixed(2);
-                      const fileTypeLabel = fileType === "image" && "image" in file ? "Image" : "File";
+                  const fileURL =
+                    fileType === "image" &&
+                    "image" in file &&
+                    (file as RecipeImage).image
+                      ? URL.createObjectURL((file as RecipeImage).image as Blob)
+                      : URL.createObjectURL(file as File);
+                  const fileName =
+                    fileType === "image" && "image" in file
+                      ? (file as RecipeImage).image?.name
+                      : (file as File).name;
+                  const fileSize =
+                    fileType === "image" && "image" in file
+                      ? (
+                          ((file as RecipeImage).image?.size ?? 0) /
+                          (1024 * 1024)
+                        ).toFixed(2)
+                      : ((file as File).size / (1024 * 1024)).toFixed(2);
+                  const fileTypeLabel =
+                    fileType === "image" && "image" in file ? "Image" : "File";
 
                   return (
                     <motion.div
@@ -131,7 +169,11 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
                         >
                           <Image
                             src={fileURL}
-                            alt={fileType === "file"? (file as File).name: (file as RecipeImage).image?.name || "image"} 
+                            alt={
+                              fileType === "file"
+                                ? (file as File).name
+                                : (file as RecipeImage).image?.name || "image"
+                            }
                             width={500}
                             height={500}
                             className="object-cover size-full"
@@ -169,17 +211,11 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
                         type="button"
                         size="icon"
                         variant={"ghost"}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          setFiles((prevFiles) =>
-                            prevFiles.filter((_, fileIdx) => fileIdx !== idx)
-                          );
-                        }}
+                        onClick={() => handleRemoveFile(file)}
                       >
                         <Trash className="size-4 text-neutral-600 hover:text-destructive transition-colors duration-200 dark:text-neutral-400" />
                       </Button>
                     </motion.div>
-
                   );
                 })}
               {!files.length && (

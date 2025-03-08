@@ -4,10 +4,12 @@ import {
   postRecipe,
 } from "@/lib/services/api/recipeServices";
 import { EditRecipe, SubmitRecipe } from "@/lib/types/recipeTypes";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 
 const useMutationRecipe = () => {
+  const queryClient = useQueryClient();
+
   const useMutationPostRecipe = () => {
     return useMutation({
       mutationFn: (data: SubmitRecipe) => postRecipe(data),
@@ -35,9 +37,9 @@ const useMutationRecipe = () => {
   const useMutationEditRecipe = () => {
     return useMutation({
       mutationFn: ({ id, data }: { id: string; data: EditRecipe }) =>
-        editRecipe(id, data), 
-      onSuccess(data) {
-        console.log("Edit Recipe Success:", data);
+        editRecipe(id, data),
+      onSuccess(data, variables) {
+        queryClient.invalidateQueries({ queryKey: ["recipe", variables.id] });
       },
       onError(error) {
         console.error("Edit Recipe Error:", error);

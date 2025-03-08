@@ -19,6 +19,12 @@ declare module "next-auth" {
   }
 }
 
+export type EditUserFormData = {
+  username?: string;
+  pfp?: File;
+  password1?: string;
+  password2?: string;
+};
 
 export type SignUpFormData = {
   email: string;

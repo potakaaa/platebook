@@ -53,8 +53,8 @@ const IngredientSchema = z.object({
 
 const ImageSchema = z.object({
   id: z.string().optional(),
-  image: z.instanceof(File)
-})
+  image: z.instanceof(File),
+});
 
 const StepSchema = z.object({
   id: z.string().optional(),
@@ -120,12 +120,11 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
 
   useEffect(() => {
     const processImages = async () => {
-      console.log(recipe.images);
       if (recipe.images && recipe.images.length > 0) {
         const filesWithIds = await Promise.all(
           recipe.images.map(async (img, index) => {
             const file = await urlToFile(
-              img.image_url || '',
+              img.image_url || "",
               `recipe_image_${index}.jpg`
             );
             return { id: String(img.id), file };
@@ -152,7 +151,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
         name: ingredient.name,
         quantity: ingredient.quantity,
       })),
-      steps: recipe.steps.map((step) => ({
+      steps: recipe.steps.map((step, index) => ({
         id: String(step.id),
         step_num: step.step_num,
         description: step.description,
@@ -182,7 +181,10 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
   const [open, setOpen] = useState(false);
 
   const onSubmit = form.handleSubmit((data) => {
-    editRecipe({ id: id, data: data as SubmitEditRecipe }, { onSuccess: () => setOpen(false) });
+    editRecipe(
+      { id: id, data: data as SubmitEditRecipe },
+      { onSuccess: () => setOpen(false) }
+    );
   });
 
   return (
@@ -198,11 +200,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
         <DialogTitle className="text-center font-bold">Edit Post</DialogTitle>
         <span className="border-b border-muted mb-2" />
         <Form {...form}>
-          <form
-            noValidate
-            onSubmit={onSubmit}
-            className="flex flex-col gap-3"
-          >
+          <form noValidate onSubmit={onSubmit} className="flex flex-col gap-3">
             <FormField
               control={form.control}
               name="title"
@@ -312,7 +310,9 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                     btnVariant="ghost"
                     btnSize="icon"
                     tipChildren={<p>Remove Ingredient</p>}
-                    onClick={() => removeIngredient(index)}
+                    onClick={() => {
+                      if (stepFields.length > 1) removeIngredient(index);
+                    }}
                   />
 
                   <ToolTipButton
@@ -339,7 +339,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                             id={`steps.${index}.step_num`}
                             type="number"
                             readOnly
-                            value={index + 1}
+                            value={Number(index + 1)}
                             className="text-center"
                           />
                         </FormControl>
@@ -376,7 +376,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                             id={`steps.${index}.id`}
                             type="hidden"
                             readOnly
-                            value={field.value}
+                            value={Number(field.value)}
                             className="text-center"
                           />
                         </FormControl>
@@ -389,7 +389,9 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                     btnVariant="ghost"
                     btnSize="icon"
                     tipChildren={<p>Remove Step</p>}
-                    onClick={() => removeStep(index)}
+                    onClick={() => {
+                      if (stepFields.length > 1) removeStep(index);
+                    }}
                   />
 
                   <ToolTipButton
@@ -418,7 +420,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                       <FileUpload
                         initialFiles={field.value}
                         onFileChange={(files: (File | RecipeImage)[]) => {
-                          if (files.every(file => file instanceof File)) {
+                          if (files.every((file) => file instanceof File)) {
                             field.onChange(files as File[]);
                           } else {
                             field.onChange(files as RecipeImage[]);

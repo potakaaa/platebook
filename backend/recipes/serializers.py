@@ -140,37 +140,62 @@ class RecipeSerializer(serializers.ModelSerializer):
         }
 
     def update(self, instance, validated_data):
-        request = self.context['request']
+        request = self.context["request"]
 
-        # Print the raw request data (for debugging)
-        print("REQUEST DATA (raw):", request.data)  # Print raw data
-        print("FILES:", request.FILES)  # Print files received
+        existing_ingredient_ids = json.loads(request.data.get("existing_ingredients", "[]"))
+        ingredients_data = json.loads(request.data.get("ingredients", "[]"))
 
-        # Check if 'ingredients' is already a list; no need to json.loads if it is
-        ingredients_data = request.data.get("ingredients", [])
-        if isinstance(ingredients_data, str):
-            ingredients_data = json.loads(ingredients_data)
-        print("Ingredients data:", ingredients_data)
 
-        # Check if 'steps' is already a list; no need to json.loads if it is
-        steps_data = request.data.get("steps", [])
-        if isinstance(steps_data, str):
-            steps_data = json.loads(steps_data)
-        print("Steps data:", steps_data)
+        updated_ingredient_ids = set(existing_ingredient_ids)
+        for ingredient_data in ingredients_data:
+            if "id" in ingredient_data and ingredient_data["id"] in existing_ingredient_ids:
+                ingredient = Ingredient.objects.get(id=ingredient_data["id"])
+                ingredient.name = ingredient_data["name"]
+                ingredient.quantity = ingredient_data["quantity"]
+                ingredient.save()
+            else:
+                new_ingredient = Ingredient.objects.create(recipe=instance, **ingredient_data)
+                updated_ingredient_ids.add(new_ingredient.id)
 
-        # Get the image files sent in the 'images' field
-        images_data = request.FILES.getlist("images")  # Access image files sent under the 'images' key
-        print("Images data:", images_data)
+        Ingredient.objects.filter(recipe=instance).exclude(id__in=updated_ingredient_ids).delete()
 
-        # Now you can access both the parsed JSON data and the uploaded image files
-        for image_file in images_data:
-            print(f"Processing image: {image_file.name}")
-            # You can process the image here, e.g., saving it to the server or associating it with a recipe.
+        existing_step_ids = json.loads(request.data.get("existing_steps", "[]"))
+        steps_data = json.loads(request.data.get("steps", "[]"))
 
-        # Temporarily skipping database update logic
-        # Here you would update the instance with the received data
+
+        updated_step_ids = set(existing_step_ids)
+        for step_data in steps_data:
+            if "id" in step_data and step_data["id"] in existing_step_ids:
+
+                step = Step.objects.get(id=step_data["id"])
+                step.description = step_data["description"]
+                step.step_num = step_data["step_num"]  
+                step.save()
+            else:
+                new_step = Step.objects.create(recipe=instance, **step_data)
+                updated_step_ids.add(new_step.id)
+
+        Step.objects.filter(recipe=instance).exclude(id__in=updated_step_ids).delete()
+
+        existing_image_ids = json.loads(request.data.get("existing_images", "[]"))
+        uploaded_images = request.FILES.getlist("images")
+
+        updated_image_ids = set(existing_image_ids)
+        for image_file in uploaded_images:
+            new_image = RecipeImage(recipe=instance)
+            new_image.image = image_file
+            new_image.save()
+            updated_image_ids.add(new_image.id)
+
+        RecipeImage.objects.filter(recipe=instance).exclude(id__in=updated_image_ids).delete()
+
+        instance.title = validated_data.get("title", instance.title)
+        instance.description = validated_data.get("description", instance.description)
+        instance.origin_country = validated_data.get("origin_country", instance.origin_country)
+        instance.save()
 
         return instance
+
 
 
     def get_likes(self, obj):

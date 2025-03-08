@@ -4,9 +4,14 @@ import {
   forgotPasswordRequest,
   forgotPasswordVerify,
   signUp,
+  updateUser,
   verifiedPasswordReset,
 } from "@/lib/services/api/accountServices";
-import { ResetPasswordFormData, SignUpFormData } from "@/lib/types/authTypes";
+import {
+  EditUserFormData,
+  ResetPasswordFormData,
+  SignUpFormData,
+} from "@/lib/types/authTypes";
 
 const useMutationAuth = () => {
   const useMutationSignUp = () => {
@@ -53,6 +58,19 @@ const useMutationAuth = () => {
       },
       onError(error) {
         console.error("Verified Password Reset Error:", error);
+      },
+    });
+  };
+
+  const useMutationUpdateUser = () => {
+    return useMutation({
+      mutationFn: ({ id, data }: { id: string; data: EditUserFormData }) =>
+        updateUser(id, data),
+      onSuccess(data) {
+        console.log("Edit Success:", data);
+      },
+      onError(error) {
+        console.error("Edit Error:", error);
       },
     });
   };

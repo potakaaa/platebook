@@ -11,12 +11,17 @@ import { useUserStore } from "@/store/user/UserStore";
 import DeleteButton from "@/components/userPage/DeleteButton";
 import EditRecipeDialog from "@/components/post/EditRecipeDialog";
 import PostEditButton from "@/components/post/PostEditButton";
+import { Frown } from "lucide-react";
 
-const page = (props: { params: Promise<{ id: string }> }) => {
+const page = (props: { params: Promise<{ recipeId: string }> }) => {
   const params = React.use(props.params);
 
   const { useQueryFetchRecipe } = useQueryRecipe();
-  const { data: recipe, isPending, error } = useQueryFetchRecipe(params.id);
+  const {
+    data: recipe,
+    isPending,
+    error,
+  } = useQueryFetchRecipe(params.recipeId);
 
   if (isPending) {
     return (
@@ -25,6 +30,14 @@ const page = (props: { params: Promise<{ id: string }> }) => {
       </div>
     );
   }
+
+  if (error)
+    return (
+      <div className="flex flex-row gap-2 mt-10">
+        <p>Error loading user</p>
+        <Frown className="size-5 text-primary drop-shadow-sm" />
+      </div>
+    );
 
   const imageUrls = recipe?.images.map((image: any) => image.image_url) || [];
 
@@ -42,7 +55,7 @@ const page = (props: { params: Promise<{ id: string }> }) => {
       >
         {recipe?.chef.username}
       </span>
-      <PostEditButton id={params.id} recipe={recipe} />
+      <PostEditButton id={params.recipeId} recipe={recipe} />
       <section id="carousel" className="w-full">
         <PostCarousel images={imageUrls} />
       </section>

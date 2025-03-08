@@ -223,22 +223,53 @@ export const editRecipe = async (id: string, data: EditRecipe) => {
   try {
     const formData = new FormData();
 
-    const jsonData = { ...data, images: data.images.map(image => ({
-      image: image.id
-    }))};
-    
-    formData.append('data', JSON.stringify(jsonData));
+    const existingIngredientIds = data.ingredients
+      .filter((ingredient) => ingredient.id)
+      .map((ingredient) => ingredient.id);
 
-    data.images.forEach((image, index) => {
-      if (image.image) {
-        formData.append('images', image.image);
+    formData.append(
+      "existing_ingredients",
+      JSON.stringify(existingIngredientIds)
+    );
+    let allIngredients = data.ingredients;
+    formData.append("ingredients", JSON.stringify(allIngredients));
+
+    const existingStepsIds = data.steps
+      .filter((step) => step.id)
+      .map((step) => step.id);
+    formData.append("existing_steps", JSON.stringify(existingStepsIds));
+
+    let allSteps = data.steps;
+    allSteps = allSteps.map((step, index) => ({
+      ...step,
+      step_num: index + 1,
+    }));
+
+    formData.append("steps", JSON.stringify(allSteps));
+    formData.append("existing_steps", JSON.stringify(existingStepsIds));
+
+    const keptImageIds = data.images
+      .filter((image) => image.id)
+      .map((image) => image.id);
+    formData.append("existing_images", JSON.stringify(keptImageIds));
+
+    data.images.forEach((image) => {
+      if (image.image && !image.id) {
+        formData.append("images", image.image);
       }
     });
 
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("origin_country", data.origin_country);
+
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
 
     const response = await axiosClient.put(`/recipes/${id}/`, formData, {
       headers: {
-        "Content-Type": "multipart/form-data",  
+        "Content-Type": "multipart/form-data",
       },
     });
 
@@ -248,4 +279,5 @@ export const editRecipe = async (id: string, data: EditRecipe) => {
     throw error;
   }
 };
+
 

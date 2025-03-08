@@ -5,18 +5,26 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import useQueryAuth from "@/hooks/tanstack/auth/useQueryAuth";
 import { Frown, UserPlus } from "lucide-react";
-import React from "react";
-import EditButton from "@/components/userPage/EditButton";
+import React, { useEffect } from "react";
 import { useUserStore } from "@/store/user/UserStore";
 import FollowButton from "@/components/userPage/FollowButton";
+import EditUserDialog from "@/components/userPage/EditUserDialog";
 
-const page = (props: { params: Promise<{ id: string }> }) => {
+
+const page = (props: { params: Promise<{ userId: string }> }) => {
   const params = React.use(props.params);
   const { useQueryGetUserbyID } = useQueryAuth();
-  const { data: user, isPending, error } = useQueryGetUserbyID(params.id);
+  const { data: user, isPending, error } = useQueryGetUserbyID(params.userId);
   const { user: client } = useUserStore();
+  const [isOwner, setIsOwner] = React.useState(false);
 
-  const isOwner = client?.id === user?.id;
+  useEffect(() => {
+    if (user?.userId && client?.id && String(user.userId) === String(client.id)) {
+      setIsOwner(true);
+    } else {
+      setIsOwner(false);
+    }
+  }, [user?.userId, client?.id]); 
 
   if (isPending)
     return (
@@ -27,17 +35,13 @@ const page = (props: { params: Promise<{ id: string }> }) => {
       </div>
     );
 
-  if (1 === 1)
+  if (error)
     return (
       <div className="flex flex-row gap-2 mt-10">
         <p>Error loading user</p>
         <Frown className="size-5 text-primary drop-shadow-sm" />
       </div>
     );
-
-  const HandleUserEdit = () => {
-    console.log("Edit user");
-  };
 
   return (
     <div className="flex flex-col w-full min-h-screen justify-start items-center py-10 gap-0 sm:gap-3 md:gap-5">
@@ -97,15 +101,15 @@ const page = (props: { params: Promise<{ id: string }> }) => {
           </Button>
 
           {isOwner ? (
-            <EditButton onClick={() => console.log(1)} />
+            <EditUserDialog user={user} />
           ) : (
-            <FollowButton id={params.id} isFollowing={user.isFollowing} />
+            <FollowButton id={params.userId} isFollowing={user.isFollowing} />
           )}
         </div>
       </section>
       <span className="w-full border-b border-muted" />
       <div id="my-posts" className="w-full flex flex-col gap-5">
-        <InfiniteScrollComp userId={params.id} />
+        <InfiniteScrollComp userId={params.userId} />
       </div>
     </div>
   );
