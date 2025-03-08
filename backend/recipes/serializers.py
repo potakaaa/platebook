@@ -43,40 +43,7 @@ class RecipeListSerializer(serializers.ModelSerializer):
     isLiked = serializers.SerializerMethodField()
     isShared = serializers.SerializerMethodField()
     
-    def update(self, instance, validated_data):
-        request = self.context['request']
-        
-        ingredients_data = json.loads(request.data.get("ingredients", "[]"))
-        steps_data = json.loads(request.data.get("steps", "[]"))
-        images_data = request.FILES.getlist("images", [])
-        
-        existing_ingredient_ids = request.data.getlist("existing_ingredients", [])
-        existing_step_ids = request.data.getlist("existing_steps", [])
-       
-        instance.title = validated_data.get("title", instance.title)
-        instance.description = validated_data.get("description", instance.description)
-        instance.save()
-
-        existing_ingredient_objs = Ingredient.objects.filter(id__in=existing_ingredient_ids, recipe=instance)
-        
-        for ingredient_data in ingredients_data:
-            Ingredient.objects.create(recipe=instance, **ingredient_data)
-
-        Ingredient.objects.filter(recipe=instance).exclude(id__in=existing_ingredient_objs.values_list("id", flat=True)).delete()
-
-        existing_step_objs = Step.objects.filter(id__in=existing_step_ids, recipe=instance)
-
-        for step_data in steps_data:
-            Step.objects.create(recipe=instance, **step_data)
-
-        Step.objects.filter(recipe=instance).exclude(id__in=existing_step_objs.values_list("id", flat=True)).delete()
-
-        RecipeImage.objects.filter(recipe=instance).delete()  
-
-        for img_file in images_data:
-            RecipeImage.objects.create(recipe=instance, image=img_file)
-
-        return instance
+   
 
     
     def get_likes(self, obj):
@@ -171,6 +138,39 @@ class RecipeSerializer(serializers.ModelSerializer):
             'isLiked': {'read_only': True},
             'isShared': {'read_only': True}
         }
+
+    def update(self, instance, validated_data):
+        request = self.context['request']
+
+        # Print the raw request data (for debugging)
+        print("REQUEST DATA (raw):", request.data)  # Print raw data
+        print("FILES:", request.FILES)  # Print files received
+
+        # Check if 'ingredients' is already a list; no need to json.loads if it is
+        ingredients_data = request.data.get("ingredients", [])
+        if isinstance(ingredients_data, str):
+            ingredients_data = json.loads(ingredients_data)
+        print("Ingredients data:", ingredients_data)
+
+        # Check if 'steps' is already a list; no need to json.loads if it is
+        steps_data = request.data.get("steps", [])
+        if isinstance(steps_data, str):
+            steps_data = json.loads(steps_data)
+        print("Steps data:", steps_data)
+
+        # Get the image files sent in the 'images' field
+        images_data = request.FILES.getlist("images")  # Access image files sent under the 'images' key
+        print("Images data:", images_data)
+
+        # Now you can access both the parsed JSON data and the uploaded image files
+        for image_file in images_data:
+            print(f"Processing image: {image_file.name}")
+            # You can process the image here, e.g., saving it to the server or associating it with a recipe.
+
+        # Temporarily skipping database update logic
+        # Here you would update the instance with the received data
+
+        return instance
 
 
     def get_likes(self, obj):

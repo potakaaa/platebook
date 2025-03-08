@@ -16,7 +16,7 @@ import {
 import { z } from "zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitRecipe } from "@/lib/types/recipeTypes";
+import { RecipeImage, SubmitRecipe } from "@/lib/types/recipeTypes";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Trash } from "lucide-react";
@@ -331,13 +331,14 @@ const PostRecipeDialog = () => {
                   <FormControl>
                     <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
                       <FileUpload
-                        onFileChange={(files: File[]) => field.onChange(files)}
+                        onFileChange={(files: (RecipeImage | File)[]) => field.onChange(files.filter((file): file is File => file instanceof File))}
                         onBlur={field.onBlur}
                         name={field.name}
                         ref={field.ref}
                         multiple
                         id="images"
                         type="file"
+                        fileType="file"
                       />
                     </div>
                   </FormControl>

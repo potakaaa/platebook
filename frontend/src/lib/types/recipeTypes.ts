@@ -11,7 +11,8 @@ export type SubmitRecipe = {
 
 export type RecipeImage = {
   id?: string;
-  image_url: string;
+  image_url?: string;
+  image?: File;
 };
 
 export type EditRecipe = {
@@ -29,7 +30,7 @@ export type SubmitEditRecipe = {
   origin_country: string;
   steps: Step[];
   ingredients: Ingredient[];
-  images: File[];
+  images: RecipeImage[];
 };
 
 export type Ingredient = {

@@ -219,7 +219,7 @@ export const deleteRecipe = async (id: string) => {
   }
 };
 
-export const editRecipe = async (id: string, data: FormData) => {
+export const editRecipe = async (id: string, data: EditRecipe) => {
   try {
     const response = await axiosClient.put(`/recipes/${id}/`, data, {
       headers: {

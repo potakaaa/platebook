@@ -18,6 +18,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   EditRecipe,
+  RecipeImage,
   SubmitEditRecipe,
   SubmitRecipe,
 } from "@/lib/types/recipeTypes";
@@ -49,6 +50,11 @@ const IngredientSchema = z.object({
     .min(1, "Quantity is required")
     .max(50, "Quantity cannot be longer than 50 characters"),
 });
+
+const ImageSchema = z.object({
+  id: z.string().optional(),
+  image: z.instanceof(File)
+})
 
 const StepSchema = z.object({
   id: z.string().optional(),
@@ -97,7 +103,7 @@ const editRecipeSchema = z.object({
     .min(1, "At least one ingredient is required"),
 
   images: z
-    .array(z.instanceof(File))
+    .array(ImageSchema)
     .refine((files) => (files ? files.length > 0 : true), {
       message: "At least one image is required",
     }),
@@ -110,11 +116,7 @@ interface EditRecipeDialogProps {
 
 const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
   const { useMutationEditRecipe } = useMutationRecipe();
-  const { mutate: postRecipe, isPending } = useMutationEditRecipe();
-
-  const [preprocessedImages, setPreprocessedImages] = useState<
-    { id: string; file: File }[]
-  >([]);
+  const { mutate: editRecipe, isPending } = useMutationEditRecipe();
 
   useEffect(() => {
     const processImages = async () => {
@@ -123,17 +125,15 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
         const filesWithIds = await Promise.all(
           recipe.images.map(async (img, index) => {
             const file = await urlToFile(
-              img.image_url,
+              img.image_url || '',
               `recipe_image_${index}.jpg`
             );
-            return { id: img.id || `default_id_${index}`, file };
+            return { id: String(img.id), file };
           })
         );
-        setPreprocessedImages(filesWithIds);
-
         form.setValue(
           "images",
-          filesWithIds.map((file) => file.file)
+          filesWithIds.map((file) => ({ id: file.id, image: file.file }))
         );
       }
     };
@@ -181,53 +181,9 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
 
   const [open, setOpen] = useState(false);
 
-  const onSubmit = async (data: SubmitEditRecipe) => {
-    console.log("Data being submitted:", data);
-
-    const formData = new FormData();
-
-    formData.append("title", data.title);
-    formData.append("description", data.description);
-    formData.append("origin_country", data.origin_country);
-
-    const newIngredients = data.ingredients.filter(
-      (ing) => ing.id === undefined
-    );
-    const existingIngredientIds = data.ingredients
-      .filter((ing) => ing.id && !ing.id.startsWith("temp_id"))
-      .map((ing) => ing.id);
-
-    formData.append("ingredients", JSON.stringify(newIngredients));
-    existingIngredientIds.forEach((id) => {
-      if (id) {
-        formData.append("existing_ingredients", id);
-      }
-    });
-
-    const newSteps = data.steps.filter((step) => step.id === undefined);
-    const existingStepIds = data.steps
-      .filter((step) => step.id && !step.id.startsWith("temp_id"))
-      .map((step) => step.id);
-
-    formData.append("steps", JSON.stringify(newSteps));
-    existingStepIds.forEach((id) => {
-      if (id) {
-        formData.append("existing_steps", id);
-      }
-    });
-
-    data.images?.forEach((image) => {
-      if (image instanceof File) {
-        formData.append("images", image);
-      }
-    });
-
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
-    postRecipe({ id, data: formData });
-  };
+  const onSubmit = form.handleSubmit((data) => {
+    editRecipe({ id: id, data: data as SubmitEditRecipe }, { onSuccess: () => setOpen(false) });
+  });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -239,12 +195,12 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
       dark:[&::-webkit-scrollbar-track]:bg-neutral-700
       dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar]:w-2 gap-2"
       >
-        <DialogTitle className="text-center font-bold">Create Post</DialogTitle>
+        <DialogTitle className="text-center font-bold">Edit Post</DialogTitle>
         <span className="border-b border-muted mb-2" />
         <Form {...form}>
           <form
             noValidate
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={onSubmit}
             className="flex flex-col gap-3"
           >
             <FormField
@@ -263,7 +219,6 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="description"
@@ -462,13 +417,20 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                     <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
                       <FileUpload
                         initialFiles={field.value}
-                        onFileChange={(files: File[]) => field.onChange(files)}
+                        onFileChange={(files: (File | RecipeImage)[]) => {
+                          if (files.every(file => file instanceof File)) {
+                            field.onChange(files as File[]);
+                          } else {
+                            field.onChange(files as RecipeImage[]);
+                          }
+                        }}
                         onBlur={field.onBlur}
                         name={field.name}
                         ref={field.ref}
                         multiple
                         id="images"
                         type="file"
+                        fileType="image"
                       />
                     </div>
                   </FormControl>

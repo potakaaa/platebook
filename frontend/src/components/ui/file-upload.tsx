@@ -6,6 +6,7 @@ import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { Trash } from "lucide-react";
 import { Button } from "./button";
+import { RecipeImage } from "@/lib/types/recipeTypes";
 
 const mainVariant = {
   initial: {
@@ -30,20 +31,24 @@ const secondaryVariant = {
 
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
-  onFileChange?: (files: File[]) => void; // Custom onFileChange prop
-  initialFiles?: File[];
+  onFileChange?: (files: (RecipeImage | File)[]) => void; // Custom onFileChange prop
+  initialFiles?:(RecipeImage | File)[];
+  fileType?: "image" | "file";
 }
 
 export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, onFileChange, initialFiles = [], ...props }, ref) => {
-    const [files, setFiles] = useState<File[]>(initialFiles);
+  ({ className, type, onFileChange, initialFiles = [], fileType, ...props }, ref) => {
+    const [files, setFiles] = useState<(RecipeImage | File)[]>(initialFiles);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-      setFiles(initialFiles);
+      if (initialFiles.length > 0)
+      {
+        setFiles(initialFiles);
+      }
     }, [initialFiles]);
 
-    const handleFileChange = (newFiles: File[]) => {
+    const handleFileChange = (newFiles: (RecipeImage | File)[]) => {
       setFiles((prevFiles) => [...prevFiles, ...newFiles]);
       onFileChange && onFileChange([...files, ...newFiles]);
     };
@@ -55,7 +60,10 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
     const { getRootProps, isDragActive } = useDropzone({
       multiple: true,
       noClick: true,
-      onDrop: handleFileChange,
+      onDrop: (acceptedFiles) => {
+        const newFiles = acceptedFiles.map((file) => ({id: undefined, image: file }));
+        handleFileChange(newFiles);
+      },
       onDropRejected: (error) => {
         console.log(error);
       },
@@ -75,7 +83,12 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
             ref={fileInputRef}
             id="file-upload-handle"
             type="file"
-            onChange={(e) => handleFileChange(Array.from(e.target.files || []))}
+            onChange={(e) => {
+              const newFiles = Array.from(e.target.files || []).map((file) =>
+                fileType === "image" ? { image: file } : file
+              );
+              handleFileChange(newFiles);
+            }}
             className="hidden"
             accept="image/*"
             {...props}
@@ -93,7 +106,11 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
             <div className="relative w-full mt-10 max-w-xl mx-auto">
               {files.length > 0 &&
                 files.map((file, idx) => {
-                  const image = URL.createObjectURL(file);
+                  const fileURL = fileType === "image" && "image" in file && (file as RecipeImage).image ? URL.createObjectURL((file as RecipeImage).image as Blob) : URL.createObjectURL(file as File);
+                      const fileName =fileType === "image" && "image" in file ? (file as RecipeImage).image?.name : (file as File).name;
+                      const fileSize = fileType === "image" && "image" in file ?(((file as RecipeImage).image?.size ?? 0) / (1024 * 1024) ).toFixed(2): ((file as File).size / (1024 * 1024)).toFixed(2);
+                      const fileTypeLabel = fileType === "image" && "image" in file ? "Image" : "File";
+
                   return (
                     <motion.div
                       key={"file" + idx}
@@ -113,12 +130,12 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
                           className="size-24 rounded-md shadow-md w-40 max-w-40 flex-[1] overflow-hidden"
                         >
                           <Image
-                            src={image}
-                            alt={file.name}
+                            src={fileURL}
+                            alt={fileType === "file"? (file as File).name: (file as RecipeImage).image?.name || "image"} 
                             width={500}
                             height={500}
                             className="object-cover size-full"
-                            onLoad={() => URL.revokeObjectURL(image)}
+                            onLoad={() => URL.revokeObjectURL(fileURL)}
                           />
                         </motion.div>
                         <div className="flex flex-col justify-start w-52 flex-[2]">
@@ -128,7 +145,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
                             layout
                             className="text-base text-neutral-700 dark:text-neutral-300 truncate max-w-xs"
                           >
-                            {file.name}
+                            {fileName}
                           </motion.p>
                           <motion.p
                             initial={{ opacity: 0 }}
@@ -136,7 +153,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
                             layout
                             className="rounded-lg py-1 w-fit flex-shrink-0 text-sm text-neutral-600 dark:bg-neutral-800 dark:text-white shadow-input"
                           >
-                            {(file.size / (1024 * 1024)).toFixed(2)} MB
+                            {fileSize} MB
                           </motion.p>
                           <motion.p
                             initial={{ opacity: 0 }}
@@ -144,7 +161,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
                             layout
                             className="px-1 py-0.5 rounded-md bg-gray-100 dark:bg-neutral-800 text-xs text-neutral-600 dark:text-neutral-400"
                           >
-                            {file.type}
+                            {fileTypeLabel}
                           </motion.p>
                         </div>
                       </div>
@@ -163,9 +180,6 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
                       </Button>
                     </motion.div>
 
-                    //   <div className="flex text-sm md:flex-row flex-col items-start md:items-center w-full mt-2 justify-between text-neutral-600 dark:text-neutral-400">
-
-                    //   </div>
                   );
                 })}
               {!files.length && (

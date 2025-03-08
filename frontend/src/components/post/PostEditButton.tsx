@@ -3,11 +3,12 @@ import { useUserStore } from "@/store/user/UserStore";
 import React from "react";
 import EditRecipeDialog from "./EditRecipeDialog";
 import DeleteButton from "../userPage/DeleteButton";
+import { FullRecipe } from "@/lib/types/recipeTypes";
 
-const PostEditButton = ({ id }: { id: string }) => {
+const PostEditButton = ({ id, recipe }: { id: string, recipe: FullRecipe }) => {
   const { user } = useUserStore();
-  const { useQueryFetchRecipe } = useQueryRecipe();
-  const { data: recipe, isPending, error } = useQueryFetchRecipe(id);
+
+  
   return (
     <>
       {recipe?.chef.userId === user?.id && (
