@@ -221,9 +221,24 @@ export const deleteRecipe = async (id: string) => {
 
 export const editRecipe = async (id: string, data: EditRecipe) => {
   try {
-    const response = await axiosClient.put(`/recipes/${id}/`, data, {
+    const formData = new FormData();
+
+    const jsonData = { ...data, images: data.images.map(image => ({
+      image: image.id
+    }))};
+    
+    formData.append('data', JSON.stringify(jsonData));
+
+    data.images.forEach((image, index) => {
+      if (image.image) {
+        formData.append('images', image.image);
+      }
+    });
+
+
+    const response = await axiosClient.put(`/recipes/${id}/`, formData, {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",  
       },
     });
 
@@ -233,3 +248,4 @@ export const editRecipe = async (id: string, data: EditRecipe) => {
     throw error;
   }
 };
+
