@@ -4,6 +4,7 @@ import React from "react";
 import { Button } from "../ui/button";
 import {
   IconBrandAppleFilled,
+  IconBrandDiscordFilled,
   IconBrandGoogleFilled,
   IconBrandX,
 } from "@tabler/icons-react";
@@ -18,9 +19,10 @@ const OauthButtons = () => {
         variant="outline"
         className="w-full relative group/btn dark:bg-transparent"
         type="button"
+        onClick={() => signIn("discord", { callbackUrl: "/home" })}
       >
-        <IconBrandAppleFilled size={24} />
-        <span className="sr-only">Login with Apple</span>
+        <IconBrandDiscordFilled size={24} />
+        <span className="sr-only">Login with Discord</span>
         <BottomGradient />
       </Button>
       <Button
