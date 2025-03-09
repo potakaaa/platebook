@@ -5,6 +5,9 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "./providers";
 
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
+
 const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",
