@@ -1,5 +1,5 @@
 "use client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   forgotPasswordRequest,
   forgotPasswordVerify,
@@ -14,6 +14,8 @@ import {
 } from "@/lib/types/authTypes";
 
 const useMutationAuth = () => {
+  const queryClient = useQueryClient();
+
   const useMutationSignUp = () => {
     return useMutation({
       mutationFn: (data: SignUpFormData) => signUp(data),
@@ -66,8 +68,8 @@ const useMutationAuth = () => {
     return useMutation({
       mutationFn: ({ id, data }: { id: string; data: EditUserFormData }) =>
         updateUser(id, data),
-      onSuccess(data) {
-        console.log("Edit Success:", data);
+      onSuccess(data, variables) {
+        queryClient.invalidateQueries({ queryKey: ["user", variables.id] });
       },
       onError(error) {
         console.error("Edit Error:", error);
