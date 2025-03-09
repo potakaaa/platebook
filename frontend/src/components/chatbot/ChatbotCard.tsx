@@ -128,7 +128,16 @@ const ChatbotCard = () => {
                       children={message.content}
                       remarkPlugins={[remarkGfm]}
                       components={{
-                        code({ node, inline, className, children, ...props }) {
+                        code({
+                          inline,
+                          className,
+                          children,
+                          ...props
+                        }: {
+                          inline?: boolean;
+                          className?: string;
+                          children?: React.ReactNode;
+                        }) {
                           return inline ? (
                             <code
                               {...props}
@@ -169,15 +178,14 @@ const ChatbotCard = () => {
                 </div>
               )}
               {error && (
-                <div className="flex flex-col ">
-                  <p>Error occured</p>
-                  <Button
-                    className="underline"
-                    type="button"
+                <div className="flex flex-row gap-2 justify-center mt-5">
+                  <p className="text-xs text-destructive">Error occured</p>
+                  <p
+                    className="text-xs hover:text-primary underline cursor-pointer"
                     onClick={() => reload()}
                   >
                     Retry
-                  </Button>
+                  </p>
                 </div>
               )}
               <div ref={scrollRef} />
