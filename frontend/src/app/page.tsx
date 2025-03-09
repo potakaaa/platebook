@@ -18,6 +18,8 @@ import {
 } from "@tabler/icons-react";
 import Image from "next/image";
 
+export const dynamic = "force-dynamic";
+
 const LandingPage = () => {
   return (
     <div className="w-full my-5 lg:my-20">
