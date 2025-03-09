@@ -7,7 +7,6 @@ const google = createGoogleGenerativeAI({
 });
 
 export const runtime = "edge";
-export const dynamic = "force-dynamic";
 
 const generateId = () => Math.random().toString(36).slice(2, 15);
 

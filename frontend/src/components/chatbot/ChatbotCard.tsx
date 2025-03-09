@@ -1,5 +1,8 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
+
 import { IconMessageChatbot } from "@tabler/icons-react";
 import React from "react";
 import { useChat } from "@ai-sdk/react";
