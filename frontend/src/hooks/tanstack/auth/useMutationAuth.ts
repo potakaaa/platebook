@@ -80,6 +80,7 @@ const useMutationAuth = () => {
     useMutationForgotPasswordRequest,
     useMutationForgotPasswordVerify,
     useMutationVerifiedPasswordReset,
+    useMutationUpdateUser,
   };
 };
 

@@ -55,18 +55,15 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
     const [files, setFiles] = useState<(RecipeImage | File)[]>(initialFiles);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    console.log("initialFiles", initialFiles);
-
-    useEffect(() => {
-      if (initialFiles.length > 0) {
-        console.log("initialFiles", initialFiles);
-        setFiles(initialFiles);
-      }
-    }, [initialFiles]);
 
     const handleFileChange = (newFiles: (RecipeImage | File)[]) => {
-      setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-      onFileChange && onFileChange([...files, ...newFiles]);
+      // Ensure newFiles is always an array even if it contains just one file
+      const filesArray = Array.isArray(newFiles) ? newFiles : [newFiles];
+    
+      setFiles((prevFiles) => [...prevFiles, ...filesArray]);
+      onFileChange && onFileChange([...files, ...filesArray]);
+
+      console.log("Files:", files);
     };
 
     const handleRemoveFile = (fileToRemove: RecipeImage | File) => {

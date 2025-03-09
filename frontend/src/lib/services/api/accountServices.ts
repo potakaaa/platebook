@@ -94,7 +94,7 @@ export const getUserByID = async (id: string) => {
 
 export const updateUser = async (id: string, data: any) => {
   try {
-    const response = await axiosClient.patch(`/users/${id}/update/`, data);
+    const response = await axiosClient.patch(`/user/${id}/update/`, data);
 
     return response.data;
   } catch (error: any) {

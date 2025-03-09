@@ -31,11 +31,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import EditButton from "./EditButton";
 import { urlToFile } from "@/lib/utils/urlToFile";
 import { profile } from "console";
+import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
+import { EditUserFormData } from "@/lib/types/authTypes";
 
 
 const editUserSchema = z.object({
   username: z.string().nonempty(),
-  pfp: z.array(z.instanceof(File)).optional(),
+  pfp: z.array(z.instanceof(File))
 });
 
 interface EditUserDialogProps {
@@ -43,8 +45,8 @@ interface EditUserDialogProps {
 }
 
 const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
-  const { useMutationEditRecipe } = useMutationRecipe();
-  const { mutate: editRecipe, isPending } = useMutationEditRecipe();
+  const { useMutationUpdateUser } = useMutationAuth();
+  const { mutate: updateUser, isPending } = useMutationUpdateUser();
 
   const form = useForm({
     resolver: zodResolver(editUserSchema),
@@ -57,18 +59,8 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    console.log(user);
-    if (open) {
-      form.reset({
-        username: user.username,
-        pfp: undefined,
-      });
-    }
-  }, [open]);
 
-  useEffect(() => {
-
-    console.log("PROCESSING IMAGE: ", user.pfp_url);
+    console.log("user: ", user);
 
     const processImages = async () => {
       if (user.pfp_url) {
@@ -86,7 +78,11 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
   
 
   const onSubmit = form.handleSubmit((data) => {
-
+    const formData: EditUserFormData = {
+      username: data.username,
+      pfp: data.pfp[0], 
+    };
+    updateUser({ id: user.userId, data: formData }, {onSuccess: () => setOpen(false)});
   });
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -111,10 +107,10 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
                     <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
                       <FileUpload
                         multiple={false}
-                        initialFiles={field.value} 
+                        initialFiles={field.value ? field.value :  []}  // Ensure initialFiles is always an array
                         onFileChange={(files: (File | RecipeImage)[]) => {
-                          const file = files[0] instanceof File ? files[0] : null;
-                          field.onChange(file);
+                          const file = files[0];  // Just take the first file when `multiple` is false
+                          field.onChange(file);    // Pass the single file directly to field.onChange
                         }}
                         onBlur={field.onBlur}
                         name={field.name}
