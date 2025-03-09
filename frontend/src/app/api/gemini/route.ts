@@ -7,6 +7,7 @@ const google = createGoogleGenerativeAI({
 });
 
 export const runtime = "edge";
+export const dynamic = "force-dynamic";
 
 const generateId = () => Math.random().toString(36).slice(2, 15);
 
@@ -31,7 +32,12 @@ export async function POST(request: Request) {
       messages: buildGoogleGenAIPrompt(messages),
       temperature: 0.5,
     });
-    return stream.toDataStreamResponse();
+    return stream.toDataStreamResponse({
+      headers: {
+        "Transfer-Encoding": "chunked",
+        Connection: "keep-alive",
+      },
+    });
   } catch (error) {
     console.error("Gemini API Error:", error);
     return new Response(JSON.stringify({ error: "An error occurred." }), {
