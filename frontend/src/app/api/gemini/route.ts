@@ -3,10 +3,11 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { initialMessage } from "@/lib/gemini/data";
 
 const google = createGoogleGenerativeAI({
-  apiKey: process.env.GEMINI_API_KEY || "",
+  apiKey: process.env.GOOGLE_API_KEY || "",
 });
 
 export const runtime = "edge";
+export const dynamic = "force-dynamic";
 
 const generateId = () => Math.random().toString(36).slice(2, 15);
 
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
   try {
     const { messages } = await request.json();
     const stream = await streamText({
-      model: google("gemini-2.0-flash-001"), // Ensure the correct model format
+      model: google("gemini-2.0-flash-lite-preview-02-05"), // Ensure the correct model format
       messages: buildGoogleGenAIPrompt(messages),
       temperature: 0.5,
     });

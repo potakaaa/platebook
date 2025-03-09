@@ -20,8 +20,10 @@ import remarkGfm from "remark-gfm";
 
 import { Input } from "../ui/input";
 import { CircleX, Loader2, SendHorizonal, X } from "lucide-react";
+import { unstable_noStore as noStore } from "next/cache";
 
 const ChatbotCard = () => {
+  noStore();
   const [isChatOpen, setIsChatOpen] = React.useState(false);
   const chatIconRef = React.useRef<HTMLButtonElement>(null);
 
