@@ -93,6 +93,67 @@ class GoogleLogin(SocialLoginView):
       except Exception as e:
           print(f"Cloudinary upload error: {e}")
           return None
+
+
+
+class DiscordOAuthLogin(APIView):
+    authentication_classes = []  
+
+    def post(self, request):
+        discord_id = request.data.get("discord_id")
+        username = request.data.get("username")
+        email = request.data.get("email")
+        avatar = request.data.get("avatar")
+
+        if not discord_id:
+            return Response({"error": "Invalid Discord ID"}, status=400)
+
+        user, created = CustomUserModel.objects.get_or_create(
+            discord_id=discord_id,
+            defaults={"username": username, "email": email}
+        )
+
+        if avatar:
+            uploaded_pfp_url = self.upload_image_from_url(avatar)
+            if uploaded_pfp_url:
+                user.pfp = uploaded_pfp_url
+                user.save()
+
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+        refresh_token = str(refresh)
+
+        return Response({
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "user": {
+                "id": str(user.userId),
+                "email": user.email,
+                "username": user.username,
+                "pfp_url": self.get_pfp_url(user)
+            }
+        })
+
+    def upload_image_from_url(self, image_url):
+        try:
+            response = requests.get(image_url)
+            response.raise_for_status()
+
+            upload_result = upload(
+                response.content,
+                folder="profile_pictures",
+                resource_type="image"
+            )
+
+            return upload_result["public_id"]
+
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching image from URL: {e}")
+            return None
+        except Exception as e:
+            print(f"Cloudinary upload error: {e}")
+            return None
+
     
 
 class UpdateUserView(RetrieveUpdateAPIView):

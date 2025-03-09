@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    "allauth.socialaccount.providers.twitter",
+    "allauth.socialaccount.providers.discord",
     'django_otp',
     'django_otp.plugins.otp_email',
     
@@ -86,10 +86,16 @@ SOCIALACCOUNT_PROVIDERS = {
             'access_type': 'online',
         }
     },
-    "twitter": {
-        "APP": None, #store in database like in google
-        "VERIFIED_EMAIL": False
+    'discord': {
+        "SCOPE": [
+            "identify",
+            "email",
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
     }
+
     
 }
 

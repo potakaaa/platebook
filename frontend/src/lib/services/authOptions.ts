@@ -5,6 +5,7 @@ import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { useUserStore } from "@/store/user/UserStore";
+import DiscordProvider from "next-auth/providers/discord";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -81,6 +82,17 @@ export const authOptions: NextAuthOptions = {
         },
       },
     }),
+
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID || "",
+      clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
+      authorization: {
+        params: {
+          scope: "identify email",
+          prompt: "consent",
+        },
+      },
+    }),
   ],
 
   callbacks: {
@@ -91,6 +103,38 @@ export const authOptions: NextAuthOptions = {
         }
 
         return true;
+      }
+
+      if (account?.provider === "discord") {
+        const { access_token } = account;
+        if (!access_token) {
+          console.error("No access token found for Discord");
+          return false;
+        }
+
+        try {
+          const response = await axiosClient.post("social/login/discord/", {
+            access_token,
+          });
+
+          const apiAccessToken = response.data.access_token;
+          const apiRefreshToken = response.data.refresh_token;
+          const id = response.data.user?.id;
+
+          if (!apiAccessToken) {
+            console.error("No access token returned from backend");
+            return false;
+          }
+
+          (user as AuthUser).image = response.data.user?.pfp_url || null;
+          (user as AuthUser).id = id;
+          (user as AuthUser).accessToken = apiAccessToken;
+          (user as AuthUser).refreshToken = apiRefreshToken;
+          return true;
+        } catch (error) {
+          console.error("Error signing in with Discord", error);
+          return false;
+        }
       }
 
       if (account?.provider === "google") {
