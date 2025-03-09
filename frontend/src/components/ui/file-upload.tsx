@@ -57,9 +57,14 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
 
 
     const handleFileChange = (newFiles: (RecipeImage | File)[]) => {
-      // Ensure newFiles is always an array even if it contains just one file
       const filesArray = Array.isArray(newFiles) ? newFiles : [newFiles];
-    
+
+      if (!multiple) {
+        setFiles(filesArray);
+        onFileChange && onFileChange(filesArray);
+        return;
+      }
+
       setFiles((prevFiles) => [...prevFiles, ...filesArray]);
       onFileChange && onFileChange([...files, ...filesArray]);
 

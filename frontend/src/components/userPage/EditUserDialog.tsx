@@ -37,7 +37,7 @@ import { EditUserFormData } from "@/lib/types/authTypes";
 
 const editUserSchema = z.object({
   username: z.string().nonempty(),
-  pfp: z.array(z.instanceof(File))
+  pfp: z.instanceof(File).optional(),
 });
 
 interface EditUserDialogProps {
@@ -52,7 +52,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
     resolver: zodResolver(editUserSchema),
     defaultValues: {
         username: user.username,
-        pfp: [],
+        pfp: undefined,
     },
   });
 
@@ -67,7 +67,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
 
         const pfpFile = await urlToFile(user.pfp_url, `${user.username || "profile_picture"}.jpg`);
         console.log("PFP FILE: ", pfpFile);
-        form.setValue("pfp", [pfpFile]); 
+        form.setValue("pfp", pfpFile); 
 
         console.log("FORM: ", form.getValues());
       }
@@ -80,7 +80,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
   const onSubmit = form.handleSubmit((data) => {
     const formData: EditUserFormData = {
       username: data.username,
-      pfp: data.pfp[0], 
+      pfp: data.pfp, 
     };
     updateUser({ id: user.userId, data: formData }, {onSuccess: () => setOpen(false)});
   });
@@ -107,10 +107,10 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
                     <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
                       <FileUpload
                         multiple={false}
-                        initialFiles={field.value ? field.value :  []}  // Ensure initialFiles is always an array
+                        initialFiles={field.value ? [field.value] :  []}  
                         onFileChange={(files: (File | RecipeImage)[]) => {
-                          const file = files[0];  // Just take the first file when `multiple` is false
-                          field.onChange(file);    // Pass the single file directly to field.onChange
+                          const file = files[0];
+                          field.onChange(file);   
                         }}
                         onBlur={field.onBlur}
                         name={field.name}

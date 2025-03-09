@@ -133,17 +133,43 @@ class CustomUserModelSerializer(ModelSerializer):
     return instance
 
       
-  def save(self, request):
-        user = CustomUserModel.objects.create_user(
-            username=self.validated_data["username"],
-            email=self.validated_data["email"],
-            password=self.validated_data["password1"],
-        )
-        pfp = self.validated_data.get("pfp", None)
-        if pfp:  
-          user.pfp = pfp
-        user.save()
-        return user
+  def save(self, request=None):
+    is_update = self.instance is not None  # Check if this is an update
+
+    username = self.validated_data.get("username", self.instance.username if is_update else None)
+    email = self.validated_data.get("email", self.instance.email if is_update else None)
+    password = self.validated_data.get("password1")
+
+    # Only enforce required fields if creating a new user
+    if not is_update and (not username or not email):
+        raise serializers.ValidationError({"error": "Username and email are required for new users."})
+
+    if is_update:  # Updating an existing user
+        if username:
+            self.instance.username = username
+        if email:
+            self.instance.email = email
+        if password:
+            self.instance.set_password(password)
+        if "pfp" in self.validated_data:
+            self.instance.pfp = self.validated_data["pfp"]
+
+        self.instance.save()
+        return self.instance
+
+    # Creating a new user
+    user = CustomUserModel.objects.create_user(
+        username=username,
+        email=email,
+        password=password,
+    )
+
+    if "pfp" in self.validated_data:
+        user.pfp = self.validated_data["pfp"]
+
+    user.save()
+    return user
+
     
 
 class OTPSerializer(serializers.Serializer):

@@ -94,7 +94,20 @@ export const getUserByID = async (id: string) => {
 
 export const updateUser = async (id: string, data: any) => {
   try {
-    const response = await axiosClient.patch(`/user/${id}/update/`, data);
+    const formData = new FormData();
+
+    // Append each field to formData
+    for (const key in data) {
+      if (data[key] !== undefined && data[key] !== null) {
+        formData.append(key, data[key]);
+      }
+    }
+
+    const response = await axiosClient.patch(`/user/${id}/update/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     return response.data;
   } catch (error: any) {

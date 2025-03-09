@@ -119,7 +119,7 @@ class UpdateUserView(RetrieveUpdateAPIView):
         serializer = self.get_serializer(user, data=request.data, partial=True)
 
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(request=request)
             return Response(
                 {"message": "User details updated successfully", "user": serializer.data},
                 status=status.HTTP_200_OK,
