@@ -3,7 +3,7 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { initialMessage } from "@/lib/gemini/data";
 
 const google = createGoogleGenerativeAI({
-  apiKey: process.env.GOOGLE_API_KEY || "",
+  apiKey: process.env.GOOGLE_API_KEY,
 });
 
 export const runtime = "edge";
