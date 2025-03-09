@@ -27,22 +27,30 @@ const buildGoogleGenAIPrompt = (messages: Message[]): Message[] => [
 export async function POST(request: Request) {
   try {
     const { messages } = await request.json();
+    console.log("Incoming messages:", messages);
+
     const stream = await streamText({
       model: google("gemini-2.0-flash-lite-preview-02-05"), // Ensure the correct model format
       messages: buildGoogleGenAIPrompt(messages),
       temperature: 0.5,
     });
+
+    console.log("Streaming response initialized...");
+
     return stream.toDataStreamResponse({
       headers: {
         "Transfer-Encoding": "chunked",
         Connection: "keep-alive",
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini API Error:", error);
-    return new Response(JSON.stringify({ error: "An error occurred." }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ error: "An error occurred.", details: error.message }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 }
