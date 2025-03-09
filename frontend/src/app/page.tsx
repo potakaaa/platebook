@@ -1,4 +1,5 @@
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
+import ChatbotCard from "@/components/chatbot/ChatbotCard";
 import HoverMe from "@/components/hero/HoverMe";
 import SearchInput from "@/components/hero/SearchInput";
 import Features from "@/components/landing/Features";
@@ -20,6 +21,7 @@ import Image from "next/image";
 const LandingPage = () => {
   return (
     <div className="w-full my-5 lg:my-20">
+      <ChatbotCard />
       <section className="absolute inset-0 w-full">
         <Navbar />
         <div className="flex-grow" />{" "}
@@ -182,8 +184,8 @@ const threeFeatures = [
     icon: IconBrandTabler,
   },
   {
-    title: "Smart AI Recipe Assistant",
-    desc: "Not sure what to cook? Our AI chatbot suggests recipes based on existing posts and your preferences.",
+    title: "Smart AI Guide Assistant",
+    desc: "Don't know how to use or navigate through the pages of Platebook? Meet PlateBot - Our Smart AI Chabot.",
     icon: IconMessageChatbot,
   },
 ];
