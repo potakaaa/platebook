@@ -137,7 +137,10 @@ const ChatbotCard = () => {
                               {children}
                             </code>
                           ) : (
-                            <pre {...props} className="bg-grey-200 p-2 rounded">
+                            <pre
+                              {...(props as React.HTMLAttributes<HTMLPreElement>)}
+                              className="bg-grey-200 p-2 rounded"
+                            >
                               <code>{children}</code>
                             </pre>
                           );
