@@ -13,7 +13,7 @@ const FeedChoice = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center ">
       <section
         id="feed-choice"
         className="flex flex-row w-full justify-evenly items-center space-x-4 text-sm mb-5 md:mb-10 border-muted border-b relative"
@@ -43,7 +43,9 @@ const FeedChoice = () => {
         </Button>
       </section>
 
-      {feed === "for-you" ? <InfiniteScrollComp /> : <FollowingTab />}
+      <div className="w-full">
+        {feed === "for-you" ? <InfiniteScrollComp /> : <FollowingTab />}
+      </div>
     </div>
   );
 };

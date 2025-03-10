@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,11 +17,14 @@ import NavButtonLeft from "../nav/NavButtonsLeft";
 import { IconDisc } from "@tabler/icons-react";
 import RightPlateList from "./RightPlateList";
 import { ChevronRight } from "lucide-react";
+import { usePlatelistDrawer } from "@/store/platelist/usePlatelist";
 
 export function PlateListSidebarToggle() {
+  const { open, setPlateOpen } = usePlatelistDrawer();
+
   return (
-    <Sheet>
-      <SheetTrigger asChild className="">
+    <Sheet open={open} onOpenChange={setPlateOpen}>
+      <SheetTrigger asChild className="hidden md:block">
         <NavButtonLeft
           name="Plate List"
           icon={IconDisc}
@@ -31,7 +36,7 @@ export function PlateListSidebarToggle() {
           <SheetTitle className="text-lg text-primary font-bold">
             Plate List
           </SheetTitle>
-          <SheetDescription>
+          <SheetDescription className="text-xs sm:text-sm">
             Your Plate List is a collection of recipes you've saved to cook.
           </SheetDescription>
         </SheetHeader>

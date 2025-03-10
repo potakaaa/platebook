@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import colors from "tailwindcss/colors";
 
 const svgToDataUri = require("mini-svg-data-uri");
 
@@ -17,6 +18,7 @@ export default withMT({
   theme: {
     extend: {
       colors: {
+        ...colors,
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

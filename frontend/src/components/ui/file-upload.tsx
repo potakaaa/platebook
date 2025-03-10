@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { IconUpload } from "@tabler/icons-react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
@@ -54,7 +54,6 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const [files, setFiles] = useState<(RecipeImage | File)[]>(initialFiles);
     const fileInputRef = useRef<HTMLInputElement>(null);
-
 
     const handleFileChange = (newFiles: (RecipeImage | File)[]) => {
       const filesArray = Array.isArray(newFiles) ? newFiles : [newFiles];
@@ -238,14 +237,18 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
                   )}
                 >
                   {isDragActive ? (
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="text-neutral-600 flex flex-col items-center"
-                    >
-                      Drop it
-                      <IconUpload className="h-4 w-4 text-neutral-600 dark:text-neutral-400" />
-                    </motion.p>
+                    <AnimatePresence>
+                      <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ ease: [0, 0.25, 0.5, 1], duration: 0.2 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        className="text-neutral-600 flex flex-col items-center"
+                      >
+                        Drop it
+                        <IconUpload className="h-4 w-4 text-neutral-600 dark:text-neutral-400" />
+                      </motion.p>
+                    </AnimatePresence>
                   ) : (
                     <IconUpload className="h-4 w-4 text-neutral-600 dark:text-neutral-300" />
                   )}

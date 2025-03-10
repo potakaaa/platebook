@@ -6,6 +6,7 @@ import React, { ReactNode } from "react";
 import SearchStateProvider from "./SearchStateProvider";
 import SearchBar from "@/components/home/search/SearchBar";
 import ChatbotCard from "@/components/chatbot/ChatbotCard";
+import { PlateListSidebarToggle } from "@/components/home/platelist/PlateListSidebar";
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
@@ -32,7 +33,10 @@ const layout = ({ children }: { children: ReactNode }) => {
           <section id="search" className="mb-5 w-full">
             <SearchBar />
           </section>
-          <SearchStateProvider>{children}</SearchStateProvider>
+          <SearchStateProvider>
+            <PlateListSidebarToggle />
+            {children}
+          </SearchStateProvider>
         </section>
         <section
           id="right-platelist"

@@ -1,4 +1,5 @@
 "use client";
+
 import InfiniteScrollComp from "@/components/home/feed/InfiniteScroll";
 import Spinner from "@/components/loader/Spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,7 +11,6 @@ import { useUserStore } from "@/store/user/UserStore";
 import FollowButton from "@/components/userPage/FollowButton";
 import EditUserDialog from "@/components/userPage/EditUserDialog";
 
-
 const page = (props: { params: Promise<{ userId: string }> }) => {
   const params = React.use(props.params);
   const { useQueryGetUserbyID } = useQueryAuth();
@@ -19,12 +19,16 @@ const page = (props: { params: Promise<{ userId: string }> }) => {
   const [isOwner, setIsOwner] = React.useState(false);
 
   useEffect(() => {
-    if (user?.userId && client?.id && String(user.userId) === String(client.id)) {
+    if (
+      user?.userId &&
+      client?.id &&
+      String(user.userId) === String(client.id)
+    ) {
       setIsOwner(true);
     } else {
       setIsOwner(false);
     }
-  }, [user?.userId, client?.id]); 
+  }, [user?.userId, client?.id]);
 
   if (isPending)
     return (

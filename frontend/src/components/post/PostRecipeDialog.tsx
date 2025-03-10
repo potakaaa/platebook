@@ -25,6 +25,7 @@ import ToolTipButton from "../home/buttons/ToolTipButton";
 import { FileUpload } from "../ui/file-upload";
 import useMutationRecipe from "@/hooks/tanstack/recipe/useMutationRecipe";
 import { useQueryClient } from "@tanstack/react-query";
+import { usePostDialogStore } from "@/store/post/PostDialogStore";
 
 const IngredientSchema = z.object({
   name: z
@@ -124,7 +125,7 @@ const PostRecipeDialog = () => {
     name: "steps",
   });
 
-  const [open, setOpen] = useState(false);
+  const { open, setOpen } = usePostDialogStore();
 
   const onSubmit = async (data: SubmitRecipe) => {
     postRecipe(data, {
