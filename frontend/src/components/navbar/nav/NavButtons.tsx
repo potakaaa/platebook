@@ -2,6 +2,7 @@ import { useChatbot } from "@/store/chatbot/useChatbotStore";
 import { IconMessageChatbot } from "@tabler/icons-react";
 import {
   BookUser,
+  Coffee,
   HelpCircleIcon,
   InfoIcon,
   PencilLine,
@@ -58,7 +59,7 @@ export const getNavButtons = (
     },
     {
       name: "Buy us Coffee",
-      icon: <InfoIcon className={navButtonIconStyles} />,
+      icon: <Coffee className={navButtonIconStyles} />,
       id: "about",
       onClick: () => setIsCoffeeOpen(true),
     },
