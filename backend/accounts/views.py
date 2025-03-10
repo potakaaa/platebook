@@ -421,6 +421,7 @@ class GetUserRecipesView(ListAPIView):
         recipes = Recipe.objects.filter(chef=user).select_related("chef")
 
         if not recipes.exists():
-            return Response({"message": "No recipes found"}, status=status.HTTP_404_NOT_FOUND)
+            return Recipe.objects.none() 
+
 
         return recipes
