@@ -134,6 +134,7 @@ const ChatbotCard = ({ forHero }: { forHero?: boolean }) => {
                         height={200}
                         alt="Platebook Logo"
                         className="object-cover size-8 drop-shadow-md text-center"
+                        priority
                       />
                       <p className="text-xs">
                         Hello, I'm PlateBot. Ask me anything!

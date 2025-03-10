@@ -11,11 +11,13 @@ import { useUserStore } from "@/store/user/UserStore";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useFocusStore } from "@/store/focus/useFocusStore";
 
 const LeftNav = () => {
   const { user, resetStore } = useUserStore();
   const router = useRouter();
   const { data: session, status } = useSession();
+  const { setFocus, setFocusComponentId } = useFocusStore();
 
   return (
     <div className="flex flex-col size-full">
@@ -63,7 +65,14 @@ const LeftNav = () => {
           onClick={() => router.push("/home")}
         />
         <PostRecipeDialog />
-        <NavButtonLeft name="Search Recipe" icon={IconSearch} />
+        <NavButtonLeft
+          name="Search Recipe"
+          icon={IconSearch}
+          onClick={() => {
+            setFocus(true);
+            setFocusComponentId("search-home");
+          }}
+        />
         <ThemeToggle />
         <PlateListSidebarToggle />
       </div>

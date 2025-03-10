@@ -189,7 +189,7 @@ export function PlaceholdersAndVanishInput({
     >
       <canvas
         className={cn(
-          "absolute pointer-events-none  text-base transform scale-50 top-[20%] left-2 sm:left-8 origin-top-left filter invert dark:invert-0 pr-20",
+          "absolute pointer-events-none  text-base transform scale-50 top-[20%] left-2 sm:left-3 origin-top-left filter invert dark:invert-0 pr-20",
           !animating ? "opacity-0" : "opacity-100"
         )}
         ref={canvasRef}
@@ -206,7 +206,7 @@ export function PlaceholdersAndVanishInput({
         value={value}
         type="text"
         className={cn(
-          "w-full relative text-sm sm:text-base z-40 border-none bg-transparent h-full text-muted-foreground rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-5 pr-20",
+          "w-full relative text-sm sm:text-base z-40 border-none bg-transparent h-full text-muted-foreground rounded-full focus:outline-none focus:ring-0 pl-5 pr-20",
           animating && "text-transparent dark:text-transparent truncate"
         )}
       />
