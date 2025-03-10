@@ -43,18 +43,20 @@ const page = (props: { params: Promise<{ recipeId: string }> }) => {
 
   return (
     <div className="w-full flex flex-col justify-start items-center gap-5">
-      <span
-        id="post-name"
-        className="text-lg sm:text-xl font-semibold text-center"
-      >
-        {recipe?.title}
-      </span>
-      <span
-        id="post-chef"
-        className="text-xs sm:text-sm text-muted-foreground font-semibold"
-      >
-        {recipe?.chef.username}
-      </span>
+      <div className="flex flex-col gap-2">
+        <span
+          id="post-name"
+          className="text-lg sm:text-xl font-semibold text-center w-full bg-primary text-white rounded-lg p-2 px-4 shadow-lg"
+        >
+          {recipe?.title}
+        </span>
+        <span
+          id="post-chef"
+          className="text-xs text-center sm:text-sm text-muted-foreground font-semibold border border-muted-foreground/40 rounded-full"
+        >
+          {recipe?.chef.username}
+        </span>
+      </div>
       <PostEditButton id={params.recipeId} recipe={recipe} />
       <section id="carousel" className="w-full">
         <PostCarousel images={imageUrls} />

@@ -4,6 +4,7 @@ import React from "react";
 import { Carousel, IconButton } from "@material-tailwind/react";
 import Image from "next/image";
 import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
+import { AspectRatio } from "../ui/aspect-ratio";
 
 const PostCarousel = ({ images }: { images: string[] }) => {
   return (
@@ -18,7 +19,7 @@ const PostCarousel = ({ images }: { images: string[] }) => {
           variant="text"
           color="white"
           size="sm"
-          className="!absolute top-2/4 left-2 -translate-y-2/4"
+          className="!absolute top-2/4 left-2 -translate-y-2/4 drop-shadow-md"
           onClick={handlePrev}
           placeholder=""
           onPointerEnterCapture={() => {}}
@@ -32,7 +33,7 @@ const PostCarousel = ({ images }: { images: string[] }) => {
           variant="text"
           color="white"
           size="sm"
-          className="!absolute top-2/4 !right-4 -translate-y-2/4"
+          className="!absolute top-2/4 !right-4 -translate-y-2/4 drop-shadow-md"
           onClick={handleNext}
           placeholder=""
           onPointerEnterCapture={() => {}}
@@ -42,7 +43,7 @@ const PostCarousel = ({ images }: { images: string[] }) => {
         </IconButton>
       )}
       navigation={({ setActiveIndex, activeIndex, length }) => (
-        <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
+        <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2 ">
           {new Array(length).fill("").map((_, i) => (
             <span
               key={i}
@@ -56,13 +57,16 @@ const PostCarousel = ({ images }: { images: string[] }) => {
       )}
     >
       {images.map((image, index) => (
-        <Image
-          src={image}
-          alt={`image-${index}`}
-          key={index}
-          width={500}
-          height={500}
-        />
+        <AspectRatio ratio={4 / 3} className="w-full relative overflow-hidden">
+          <Image
+            src={image}
+            alt={`image-${index}`}
+            key={index}
+            width={700}
+            height={700}
+            className="object-cover size-full"
+          />
+        </AspectRatio>
       ))}
     </Carousel>
   );
