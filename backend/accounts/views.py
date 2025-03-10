@@ -414,10 +414,13 @@ class GetUserRecipesView(ListAPIView):
     pagination_class = UserRecipePagination 
 
     def get_queryset(self):
-        user_id = self.kwargs.get("userId") 
-        user = CustomUserModel.objects.filter(userId=user_id).first()
-        
-        if not user:
-            raise Http404("User not found")
-        
-        return Recipe.objects.filter(chef=user)
+        user_id = self.kwargs.get("userId")
+
+        user = get_object_or_404(CustomUserModel, userId=user_id)
+
+        recipes = Recipe.objects.filter(chef=user).select_related("chef")
+
+        if not recipes.exists():
+            return Response({"message": "No recipes found"}, status=status.HTTP_404_NOT_FOUND)
+
+        return recipes
