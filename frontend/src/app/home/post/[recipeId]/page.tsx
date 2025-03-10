@@ -13,8 +13,9 @@ export async function generateMetadata({
 }: {
   params: { recipeId: string };
 }): Promise<Metadata> {
+  const { recipeId } = params;
   try {
-    const recipe = await fetchPostByID(params.recipeId);
+    const recipe = await fetchPostByID(recipeId);
 
     if (!recipe) {
       return {
