@@ -29,6 +29,7 @@ import { usePostDialogStore } from "@/store/post/PostDialogStore";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const IngredientSchema = z.object({
   name: z
@@ -143,15 +144,20 @@ const PostRecipeDialog = () => {
     });
   };
 
+  const responsiveStyles = {
+    input: "text-xs sm:text-sm px-2 sm:px-4",
+    button: "px-1 mx-0 gap-0 w-full",
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <NavButtonLeft name="Post Recipe" icon={IconSquareRoundedPlus} />
       </DialogTrigger>
       <DialogContent
-        className="overflow-y-auto w-3/6 max-h-[80vh] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
+        className="overflow-y-auto w-5/6 max-h-[80vh] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
       dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-      dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar]:w-2 gap-2"
+      dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar]:w-2 gap-2 rounded-xl overflow-x-hidden"
       >
         {status === "loading" || !session ? (
           <div className="flex flex-row gap-2 items-center justify-center py-3">
@@ -193,7 +199,7 @@ const PostRecipeDialog = () => {
                     <FormItem>
                       <Input
                         placeholder="Enter title here..."
-                        className="py-5"
+                        className={cn("py-5", responsiveStyles.input)}
                         id="title"
                         type="text"
                         {...field}
@@ -210,7 +216,7 @@ const PostRecipeDialog = () => {
                       <Textarea
                         placeholder="Enter your recipe description here..."
                         id="description"
-                        className="min-h-44"
+                        className={cn("min-h-44", responsiveStyles.input)}
                         {...field}
                       />
                       <FormMessage />
@@ -244,6 +250,7 @@ const PostRecipeDialog = () => {
                                 id={`ingredients.${index}.name`}
                                 type="text"
                                 placeholder="Ingredient Name"
+                                className={cn("", responsiveStyles.input)}
                                 {...field}
                               />
                             </FormControl>
@@ -261,7 +268,8 @@ const PostRecipeDialog = () => {
                               <Input
                                 id={`ingredients.${index}.quantity`}
                                 type="text"
-                                placeholder="Quantity"
+                                placeholder="Qty."
+                                className={cn("", responsiveStyles.input)}
                                 {...field}
                               />
                             </FormControl>
@@ -271,27 +279,30 @@ const PostRecipeDialog = () => {
                         )}
                       />
 
-                      <ToolTipButton
-                        btnChildren={
-                          <Trash className="size-8 text-destructive" />
-                        }
-                        btnVariant="ghost"
-                        btnSize="icon"
-                        tipChildren={<p>Remove Ingredient</p>}
-                        onClick={() => removeIngredient(index)}
-                      />
-
-                      <ToolTipButton
-                        btnChildren={
-                          <IconSquareRoundedPlus className="size-8" />
-                        }
-                        btnVariant="ghost"
-                        btnSize="icon"
-                        tipChildren={<p>Add Ingredient</p>}
-                        onClick={() =>
-                          appendIngredient({ name: "", quantity: "" })
-                        }
-                      />
+                      <div className="flex gap-2">
+                        <ToolTipButton
+                          btnChildren={
+                            <Trash className="size-8 text-destructive" />
+                          }
+                          btnVariant="ghost"
+                          btnSize="icon"
+                          btnClassName={cn("", responsiveStyles.button)}
+                          tipChildren={<p>Remove Ingredient</p>}
+                          onClick={() => removeIngredient(index)}
+                        />
+                        <ToolTipButton
+                          btnChildren={
+                            <IconSquareRoundedPlus className="size-8" />
+                          }
+                          btnVariant="ghost"
+                          btnSize="icon"
+                          btnClassName={cn("", responsiveStyles.button)}
+                          tipChildren={<p>Add Ingredient</p>}
+                          onClick={() =>
+                            appendIngredient({ name: "", quantity: "" })
+                          }
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -309,8 +320,11 @@ const PostRecipeDialog = () => {
                                 id={`steps.${index}.step_num`}
                                 type="number"
                                 readOnly
+                                className={cn(
+                                  "text-center px-0 sm:p-2",
+                                  responsiveStyles.input
+                                )}
                                 value={index + 1}
-                                className="text-center"
                               />
                             </FormControl>
                             <FormMessage />
@@ -327,6 +341,7 @@ const PostRecipeDialog = () => {
                                 id={`steps.${index}.description`}
                                 type="text"
                                 placeholder="Step Description"
+                                className={cn("", responsiveStyles.input)}
                                 {...field}
                               />
                             </FormControl>
@@ -334,30 +349,33 @@ const PostRecipeDialog = () => {
                           </FormItem>
                         )}
                       />
-                      <ToolTipButton
-                        btnChildren={
-                          <Trash className="size-8 text-destructive" />
-                        }
-                        btnVariant="ghost"
-                        btnSize="icon"
-                        tipChildren={<p>Remove Step</p>}
-                        onClick={() => removeStep(index)}
-                      />
-
-                      <ToolTipButton
-                        btnChildren={
-                          <IconSquareRoundedPlus className="size-8" />
-                        }
-                        btnVariant="ghost"
-                        btnSize="icon"
-                        tipChildren={<p>Add Step</p>}
-                        onClick={() => {
-                          appendStep({
-                            step_num: stepFields.length + 1,
-                            description: "",
-                          });
-                        }}
-                      />
+                      <div className="flex gap-2">
+                        <ToolTipButton
+                          btnChildren={
+                            <Trash className="size-8 text-destructive" />
+                          }
+                          btnVariant="ghost"
+                          btnSize="icon"
+                          btnClassName={cn("", responsiveStyles.button)}
+                          tipChildren={<p>Remove Step</p>}
+                          onClick={() => removeStep(index)}
+                        />
+                        <ToolTipButton
+                          btnChildren={
+                            <IconSquareRoundedPlus className="size-8" />
+                          }
+                          btnVariant="ghost"
+                          btnSize="icon"
+                          btnClassName={cn("", responsiveStyles.button)}
+                          tipChildren={<p>Add Step</p>}
+                          onClick={() => {
+                            appendStep({
+                              step_num: stepFields.length + 1,
+                              description: "",
+                            });
+                          }}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>

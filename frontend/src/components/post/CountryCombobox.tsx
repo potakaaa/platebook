@@ -42,7 +42,7 @@ const CountryCombobox = ({
               variant="outline"
               role="combobox"
               className={cn(
-                "w-full justify-between",
+                "w-full justify-between text-xs px-2 sm:px-4 sm:text-sm lg:text-base",
                 !value && "text-muted-foreground"
               )}
             >
@@ -53,7 +53,7 @@ const CountryCombobox = ({
             </Button>
           </FormControl>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0">
+        <PopoverContent className="w-full p-0 mx-3 rounded-lg">
           <Command>
             <CommandInput placeholder="Search framework..." className="h-9" />
             <CommandList>
@@ -66,6 +66,7 @@ const CountryCombobox = ({
                     onSelect={() => {
                       setFormValue(country);
                     }}
+                    className="text-xs sm:text-sm lg:text-base"
                   >
                     {country}
                     <Check
