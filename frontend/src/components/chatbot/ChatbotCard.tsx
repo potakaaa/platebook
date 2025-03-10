@@ -52,7 +52,11 @@ const ChatbotCard = ({ forHero }: { forHero?: boolean }) => {
     <div className="fixed bottom-5 right-7 z-50">
       <AnimatePresence>
         {!isChatOpen ? (
-          <motion.div className="flex flex-row-reverse items-center space-x-2 ">
+          <motion.div
+            className={`flex flex-row-reverse items-center space-x-2 ${
+              !forHero && "hidden md:block"
+            }`}
+          >
             <motion.button
               className="rounded-full bg-primary p-3 cursor-pointer shadow-[0px_0px_28px_6px_rgba(232,145,23,0.3)] z-30"
               onClick={() => setIsChatOpen(true)}

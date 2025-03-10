@@ -14,6 +14,7 @@ import {
 import NavButtonLeft from "../nav/NavButtonsLeft";
 import { IconDisc } from "@tabler/icons-react";
 import RightPlateList from "./RightPlateList";
+import { ChevronRight } from "lucide-react";
 
 export function PlateListSidebarToggle() {
   return (
@@ -39,7 +40,9 @@ export function PlateListSidebarToggle() {
         </div>
         <SheetFooter>
           <SheetClose asChild>
-            <Button variant={"default"}>Close</Button>
+            <Button variant={"default"}>
+              Close <ChevronRight className="size-6" />
+            </Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>
