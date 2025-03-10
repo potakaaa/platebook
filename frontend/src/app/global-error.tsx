@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { IconError404 } from "@tabler/icons-react";
 import React from "react";
 
-const NotFound = ({
+const GlobalError = ({
   error,
   reset,
 }: {
@@ -26,4 +26,4 @@ const NotFound = ({
   );
 };
 
-export default NotFound;
+export default GlobalError;
