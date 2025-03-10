@@ -12,14 +12,16 @@ import { ButtonBorder } from "../ui/moving-border";
 import AnimatedHover, { buttonType } from "../ui/animated-hover";
 import { ModeToggle } from "../ui/mode-toggle";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { useChatbot } from "@/store/chatbot/ChatbotCardState";
+import { useChatbot } from "@/store/chatbot/useChatbotStore";
 import { useUserStore } from "@/store/user/UserStore";
+import { useFocusStore } from "@/store/focus/useFocusStore";
 
 const Navbar = () => {
   const router = useRouter();
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
   const { user } = useUserStore();
+  const { setFocus, setFocusComponentId } = useFocusStore();
 
   // Listen for scrollY changes and update state
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -29,7 +31,10 @@ const Navbar = () => {
   const navButtons: buttonType[] = [
     {
       name: "Search Recipe",
-      onClick: () => router.push("/search-recipe"),
+      onClick: () => {
+        setFocusComponentId("search-recipe");
+        setFocus(true);
+      },
       buttonClassName: "bg-transparent",
       variant: "ghost",
     },

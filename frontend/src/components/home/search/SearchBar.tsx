@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "../../ui/input";
 import { ArrowRightCircleIcon, SearchIcon } from "lucide-react";
-import useSearchStore from "@/store/search/SearchState";
+import useSearchStore from "@/store/search/useSearchStore";
 import { useDebounce } from "@/hooks/useDebounce";
 
 const SearchBar = () => {
@@ -12,9 +12,9 @@ const SearchBar = () => {
 
   useEffect(() => {
     if (debouncedValue === "" || debouncedValue === null) {
-      setSearchQuery(""); 
+      setSearchQuery("");
     } else if (debouncedValue) {
-      setSearchQuery(debouncedValue); 
+      setSearchQuery(debouncedValue);
     }
   }, [debouncedValue, setSearchQuery]);
 

@@ -12,11 +12,20 @@ import { useRouter } from "next/navigation";
 import { getNavButtons, navButtonDropStyles } from "./NavButtons";
 import { AlignJustify } from "lucide-react";
 import { SpotlightNew } from "@/components/ui/spotlight-new";
+import { useChatbot } from "@/store/chatbot/useChatbotStore";
+import { useFocusStore } from "@/store/focus/useFocusStore";
 
 const Dropdown = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const { setIsChatOpen } = useChatbot();
+  const { setFocusComponentId, setFocus } = useFocusStore();
   const router = useRouter();
-  const navButtons = getNavButtons(router);
+  const navButtons = getNavButtons(
+    router,
+    setIsChatOpen,
+    setFocusComponentId,
+    setFocus
+  );
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>

@@ -22,7 +22,7 @@ import { Input } from "../ui/input";
 import { CircleX, Loader2, SendHorizonal, X } from "lucide-react";
 import { unstable_noStore as noStore } from "next/cache";
 import { AnimatePresence, motion } from "framer-motion";
-import { useChatbot } from "@/store/chatbot/ChatbotCardState";
+import { useChatbot } from "@/store/chatbot/useChatbotStore";
 
 const ChatbotCard = ({ forHero }: { forHero?: boolean }) => {
   noStore();
@@ -95,7 +95,7 @@ const ChatbotCard = ({ forHero }: { forHero?: boolean }) => {
             style={{ transformOrigin: "bottom" }}
           >
             <Card className="w-[300px] sm:w-[350px] xl:w-[450px] p-0">
-              <CardHeader className="py-3 xl:py-4 px-2 sm:px-4 xl:px-5 items-start space-y-1">
+              <CardHeader className="py-3 xl:py-4 px-3 sm:px-4 xl:px-5 items-start space-y-1">
                 <div className="flex flex-row justify-between w-full">
                   <div className="flex flex-row gap-2 items-center">
                     <Image

@@ -14,10 +14,10 @@ import React from "react";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { usePostDialogStore } from "@/store/post/PostDialogStore";
+import { usePostDialogStore } from "@/store/post/usePostDialogStore";
 import { useUserStore } from "@/store/user/UserStore";
 import { signOut, useSession } from "next-auth/react";
-import { usePlatelistDrawer } from "@/store/platelist/usePlatelist";
+import { usePlatelistDrawer } from "@/store/platelist/usePlatelistStore";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 

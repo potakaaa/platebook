@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ArrowRightCircleIcon } from "lucide-react";
+import { useFocusStore } from "@/store/focus/useFocusStore";
 
 export function PlaceholdersAndVanishInput({
   placeholders,
@@ -175,12 +176,16 @@ export function PlaceholdersAndVanishInput({
     vanishAndSubmit();
     onSubmit && onSubmit(e);
   };
+
+  const { isFocused, setFocus } = useFocusStore();
   return (
     <form
       className={cn(
-        "w-full relative max-w-xl mx-auto bg-transparent dark:bg-zinc-800 border border-primary h-12 rounded-full overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200"
+        "w-full relative max-w-xl mx-auto bg-transparent dark:bg-zinc-800 border border-primary h-12 rounded-full overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200",
+        isFocused && "shadow-[0px_0px_51px_4px_rgba(255,119,46,0.5)]"
       )}
       onSubmit={handleSubmit}
+      onBlur={() => setFocus(false)}
     >
       <canvas
         className={cn(

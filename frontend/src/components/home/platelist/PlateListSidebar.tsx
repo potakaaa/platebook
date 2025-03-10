@@ -17,7 +17,7 @@ import NavButtonLeft from "../nav/NavButtonsLeft";
 import { IconDisc } from "@tabler/icons-react";
 import RightPlateList from "./RightPlateList";
 import { ChevronRight } from "lucide-react";
-import { usePlatelistDrawer } from "@/store/platelist/usePlatelist";
+import { usePlatelistDrawer } from "@/store/platelist/usePlatelistStore";
 
 export function PlateListSidebarToggle() {
   const { open, setPlateOpen } = usePlatelistDrawer();

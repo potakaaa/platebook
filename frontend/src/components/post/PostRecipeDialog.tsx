@@ -25,7 +25,7 @@ import ToolTipButton from "../home/buttons/ToolTipButton";
 import { FileUpload } from "../ui/file-upload";
 import useMutationRecipe from "@/hooks/tanstack/recipe/useMutationRecipe";
 import { useQueryClient } from "@tanstack/react-query";
-import { usePostDialogStore } from "@/store/post/PostDialogStore";
+import { usePostDialogStore } from "@/store/post/usePostDialogStore";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";

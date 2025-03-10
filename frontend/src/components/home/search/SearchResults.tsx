@@ -6,7 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
 import Spinner from "@/components/loader/Spinner";
 import useQueryRecipe from "@/hooks/tanstack/recipe/useQueryRecipe";
-import useSearchStore from "@/store/search/SearchState";
+import useSearchStore from "@/store/search/useSearchStore";
 import { useQueryClient } from "@tanstack/react-query";
 
 const SearchResults = () => {
