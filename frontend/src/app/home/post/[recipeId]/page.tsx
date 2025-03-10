@@ -53,30 +53,11 @@ export async function generateMetadata({
   }
 }
 
-const page = async ({ params }: { params: { recipeId: string } }) => {
-  // const { useQueryFetchRecipe } = useQueryRecipe();
-  // const {
-  //   data: recipe,
-  //   isPending,
-  //   error,
-  // } = useQueryFetchRecipe(params.recipeId);
+interface PageProps {
+  params: { recipeId: string };
+}
 
-  // if (isPending) {
-  //   return (
-  //     <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden">
-  //       <Spinner />
-  //     </div>
-  //   );
-  // }
-
-  // if (error)
-  //   return (
-  //     <div className="flex flex-row gap-2 mt-10">
-  //       <p>Error loading user</p>
-  //       <Frown className="size-5 text-primary drop-shadow-sm" />
-  //     </div>
-  //   );
-
+const page = async ({ params }: PageProps) => {
   let recipe;
 
   try {
