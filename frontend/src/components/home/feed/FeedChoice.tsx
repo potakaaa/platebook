@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import { Button } from "../../ui/button";
 import InfiniteScrollComp from "./InfiniteScroll";
 import FollowingTab from "./FollowingTab";
+import { useSession } from "next-auth/react";
 
 const FeedChoice = () => {
   const [feed, setFeed] = useState<"for-you" | "following">("for-you");
+  const { data: session, status } = useSession();
 
   const toggleFeed = () => {
     setFeed((prevFeed) => (prevFeed === "for-you" ? "following" : "for-you"));
@@ -26,6 +28,7 @@ const FeedChoice = () => {
               : "text-foreground font-normal"
           }`}
           onClick={toggleFeed}
+          disabled={status === "loading" || !session}
         >
           Following
         </Button>

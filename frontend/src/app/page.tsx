@@ -1,5 +1,6 @@
 import PostCard, { PostCardProps } from "@/components/cards/PostCard";
 import ChatbotCard from "@/components/chatbot/ChatbotCard";
+import BuyCoffeeDialog from "@/components/coffee/BuyCoffeeDialog";
 import HoverMe from "@/components/hero/HoverMe";
 import SearchInput from "@/components/hero/SearchInput";
 import Features from "@/components/landing/Features";
@@ -22,6 +23,7 @@ const LandingPage = () => {
   return (
     <div className="w-full my-5 lg:my-20">
       <ChatbotCard forHero />
+      <BuyCoffeeDialog />
       <section className="absolute inset-0 w-full">
         <Navbar />
         <div className="flex-grow" />{" "}

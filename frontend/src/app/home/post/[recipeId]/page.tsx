@@ -6,15 +6,19 @@ import { Ingredient, Step } from "@/lib/types/recipeTypes";
 import PostEditButton from "@/components/post/PostEditButton";
 import { Frown } from "lucide-react";
 import { fetchPostByID } from "@/lib/services/api/recipeServices";
-import { Metadata } from "next";
+import { Metadata, ResolvingMetadata } from "next";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { recipeId: string };
-}): Promise<Metadata> {
+interface PageProps {
+  params: Promise<{ recipeId: string }>;
+}
+
+export async function generateMetadata(
+  { params }: PageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { recipeId } = await params;
   try {
-    const recipe = await fetchPostByID(params.recipeId);
+    const recipe = await fetchPostByID(recipeId);
 
     if (!recipe) {
       return {
@@ -53,34 +57,11 @@ export async function generateMetadata({
   }
 }
 
-const page = async ({ params }: { params: { recipeId: string } }) => {
-  // const { useQueryFetchRecipe } = useQueryRecipe();
-  // const {
-  //   data: recipe,
-  //   isPending,
-  //   error,
-  // } = useQueryFetchRecipe(params.recipeId);
-
-  // if (isPending) {
-  //   return (
-  //     <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden">
-  //       <Spinner />
-  //     </div>
-  //   );
-  // }
-
-  // if (error)
-  //   return (
-  //     <div className="flex flex-row gap-2 mt-10">
-  //       <p>Error loading user</p>
-  //       <Frown className="size-5 text-primary drop-shadow-sm" />
-  //     </div>
-  //   );
-
+const page = async ({ params }: PageProps) => {
   let recipe;
 
   try {
-    recipe = await fetchPostByID(params.recipeId);
+    recipe = await fetchPostByID((await params).recipeId);
   } catch (error: any) {
     console.error("Error loading recipe", error);
     return (
@@ -109,7 +90,7 @@ const page = async ({ params }: { params: { recipeId: string } }) => {
           {recipe?.chef.username}
         </span>
       </div>
-      <PostEditButton id={params.recipeId} recipe={recipe} />
+      <PostEditButton id={(await params).recipeId} recipe={recipe} />
       <section id="carousel" className="w-full">
         <PostCarousel images={imageUrls} />
       </section>
