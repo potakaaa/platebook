@@ -50,15 +50,15 @@ const BuyCoffeeDialog = () => {
             <h1 className="text-sm font-semibold">💸 Where to send?</h1>
             <ul className="flex flex-col gap-2">
               <li className="flex flex-row items-center gap-2">
-                <RussianRubleIcon className="size-5 sm:size-8 p-1 bg-background text-primary shadow-md rounded-full" />
+                <RussianRubleIcon className="size-5 sm:size-8 p-1 sm:p-2 bg-background text-primary shadow-md rounded-full" />
                 <p className="text-xs sm:text-sm">Gcash: 09365625994</p>
               </li>
               <li className="flex flex-row items-center gap-2">
-                <CreditCard className="size-5 sm:size-8 p-1 bg-background text-primary shadow-md rounded-full" />
+                <CreditCard className="size-5 sm:size-8 p-1 sm:p-2 bg-background text-primary shadow-md rounded-full" />
                 <p className="text-xs sm:text-sm">Gotyme: 4601860028528034</p>
               </li>
               <li className="flex flex-row items-center gap-2">
-                <CreditCard className="size-5 sm:size-8 p-1 bg-background text-primary shadow-md rounded-full" />
+                <CreditCard className="size-5 sm:size-8 p-1 sm:p-2 bg-background text-primary shadow-md rounded-full" />
                 <p className="text-xs sm:text-sm">Seabank: 5294162910242504</p>
               </li>
             </ul>
