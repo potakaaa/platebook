@@ -48,7 +48,11 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
             postId={plate.recipe.id}
             postName={plate.recipe.title}
             postDesc={plate.recipe.description}
-            postImg={[plate.recipe.images[0]?.image_url]}
+            postImg={
+              plate.recipe.images?.map((img) => img.image_url) || [
+                plate.recipe.images?.[0].image_url,
+              ]
+            }
             isMobile={isMobile}
           />
         ))}
