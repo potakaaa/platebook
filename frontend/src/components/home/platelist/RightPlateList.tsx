@@ -26,7 +26,7 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
     );
   }
 
-  if (isFetchingPlateList) {
+  if (isFetchingPlateList && plateList.length === 0) {
     return (
       <span className="w-full flex items-center justify-center my-5 gap-3">
         <Loader2 className="animate-spin text-primary size-5" />

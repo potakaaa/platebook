@@ -281,3 +281,22 @@ export const editRecipe = async (id: string, data: EditRecipe) => {
 };
 
 
+export async function fetchPostByID(id: string) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}recipes/${id}/`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
+}
