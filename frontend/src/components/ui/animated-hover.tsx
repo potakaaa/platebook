@@ -37,6 +37,10 @@ const AnimatedHover = ({
             key={index}
             className={cn("relative group block")}
             href="#"
+            onClick={(e) => {
+              e.preventDefault(); // Prevent the default page refresh
+              if (button.onClick) button.onClick(); // Execute the button's function
+            }}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
@@ -64,6 +68,7 @@ const AnimatedHover = ({
                   button.buttonClassName
                 )}
                 variant={variant}
+                onClick={button.onClick}
               >
                 {button.name}
               </Button>

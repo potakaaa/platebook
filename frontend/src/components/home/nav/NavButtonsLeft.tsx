@@ -7,12 +7,14 @@ const NavButtonLeft = ({
   parentCN = "",
   divCN = "",
   onClick = () => {},
+  disabled = false,
 }: {
   name: string;
   icon: React.ComponentType<any>;
   parentCN?: string;
   divCN?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }) => {
   return (
     <section
@@ -22,6 +24,7 @@ const NavButtonLeft = ({
         parentCN
       )}
       onClick={onClick}
+      aria-disabled={disabled}
     >
       <div
         className={cn(

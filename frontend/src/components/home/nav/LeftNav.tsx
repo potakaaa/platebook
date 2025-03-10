@@ -2,7 +2,7 @@
 import { IconHome, IconLogout, IconSearch } from "@tabler/icons-react";
 import CustomAvatar from "../../user/CustomAvatar";
 import NavButtonLeft from "./NavButtonsLeft";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "../buttons/ThemeToggle";
 import HomeLogo from "../../navbar/nav/HomeLogo";
 import PostRecipeDialog from "../../post/PostRecipeDialog";
@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 const LeftNav = () => {
   const { user, resetStore } = useUserStore();
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   return (
     <div className="flex flex-col size-full">
@@ -58,11 +59,15 @@ const LeftNav = () => {
       <NavButtonLeft
         name="Log Out"
         icon={IconLogout}
-        parentCN="mt-auto"
+        parentCN={`mt-auto ${
+          status === "loading" || !session ? "hover:none" : ""
+        }`}
+        divCN={`${status === "loading" || !session ? "opacity-50" : ""}`}
         onClick={() => {
           resetStore();
           signOut({ callbackUrl: "/" });
         }}
+        disabled={status === "loading" || !session}
       />
     </div>
   );

@@ -18,12 +18,10 @@ import {
 } from "@tabler/icons-react";
 import Image from "next/image";
 
-export const dynamic = "force-dynamic";
-
 const LandingPage = () => {
   return (
     <div className="w-full my-5 lg:my-20">
-      <ChatbotCard />
+      <ChatbotCard forHero />
       <section className="absolute inset-0 w-full">
         <Navbar />
         <div className="flex-grow" />{" "}

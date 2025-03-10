@@ -5,6 +5,7 @@ import { SpotlightNew } from "@/components/ui/spotlight-new";
 import React, { ReactNode } from "react";
 import SearchStateProvider from "./SearchStateProvider";
 import SearchBar from "@/components/home/search/SearchBar";
+import ChatbotCard from "@/components/chatbot/ChatbotCard";
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
@@ -17,6 +18,7 @@ const layout = ({ children }: { children: ReactNode }) => {
       dark:[&::-webkit-scrollbar-track]:bg-neutral-700
       dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 `}
       >
+        <ChatbotCard />
         <section
           id="left-nav"
           className="sticky top-0 left-0 h-screen md:max-w-60 lg:max-w-52 xl:max-w-72 w-full z-30 px-5 py-10 border-x-2 border-secondary justify-start items-start self-start backdrop-filter backdrop-blur-lg bg-secondary/30 flex-[1] hidden md:block"

@@ -87,6 +87,7 @@ const CommentButton = ({
               onTouchMove={(e) => e.stopPropagation()}
             >
               <DialogTitle className="text-lg ">Comments</DialogTitle>
+              <span className="border-b border-muted border-dashed" />
               <div className="flex flex-col line-clamp-2 w-full max-w-sm">
                 <span className="font-semibold text-sm">{postName}</span>
                 <span className="text-xs">by {postUser}</span>
@@ -118,7 +119,13 @@ const CommentButton = ({
                 )}
               </section>
               <DialogFooter>
-                <div className="flex flex-row w-full gap-2">
+                <form
+                  className="flex flex-row w-full gap-2"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handlePostComment();
+                  }}
+                >
                   <Input
                     placeholder="Enter comment here..."
                     className="p-3 text-sm"
@@ -127,14 +134,18 @@ const CommentButton = ({
                     onChange={(e) => setCommentInput(e.target.value)}
                   ></Input>
                   <Button
+                    type="submit"
                     variant="ghost"
                     size="icon"
-                    onClick={handlePostComment}
                     disabled={isPosting || isLoading}
                   >
-                    <SendHorizonal className="size-5" />
+                    {isPosting || isLoading ? (
+                      <Loader2 className="animate-spin size-5 text-primary" />
+                    ) : (
+                      <SendHorizonal className="size-5 text-primary drop-shadow-md" />
+                    )}
                   </Button>
-                </div>
+                </form>
               </DialogFooter>
             </div>
           </DialogContent>

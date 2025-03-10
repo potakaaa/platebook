@@ -172,7 +172,6 @@ const PostRecipeDialog = () => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="description"
@@ -322,7 +321,6 @@ const PostRecipeDialog = () => {
                 </div>
               ))}
             </div>
-
             <FormField
               control={form.control}
               name="images"
@@ -331,7 +329,13 @@ const PostRecipeDialog = () => {
                   <FormControl>
                     <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
                       <FileUpload
-                        onFileChange={(files: (RecipeImage | File)[]) => field.onChange(files.filter((file): file is File => file instanceof File))}
+                        onFileChange={(files: (RecipeImage | File)[]) =>
+                          field.onChange(
+                            files.filter(
+                              (file): file is File => file instanceof File
+                            )
+                          )
+                        }
                         onBlur={field.onBlur}
                         name={field.name}
                         ref={field.ref}
@@ -347,20 +351,6 @@ const PostRecipeDialog = () => {
                 </FormItem>
               )}
             />
-
-            {/* <InputAnimated
-              id="images"
-              type="file"
-              placeholder="A catchy images for your followers"
-              multiple
-              onChange={(e) =>
-                field.onChange(e.target.files ? Array.from(e.target.files) : [])
-              }
-              onBlur={field.onBlur}
-              name={field.name}
-              ref={field.ref}
-            /> */}
-
             <Button type="submit" disabled={isPending}>
               Submit
             </Button>

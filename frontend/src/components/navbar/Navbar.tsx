@@ -3,7 +3,7 @@
 import React, { JSX, useState } from "react";
 import HomeLogo from "./nav/HomeLogo";
 import { Button } from "../ui/button";
-import { AlignJustify, LogInIcon } from "lucide-react";
+import { AlignJustify, HomeIcon, LogInIcon } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import { getNavButtons } from "./nav/NavButtons";
@@ -12,11 +12,14 @@ import { ButtonBorder } from "../ui/moving-border";
 import AnimatedHover, { buttonType } from "../ui/animated-hover";
 import { ModeToggle } from "../ui/mode-toggle";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { useChatbot } from "@/store/chatbot/ChatbotCardState";
+import { useUserStore } from "@/store/user/UserStore";
 
 const Navbar = () => {
   const router = useRouter();
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
+  const { user } = useUserStore();
 
   // Listen for scrollY changes and update state
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -38,7 +41,7 @@ const Navbar = () => {
     },
     {
       name: "Help",
-      onClick: () => router.push("/help"),
+      onClick: () => setIsChatOpen(true),
       buttonClassName: "bg-transparent",
       variant: "ghost",
     },
@@ -50,6 +53,8 @@ const Navbar = () => {
       variant: "outline",
     },
   ];
+
+  const { isChatOpen, setIsChatOpen } = useChatbot();
 
   return (
     <motion.div
@@ -67,10 +72,10 @@ const Navbar = () => {
           containerClassName="h-9 sm:h-10 w-24 sm:w-28"
           borderRadius="0.5rem"
           className="gap-2 text-xs sm:text-sm bg-primary border-none transition duration-300 hover:bg-amber-500"
-          onClick={() => router.push("/login")}
+          onClick={() => router.push(user ? "/home" : "/login")}
         >
-          <LogInIcon size={15} />
-          <span>Log In</span>
+          {user ? <HomeIcon size={15} /> : <LogInIcon size={15} />}
+          <span>{user ? "Home" : "Log In"}</span>
         </ButtonBorder>
         <div className="block lg:hidden">
           <Dropdown />
