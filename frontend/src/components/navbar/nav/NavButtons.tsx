@@ -24,7 +24,8 @@ export const getNavButtons = (
   router: ReturnType<typeof useRouter>,
   setIsChatOpen: (isOpen: boolean) => void,
   setFocusComponent: (id: string | null) => void,
-  setFocus: (isFocused: boolean) => void
+  setFocus: (isFocused: boolean) => void,
+  setIsCoffeeOpen: (isCoffeeOpen: boolean) => void
 ): navButton[] => {
   console.log("getNavButtons");
   return [
@@ -56,10 +57,10 @@ export const getNavButtons = (
       onClick: () => setIsChatOpen(true),
     },
     {
-      name: "About Us",
+      name: "Buy us Coffee",
       icon: <InfoIcon className={navButtonIconStyles} />,
-      id: "about-us",
-      onClick: () => router.push("/about-us"),
+      id: "about",
+      onClick: () => setIsCoffeeOpen(true),
     },
   ];
 };

@@ -15,6 +15,7 @@ import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useChatbot } from "@/store/chatbot/useChatbotStore";
 import { useUserStore } from "@/store/user/UserStore";
 import { useFocusStore } from "@/store/focus/useFocusStore";
+import { useCoffee } from "@/store/coffee/useCoffee";
 
 const Navbar = () => {
   const router = useRouter();
@@ -22,6 +23,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const { user } = useUserStore();
   const { setFocus, setFocusComponentId } = useFocusStore();
+  const { setIsCoffeeOpen } = useCoffee();
 
   // Listen for scrollY changes and update state
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -39,8 +41,8 @@ const Navbar = () => {
       variant: "ghost",
     },
     {
-      name: "About Us",
-      onClick: () => router.push("/about"),
+      name: "Buy us Coffee",
+      onClick: () => setIsCoffeeOpen(true),
       buttonClassName: "bg-transparent",
       variant: "ghost",
     },

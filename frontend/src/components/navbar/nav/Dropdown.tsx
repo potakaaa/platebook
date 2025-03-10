@@ -14,17 +14,20 @@ import { AlignJustify } from "lucide-react";
 import { SpotlightNew } from "@/components/ui/spotlight-new";
 import { useChatbot } from "@/store/chatbot/useChatbotStore";
 import { useFocusStore } from "@/store/focus/useFocusStore";
+import { useCoffee } from "@/store/coffee/useCoffee";
 
 const Dropdown = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const { setIsChatOpen } = useChatbot();
   const { setFocusComponentId, setFocus } = useFocusStore();
+  const { setIsCoffeeOpen } = useCoffee();
   const router = useRouter();
   const navButtons = getNavButtons(
     router,
     setIsChatOpen,
     setFocusComponentId,
-    setFocus
+    setFocus,
+    setIsCoffeeOpen
   );
 
   return (
