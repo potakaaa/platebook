@@ -10,6 +10,7 @@ import { PlateListSidebarToggle } from "../platelist/PlateListSidebar";
 import { useUserStore } from "@/store/user/UserStore";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const LeftNav = () => {
   const { user, resetStore } = useUserStore();
@@ -26,22 +27,32 @@ const LeftNav = () => {
           id="user"
           className="w-full border border-muted rounded-xl p-2 px-3 hover:bg-muted/80 transition duration-300 overflow-hidden cursor-pointer"
           onClick={() => {
-            router.push(`/home/user/${user?.id}`);
-            console.log(user?.id);
+            if (status === "loading" || !session) {
+              toast("Login to view profile", {
+                description: "You need to login to view your profile",
+                action: {
+                  label: "Login",
+                  onClick: () => router.push("/login"),
+                },
+              });
+            } else {
+              router.push(`/home/user/${user?.id}`);
+              console.log(user?.id);
+            }
           }}
         >
           <div className="flex flex-row space-x-3 xl:space-x-4 items-center">
             <CustomAvatar
-              userName={user?.name || "Username"}
-              userImage={user?.image || "https://via.placeholder.com/150"}
+              userName={user?.name || ""}
+              userImage={user?.image || "/platebook-logo-500.png"}
               className="2xl:size-10"
             />
             <div className="flex flex-col space-y-0 truncate text-ellipsis">
               <span className="font-semibold lg:text-sm">
-                {user?.name || "Username"}
+                {user?.name || "Login"}
               </span>
               <span className="md:text-[12px] lg:text-xs xl:text-sm font-light w-full max-w-lg">
-                {user?.email || "emailasdfsafd@email.com"}
+                {user?.email || "to view profile"}
               </span>
             </div>
           </div>

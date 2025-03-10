@@ -7,6 +7,7 @@ import SearchStateProvider from "./SearchStateProvider";
 import SearchBar from "@/components/home/search/SearchBar";
 import ChatbotCard from "@/components/chatbot/ChatbotCard";
 import { PlateListSidebarToggle } from "@/components/home/platelist/PlateListSidebar";
+import { Toaster } from "@/components/ui/sonner";
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
@@ -48,6 +49,7 @@ const layout = ({ children }: { children: ReactNode }) => {
         </section>
         <FloatingNavbar />
       </div>
+      <Toaster />
     </>
   );
 };

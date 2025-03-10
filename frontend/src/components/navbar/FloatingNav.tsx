@@ -16,14 +16,18 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import { usePostDialogStore } from "@/store/post/PostDialogStore";
 import { useUserStore } from "@/store/user/UserStore";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { usePlatelistDrawer } from "@/store/platelist/usePlatelist";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const FloatingNavbar = () => {
   const { theme, setTheme } = useTheme();
   const { setOpen } = usePostDialogStore();
   const { user, resetStore } = useUserStore();
   const { setPlateOpen } = usePlatelistDrawer();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   const links = [
     {
@@ -80,14 +84,37 @@ const FloatingNavbar = () => {
     {
       title: "User Profile",
       icon: <IconUserCircle className="h-full w-full text-primary" />,
-      href: `/home/user/${user?.id}`,
+      href: "",
+      onClick: () => {
+        if (status === "loading" || !session) {
+          toast("Login to view profile", {
+            description: "You need to login to view your profile",
+            action: {
+              label: "Login",
+              onClick: () => router.push("/login"),
+            },
+          });
+        } else {
+          router.push("/home/user/${user?.id}");
+        }
+      },
     },
     {
       title: "Log Out",
       icon: <IconLogout className="h-full w-full text-primary" />,
       onClick: (e: any) => {
-        resetStore();
-        signOut({ callbackUrl: "/" });
+        if (status === "loading" || !session) {
+          toast("Not Logged In", {
+            description: "You are currently not logged in.",
+            action: {
+              label: "Login",
+              onClick: () => router.push("/login"),
+            },
+          });
+        } else {
+          resetStore();
+          signOut({ callbackUrl: "/" });
+        }
       },
       href: "",
     },

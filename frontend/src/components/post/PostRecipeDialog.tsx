@@ -19,13 +19,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RecipeImage, SubmitRecipe } from "@/lib/types/recipeTypes";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { Trash } from "lucide-react";
+import { SquareArrowOutUpRight, Trash } from "lucide-react";
 import CountryCombobox from "./CountryCombobox";
 import ToolTipButton from "../home/buttons/ToolTipButton";
 import { FileUpload } from "../ui/file-upload";
 import useMutationRecipe from "@/hooks/tanstack/recipe/useMutationRecipe";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePostDialogStore } from "@/store/post/PostDialogStore";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
 
 const IngredientSchema = z.object({
   name: z
@@ -94,6 +97,7 @@ const PostRecipeDialog = () => {
   const { useMutationPostRecipe } = useMutationRecipe();
   const { mutate: postRecipe, isPending } = useMutationPostRecipe();
   const queryClient = useQueryClient();
+  const { data: session, status } = useSession();
 
   const form = useForm({
     resolver: zodResolver(postRecipeSchema),
@@ -149,214 +153,251 @@ const PostRecipeDialog = () => {
       dark:[&::-webkit-scrollbar-track]:bg-neutral-700
       dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar]:w-2 gap-2"
       >
-        <DialogTitle className="text-center font-bold">Create Post</DialogTitle>
-        <span className="border-b border-muted mb-2" />
-        <Form {...form}>
-          <form
-            noValidate
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-3"
-          >
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <Input
-                    placeholder="Enter title here..."
-                    className="py-5"
-                    id="title"
-                    type="text"
-                    {...field}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <Textarea
-                    placeholder="Enter your recipe description here..."
-                    id="description"
-                    className="min-h-44"
-                    {...field}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
+        {status === "loading" || !session ? (
+          <div className="flex flex-row gap-2 items-center justify-center py-3">
+            <Image
+              src={"/platebook-logo-500.png"}
+              alt="Platebook Logo"
+              width={100}
+              height={100}
+              className="size-5"
             />
 
-            <FormField
-              control={form.control}
-              name="origin_country"
-              render={({ field }) => (
-                <CountryCombobox
-                  value={field.value}
-                  setFormValue={(value: string) =>
-                    form.setValue("origin_country", value)
-                  }
+            <p className="text-xs sm:text-sm lg:text-base">
+              Login to Post Delicious Recipes!
+            </p>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="p-0 focus:bg-transparent m-0"
+            >
+              <SquareArrowOutUpRight className="size-4 text-primary" />
+            </Button>
+          </div>
+        ) : (
+          <>
+            <DialogTitle className="text-center font-bold">
+              Create Post
+            </DialogTitle>
+            <span className="border-b border-muted mb-2" />
+            <Form {...form}>
+              <form
+                noValidate
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex flex-col gap-3"
+              >
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Input
+                        placeholder="Enter title here..."
+                        className="py-5"
+                        id="title"
+                        type="text"
+                        {...field}
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              )}
-            />
-            {/*  Icomponent guro ni  */}
-            <div className="flex flex-col gap-2">
-              {ingredientFields.map((ingredient, index) => (
-                <div key={ingredient.id} className="flex flex-row gap-2">
-                  <FormField
-                    control={form.control}
-                    name={`ingredients.${index}.name`}
-                    render={({ field }) => (
-                      <FormItem className="flex-[3]">
-                        <FormControl>
-                          <Input
-                            id={`ingredients.${index}.name`}
-                            type="text"
-                            placeholder="Ingredient Name"
-                            {...field}
-                          />
-                        </FormControl>
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Textarea
+                        placeholder="Enter your recipe description here..."
+                        id="description"
+                        className="min-h-44"
+                        {...field}
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`ingredients.${index}.quantity`}
-                    render={({ field }) => (
-                      <FormItem className="flex-[1]">
-                        <FormControl>
-                          <Input
-                            id={`ingredients.${index}.quantity`}
-                            type="text"
-                            placeholder="Quantity"
-                            {...field}
-                          />
-                        </FormControl>
+                <FormField
+                  control={form.control}
+                  name="origin_country"
+                  render={({ field }) => (
+                    <CountryCombobox
+                      value={field.value}
+                      setFormValue={(value: string) =>
+                        form.setValue("origin_country", value)
+                      }
+                    />
+                  )}
+                />
+                {/*  Icomponent guro ni  */}
+                <div className="flex flex-col gap-2">
+                  {ingredientFields.map((ingredient, index) => (
+                    <div key={ingredient.id} className="flex flex-row gap-2">
+                      <FormField
+                        control={form.control}
+                        name={`ingredients.${index}.name`}
+                        render={({ field }) => (
+                          <FormItem className="flex-[3]">
+                            <FormControl>
+                              <Input
+                                id={`ingredients.${index}.name`}
+                                type="text"
+                                placeholder="Ingredient Name"
+                                {...field}
+                              />
+                            </FormControl>
 
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`ingredients.${index}.quantity`}
+                        render={({ field }) => (
+                          <FormItem className="flex-[1]">
+                            <FormControl>
+                              <Input
+                                id={`ingredients.${index}.quantity`}
+                                type="text"
+                                placeholder="Quantity"
+                                {...field}
+                              />
+                            </FormControl>
 
-                  <ToolTipButton
-                    btnChildren={<Trash className="size-8 text-destructive" />}
-                    btnVariant="ghost"
-                    btnSize="icon"
-                    tipChildren={<p>Remove Ingredient</p>}
-                    onClick={() => removeIngredient(index)}
-                  />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                  <ToolTipButton
-                    btnChildren={<IconSquareRoundedPlus className="size-8" />}
-                    btnVariant="ghost"
-                    btnSize="icon"
-                    tipChildren={<p>Add Ingredient</p>}
-                    onClick={() => appendIngredient({ name: "", quantity: "" })}
-                  />
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-col gap-2">
-              {stepFields.map((step: any, index: number) => (
-                <div key={step.id} className="flex flex-row gap-2">
-                  <FormField
-                    control={form.control}
-                    name={`steps.${index}.step_num`}
-                    render={({ field }) => (
-                      <FormItem className="flex-[1]">
-                        <FormControl>
-                          <Input
-                            id={`steps.${index}.step_num`}
-                            type="number"
-                            readOnly
-                            value={index + 1}
-                            className="text-center"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`steps.${index}.description`}
-                    render={({ field }) => (
-                      <FormItem className="flex-[7]">
-                        <FormControl>
-                          <Input
-                            id={`steps.${index}.description`}
-                            type="text"
-                            placeholder="Step Description"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <ToolTipButton
-                    btnChildren={<Trash className="size-8 text-destructive" />}
-                    btnVariant="ghost"
-                    btnSize="icon"
-                    tipChildren={<p>Remove Step</p>}
-                    onClick={() => removeStep(index)}
-                  />
-
-                  <ToolTipButton
-                    btnChildren={<IconSquareRoundedPlus className="size-8" />}
-                    btnVariant="ghost"
-                    btnSize="icon"
-                    tipChildren={<p>Add Step</p>}
-                    onClick={() => {
-                      appendStep({
-                        step_num: stepFields.length + 1,
-                        description: "",
-                      });
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-            <FormField
-              control={form.control}
-              name="images"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
-                      <FileUpload
-                        onFileChange={(files: (RecipeImage | File)[]) =>
-                          field.onChange(
-                            files.filter(
-                              (file): file is File => file instanceof File
-                            )
-                          )
+                      <ToolTipButton
+                        btnChildren={
+                          <Trash className="size-8 text-destructive" />
                         }
-                        onBlur={field.onBlur}
-                        name={field.name}
-                        ref={field.ref}
-                        multiple
-                        id="images"
-                        type="file"
-                        fileType="file"
+                        btnVariant="ghost"
+                        btnSize="icon"
+                        tipChildren={<p>Remove Ingredient</p>}
+                        onClick={() => removeIngredient(index)}
+                      />
+
+                      <ToolTipButton
+                        btnChildren={
+                          <IconSquareRoundedPlus className="size-8" />
+                        }
+                        btnVariant="ghost"
+                        btnSize="icon"
+                        tipChildren={<p>Add Ingredient</p>}
+                        onClick={() =>
+                          appendIngredient({ name: "", quantity: "" })
+                        }
                       />
                     </div>
-                  </FormControl>
+                  ))}
+                </div>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" disabled={isPending}>
-              Submit
-            </Button>
-          </form>
-        </Form>
+                <div className="flex flex-col gap-2">
+                  {stepFields.map((step: any, index: number) => (
+                    <div key={step.id} className="flex flex-row gap-2">
+                      <FormField
+                        control={form.control}
+                        name={`steps.${index}.step_num`}
+                        render={({ field }) => (
+                          <FormItem className="flex-[1]">
+                            <FormControl>
+                              <Input
+                                id={`steps.${index}.step_num`}
+                                type="number"
+                                readOnly
+                                value={index + 1}
+                                className="text-center"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`steps.${index}.description`}
+                        render={({ field }) => (
+                          <FormItem className="flex-[7]">
+                            <FormControl>
+                              <Input
+                                id={`steps.${index}.description`}
+                                type="text"
+                                placeholder="Step Description"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <ToolTipButton
+                        btnChildren={
+                          <Trash className="size-8 text-destructive" />
+                        }
+                        btnVariant="ghost"
+                        btnSize="icon"
+                        tipChildren={<p>Remove Step</p>}
+                        onClick={() => removeStep(index)}
+                      />
+
+                      <ToolTipButton
+                        btnChildren={
+                          <IconSquareRoundedPlus className="size-8" />
+                        }
+                        btnVariant="ghost"
+                        btnSize="icon"
+                        tipChildren={<p>Add Step</p>}
+                        onClick={() => {
+                          appendStep({
+                            step_num: stepFields.length + 1,
+                            description: "",
+                          });
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <FormField
+                  control={form.control}
+                  name="images"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
+                          <FileUpload
+                            onFileChange={(files: (RecipeImage | File)[]) =>
+                              field.onChange(
+                                files.filter(
+                                  (file): file is File => file instanceof File
+                                )
+                              )
+                            }
+                            onBlur={field.onBlur}
+                            name={field.name}
+                            ref={field.ref}
+                            multiple
+                            id="images"
+                            type="file"
+                            fileType="file"
+                          />
+                        </div>
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" disabled={isPending}>
+                  Submit
+                </Button>
+              </form>
+            </Form>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );
