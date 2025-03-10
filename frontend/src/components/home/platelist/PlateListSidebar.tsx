@@ -28,7 +28,7 @@ export function PlateListSidebarToggle() {
         <NavButtonLeft
           name="Plate List"
           icon={IconDisc}
-          parentCN="flex lg:hidden"
+          parentCN="hidden md:flex lg:hidden"
         />
       </SheetTrigger>
       <SheetContent className="bg-card flex flex-col gap-5">

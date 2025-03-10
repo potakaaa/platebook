@@ -34,7 +34,9 @@ const layout = ({ children }: { children: ReactNode }) => {
             <SearchBar />
           </section>
           <SearchStateProvider>
-            <PlateListSidebarToggle />
+            <div className="block md:hidden">
+              <PlateListSidebarToggle />
+            </div>
             {children}
           </SearchStateProvider>
         </section>
