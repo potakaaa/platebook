@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.getenv("ELASTIC_IP"), "localhost", ""]
 
 CALLBACK_URL = "http://localhost:3000"
 
@@ -125,8 +125,8 @@ JWT_AUTH_COOKIE = "access"
 JWT_REFRESH_COOKIE = "refresh"
 
 CORS_ALLOW_CREDENTIALS = True  
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000"]  
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000"] 
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app/"]  
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app/"] 
 
 SESSION_COOKIE_SAMESITE = "Lax"  
 CSRF_COOKIE_SAMESITE = "Lax"

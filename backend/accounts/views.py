@@ -394,7 +394,6 @@ class GetUserByIDView(RetrieveAPIView):
     
     def get_object(self):
         user_id = self.kwargs.get(self.lookup_field)
-        print(user_id)
         
         user = self.get_queryset().filter(userId=user_id).first()
         
