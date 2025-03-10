@@ -32,7 +32,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [os.getenv("ELASTIC_IP"), "localhost", ""]
 
-CALLBACK_URL = "http://localhost:3000"
+CALLBACK_URL = "https://platebook.vercel.app"
 
 # Application definition
 
@@ -125,8 +125,8 @@ JWT_AUTH_COOKIE = "access"
 JWT_REFRESH_COOKIE = "refresh"
 
 CORS_ALLOW_CREDENTIALS = True  
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app"]  
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app"] 
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app", "http://44.199.101.231"]  
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app", "http://44.199.101.231"] 
 
 SESSION_COOKIE_SAMESITE = "Lax"  
 CSRF_COOKIE_SAMESITE = "Lax"
