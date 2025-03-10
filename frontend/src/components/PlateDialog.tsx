@@ -15,6 +15,7 @@ import PlateImageCarousel from "./home/platelist/PlateImageCarousel";
 import { ChevronDown, Trash2, View } from "lucide-react";
 import ToolTipButton from "./home/buttons/ToolTipButton";
 import { useRouter } from "next/navigation";
+import useMutationPlatelist from "@/hooks/tanstack/platelist/useMutationPlatelist";
 
 const PlateDialog = ({
   postId,
@@ -31,6 +32,11 @@ const PlateDialog = ({
 }) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
+
+  const { useMutationDeletePlatelistItem } = useMutationPlatelist();
+
+  const { mutate: deleteItem, isPending } = useMutationDeletePlatelistItem();
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -93,6 +99,7 @@ const PlateDialog = ({
               btnType="button"
               btnVariant="destructive"
               btnClassName="text-xs lg:text-sm px-3"
+              onClick={() => deleteItem(String(postId))}
               btnChildren={
                 <>
                   <Trash2 className="size-6" />
