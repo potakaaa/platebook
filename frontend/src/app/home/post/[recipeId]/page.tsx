@@ -6,14 +6,17 @@ import { Ingredient, Step } from "@/lib/types/recipeTypes";
 import PostEditButton from "@/components/post/PostEditButton";
 import { Frown } from "lucide-react";
 import { fetchPostByID } from "@/lib/services/api/recipeServices";
-import { Metadata } from "next";
+import { Metadata, ResolvingMetadata } from "next";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { recipeId: string };
-}): Promise<Metadata> {
-  const { recipeId } = params;
+interface PageProps {
+  params: Promise<{ recipeId: string }>;
+}
+
+export async function generateMetadata(
+  { params }: PageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { recipeId } = await params;
   try {
     const recipe = await fetchPostByID(recipeId);
 
@@ -54,15 +57,11 @@ export async function generateMetadata({
   }
 }
 
-interface PageProps {
-  params: { recipeId: string };
-}
-
 const page = async ({ params }: PageProps) => {
   let recipe;
 
   try {
-    recipe = await fetchPostByID(params.recipeId);
+    recipe = await fetchPostByID((await params).recipeId);
   } catch (error: any) {
     console.error("Error loading recipe", error);
     return (
@@ -91,7 +90,7 @@ const page = async ({ params }: PageProps) => {
           {recipe?.chef.username}
         </span>
       </div>
-      <PostEditButton id={params.recipeId} recipe={recipe} />
+      <PostEditButton id={(await params).recipeId} recipe={recipe} />
       <section id="carousel" className="w-full">
         <PostCarousel images={imageUrls} />
       </section>
