@@ -21,7 +21,8 @@ const eslintConfig = [
       'react-hooks/exhaustive-deps': 'off',
       'react-hooks/rules-of-hooks': 'off',
       'react/no-unescaped-entities': 'off',
-      'react/no-children-prop': 'off'
+      'react/no-children-prop': 'off',
+      'jsx-a11y/role-supports-aria-props': 'off',
     }
   }),
 ];

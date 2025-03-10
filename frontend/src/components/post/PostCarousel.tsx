@@ -57,7 +57,11 @@ const PostCarousel = ({ images }: { images: string[] }) => {
       )}
     >
       {images.map((image, index) => (
-        <AspectRatio ratio={4 / 3} className="w-full relative overflow-hidden">
+        <AspectRatio
+          ratio={4 / 3}
+          className="w-full relative overflow-hidden"
+          key={index}
+        >
           <Image
             src={image}
             alt={`image-${index}`}
