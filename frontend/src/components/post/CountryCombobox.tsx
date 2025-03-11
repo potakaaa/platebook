@@ -39,7 +39,7 @@ const CountryCombobox = ({
               variant="outline"
               role="combobox"
               className={cn(
-                "w-full justify-between text-xs px-2 sm:px-4 sm:text-sm lg:text-base",
+                "w-full justify-between text-xs px-2 sm:px-4 sm:text-sm",
                 !value && "text-muted-foreground"
               )}
             >

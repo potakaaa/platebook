@@ -30,6 +30,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const IngredientSchema = z.object({
   name: z
@@ -133,14 +134,27 @@ const PostRecipeDialog = () => {
   const { open, setOpen } = usePostDialogStore();
 
   const onSubmit = async (data: SubmitRecipe) => {
-    postRecipe(data, {
-      onSuccess: () => {
-        form.reset();
-        queryClient.invalidateQueries({ queryKey: ["feed"] });
-        setOpen(false);
-        window.location.reload();
-      },
+    const postPromise = new Promise<void>((resolve, reject) => {
+      postRecipe(data, {
+        onSuccess: () => {
+          form.reset();
+          queryClient.invalidateQueries({ queryKey: ["feed"] });
+          setOpen(false);
+          resolve(); // Resolve the promise when successful
+        },
+        onError: (error) => {
+          reject(error); // Reject the promise if there's an error
+        },
+      });
     });
+
+    toast.promise(postPromise, {
+      loading: "Posting recipe...",
+      success: "Recipe posted!",
+      error: "Failed to post recipe.",
+    });
+
+    return postPromise;
   };
 
   const responsiveStyles = {
@@ -288,6 +302,7 @@ const PostRecipeDialog = () => {
                           btnClassName={cn("", responsiveStyles.button)}
                           tipChildren={<p>Remove Ingredient</p>}
                           onClick={() => removeIngredient(index)}
+                          disabled={ingredientFields.length === 1}
                         />
                         <ToolTipButton
                           btnChildren={
@@ -358,6 +373,7 @@ const PostRecipeDialog = () => {
                           btnClassName={cn("", responsiveStyles.button)}
                           tipChildren={<p>Remove Step</p>}
                           onClick={() => removeStep(index)}
+                          disabled={stepFields.length === 1}
                         />
                         <ToolTipButton
                           btnChildren={

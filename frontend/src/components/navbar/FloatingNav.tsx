@@ -87,7 +87,7 @@ const FloatingNavbar = () => {
       href: "",
       onClick: () => {
         if (status === "loading" || !session) {
-          toast("Login to view profile", {
+          toast.info("Login to view profile", {
             description: "You need to login to view your profile",
             action: {
               label: "Login",
@@ -104,7 +104,7 @@ const FloatingNavbar = () => {
       icon: <IconLogout className="h-full w-full text-primary" />,
       onClick: (e: any) => {
         if (status === "loading" || !session) {
-          toast("Not Logged In", {
+          toast.error("Not Logged In", {
             description: "You are currently not logged in.",
             action: {
               label: "Login",

@@ -49,7 +49,7 @@ const layout = ({ children }: { children: ReactNode }) => {
         </section>
         <FloatingNavbar />
       </div>
-      <Toaster />
+      <Toaster position="top-center" richColors expand={false} />
     </>
   );
 };

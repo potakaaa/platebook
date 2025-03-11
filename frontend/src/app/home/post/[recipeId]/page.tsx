@@ -85,7 +85,7 @@ const page = async ({ params }: PageProps) => {
         </span>
         <span
           id="post-chef"
-          className="text-xs text-center sm:text-sm text-muted-foreground font-semibold border border-muted-foreground/40 rounded-full"
+          className="text-xs text-center sm:text-sm text-muted-foreground font-semibold border border-muted-foreground/40 rounded-full px-2"
         >
           {recipe?.chef.username}
         </span>

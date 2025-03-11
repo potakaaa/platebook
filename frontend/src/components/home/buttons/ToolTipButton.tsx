@@ -18,6 +18,7 @@ const ToolTipButton = ({
   tipChildren = btnText,
   tipClassName,
   onClick,
+  disabled = false,
 }: {
   btnVariant?: "default" | "outline" | "destructive" | "secondary" | "ghost";
   btnChildren?: ReactNode;
@@ -28,6 +29,7 @@ const ToolTipButton = ({
   tipChildren?: ReactNode;
   tipClassName?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }) => {
   return (
     <TooltipProvider disableHoverableContent delayDuration={0}>
@@ -39,6 +41,7 @@ const ToolTipButton = ({
             className={btnClassName}
             onClick={onClick}
             size={btnSize}
+            disabled={disabled}
           >
             {btnChildren}
           </Button>

@@ -32,6 +32,7 @@ import useMutationRecipe from "@/hooks/tanstack/recipe/useMutationRecipe";
 import { useQueryClient } from "@tanstack/react-query";
 import EditButton from "../userPage/EditButton";
 import { urlToFile } from "@/lib/utils/urlToFile";
+import { toast } from "sonner";
 
 /*
 
@@ -181,10 +182,25 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
   const [open, setOpen] = useState(false);
 
   const onSubmit = form.handleSubmit((data) => {
-    editRecipe(
-      { id: id, data: data as SubmitEditRecipe },
-      { onSuccess: () => setOpen(false) }
-    );
+    const editPromise = new Promise<void>((resolve) => {
+      editRecipe(
+        { id: id, data: data as SubmitEditRecipe },
+        {
+          onSuccess: () => {
+            setOpen(false);
+            resolve();
+          },
+        }
+      );
+    });
+
+    toast.promise(editPromise, {
+      loading: "Editing recipe...",
+      success: "Recipe edited successfully!",
+      error: "Error editing recipe",
+    });
+
+    return editPromise;
   });
 
   return (

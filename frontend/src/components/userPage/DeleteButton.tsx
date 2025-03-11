@@ -6,6 +6,7 @@ import useQueryRecipe from "@/hooks/tanstack/recipe/useQueryRecipe";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "sonner";
 
 // interface DeleteButtonProps {
 //   onClick?: () => void;
@@ -37,7 +38,11 @@ const DeleteButton = ({ id }: { id: string }) => {
   return (
     <Button
       variant={"destructive"}
-      onClick={handleRecipeDelete}
+      onClick={() =>
+        toast.error("Delete this recipe?", {
+          action: { label: "Delete", onClick: handleRecipeDelete },
+        })
+      }
       disabled={isPending}
     >
       Delete
