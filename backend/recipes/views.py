@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
@@ -14,7 +15,9 @@ from rest_framework.filters import OrderingFilter
 from django.http import JsonResponse
 from django.core.cache import cache
 from rest_framework.generics import ListAPIView
+from rest_framework.views import APIView
 from django.db.models import Q, Case, When, Value, IntegerField, UUIDField, Count, Exists, OuterRef
+from django.db import transaction
 from interactions.models import Follow, Share, Like
 from cook_list.models import CooklistItem
 
@@ -216,3 +219,56 @@ class FollowingFeedView(ListAPIView):
 def get_recipe_ids(request):
     recipe_ids = Recipe.objects.values_list('id', flat=True)
     return Response({"recipe_ids": list(recipe_ids)})
+
+class UploadRecipeView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request, *args, **kwargs):
+        with transaction.atomic():
+            recipe_data = request.data.copy()
+
+            try:
+                # Parse ingredients and steps from JSON strings
+                ingredients_data = json.loads(request.data.get("ingredients", "[]"))
+                steps_data = json.loads(request.data.get("steps", "[]"))
+            except json.JSONDecodeError:
+                return Response({"error": "Invalid JSON format in ingredients or steps."}, status=status.HTTP_400_BAD_REQUEST)
+
+            images_data = request.FILES.getlist("images")
+
+            # Save recipe
+            recipe_serializer = RecipeSerializer(data=recipe_data)
+            if recipe_serializer.is_valid():
+                recipe = recipe_serializer.save(chef=request.user)
+            else:
+                return Response(recipe_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # Save ingredients
+            if ingredients_data:
+                for ingredient in ingredients_data:
+                    ingredient["recipe"] = recipe.id  # Ensure recipe ID is set
+                ingredient_serializer = IngredientSerializer(data=ingredients_data, many=True)
+                if ingredient_serializer.is_valid():
+                    ingredient_serializer.save()
+                else:
+                    transaction.set_rollback(True)
+                    return Response(ingredient_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # Save steps
+            if steps_data:
+                for step in steps_data:
+                    step["recipe"] = recipe.id  # Ensure recipe ID is set
+                step_serializer = StepSerializer(data=steps_data, many=True)
+                if step_serializer.is_valid():
+                    step_serializer.save()
+                else:
+                    transaction.set_rollback(True)
+                    return Response(step_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # Save images
+            if images_data:
+                recipe_images = [RecipeImage(recipe=recipe, image=image) for image in images_data]
+                RecipeImage.objects.bulk_create(recipe_images)
+
+            return Response({"message": "Recipe uploaded successfully!", "recipe_id": recipe.id}, status=status.HTTP_201_CREATED)

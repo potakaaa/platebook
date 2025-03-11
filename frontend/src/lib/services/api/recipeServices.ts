@@ -46,25 +46,27 @@ export const fetchFollowingFeed = async (page = 1) => {
 
 export const postRecipe = async (data: SubmitRecipe) => {
   try {
-    const response = await axiosClient.post("/recipes/", {
-      title: data.title,
-      description: data.description,
-      origin_country: data.origin_country,
+    const formData = new FormData();
+
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("origin_country", data.origin_country);
+
+    formData.append("ingredients", JSON.stringify(data.ingredients));
+
+    formData.append("steps", JSON.stringify(data.steps));
+
+    if (data.images && data.images.length > 0) {
+      data.images.forEach((image, index) => {
+        formData.append(`images`, image);
+      });
+    }
+
+    const response = await axiosClient.post("/recipe-upload/", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
-
-    const id = response.data.id;
-
-    if (data.images) {
-      await postRecipeImages(id, data.images);
-    }
-
-    if (data.steps) {
-      await postRecipeSteps(id, data.steps);
-    }
-
-    if (data.ingredients) {
-      await postRecipeIngredients(id, data.ingredients);
-    }
 
     return response.data;
   } catch (error: any) {
@@ -72,82 +74,11 @@ export const postRecipe = async (data: SubmitRecipe) => {
     if (error.response?.data) {
       throw error.response.data;
     }
-
     throw new Error("An unknown error occurred.");
   }
 };
 
-const postRecipeImages = async (id: string, images: File[]) => {
-  try {
-    const formData = new FormData();
 
-    // Append each image to the FormData
-    images.forEach((image) => {
-      formData.append("image", image);
-    });
-
-    const response = await axiosClient.post(
-      `/recipes/${id}/images/`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-
-    return response;
-  } catch (error: any) {
-    console.error("Recipe Image Post Error:", error.response?.data);
-    if (error.response?.data) {
-      throw error.response.data;
-    }
-
-    throw new Error("An unknown error occurred.");
-  }
-};
-
-const postRecipeSteps = async (id: string, steps: Step[]) => {
-  try {
-    const response = await axiosClient.post(`/recipes/${id}/steps/`, steps, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    return response;
-  } catch (error: any) {
-    console.error("Recipe Steps Post Error:", error.response?.data);
-    if (error.response?.data) {
-      throw error.response.data;
-    }
-
-    throw new Error("An unknown error occurred.");
-  }
-};
-
-const postRecipeIngredients = async (id: string, ingredients: Ingredient[]) => {
-  try {
-    const response = await axiosClient.post(
-      `/recipes/${id}/ingredients/`,
-      ingredients,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return response;
-  } catch (error: any) {
-    console.error("Recipe Ingredients Post Error:", error.response?.data);
-    if (error.response?.data) {
-      throw error.response.data;
-    }
-
-    throw new Error("An unknown error occurred.");
-  }
-};
 
 export const searchRecipe = async (search: string, page: number) => {
   try {
