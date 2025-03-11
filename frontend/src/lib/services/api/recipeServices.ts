@@ -6,6 +6,7 @@ import {
 } from "@/lib/types/recipeTypes";
 import { axiosClient } from "../axiosClient";
 import exp from "constants";
+import axios from "axios";
 
 //FETCHES 15 POSTS AT A TIME, ADD INFINITE SCROLL EFFECT
 
@@ -279,7 +280,6 @@ export const editRecipe = async (id: string, data: EditRecipe) => {
     throw error;
   }
 };
-
 
 export async function fetchPostByID(id: string) {
   try {
