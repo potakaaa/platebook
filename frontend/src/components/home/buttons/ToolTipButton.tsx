@@ -30,7 +30,7 @@ const ToolTipButton = ({
   onClick?: () => void;
 }) => {
   return (
-    <TooltipProvider>
+    <TooltipProvider disableHoverableContent delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
