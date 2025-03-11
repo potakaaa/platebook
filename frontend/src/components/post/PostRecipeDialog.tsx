@@ -136,10 +136,9 @@ const PostRecipeDialog = () => {
     postRecipe(data, {
       onSuccess: () => {
         form.reset();
-
-        setOpen(false);
-
         queryClient.invalidateQueries({ queryKey: ["feed"] });
+        setOpen(false);
+        window.location.reload();
       },
     });
   };
