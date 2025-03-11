@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 DEBUG = True
 
 # Enforce HTTPS in Production
-SECURE_SSL_REDIRECT = True  # Redirect all HTTP traffic to HTTPS
+SECURE_SSL_REDIRECT = False  # Redirect all HTTP traffic to HTTPS
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Trust proxy headers
 
 # Cookie Security
