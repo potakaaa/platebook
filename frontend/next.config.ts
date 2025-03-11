@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
   images: {
     remotePatterns: [
       {
@@ -59,6 +62,18 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "filrecipes101.blogspot.com",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+      },
+      {
+        protocol: "https",
+        hostname: "blogger.googleusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.seriouseats.com",
       },
       {
         protocol: "https",

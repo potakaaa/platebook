@@ -6,6 +6,7 @@ import { Disc, Loader2 } from "lucide-react";
 import Link from "next/link";
 import useQueryPlatelist from "@/hooks/tanstack/platelist/useQueryPlatelist";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
   const { user, platelist } = useUserStore();
@@ -46,8 +47,13 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
             <Disc className="text-primary size-5" />
           </span>
         )}
-        <ScrollArea className="h-screen pb-10">
-          <div className="flex flex-col w-full gap-2">
+        <ScrollArea className="h-screen">
+          <div
+            className={cn(
+              "flex flex-col w-full gap-2",
+              isMobile ? "pb-56" : "pb-32"
+            )}
+          >
             {platelist?.map((plate, index) => (
               <PlateDialog
                 key={index}
