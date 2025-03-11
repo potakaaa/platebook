@@ -385,7 +385,7 @@ const PostRecipeDialog = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
+                        <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg flex justify-center items-center">
                           <FileUpload
                             onFileChange={(files: (RecipeImage | File)[]) =>
                               field.onChange(
@@ -397,6 +397,7 @@ const PostRecipeDialog = () => {
                             onBlur={field.onBlur}
                             name={field.name}
                             ref={field.ref}
+                            className="w-full"
                             multiple
                             id="images"
                             type="file"

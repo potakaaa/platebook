@@ -34,14 +34,13 @@ import { profile } from "console";
 import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
 import { EditUserFormData } from "@/lib/types/authTypes";
 
-
 const editUserSchema = z.object({
   username: z.string().nonempty(),
   pfp: z.instanceof(File).optional(),
 });
 
 interface EditUserDialogProps {
-  user: any
+  user: any;
 }
 
 const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
@@ -51,38 +50,41 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
   const form = useForm({
     resolver: zodResolver(editUserSchema),
     defaultValues: {
-        username: user.username,
-        pfp: undefined,
+      username: user.username,
+      pfp: undefined,
     },
   });
 
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-
     console.log("user: ", user);
 
     const processImages = async () => {
       if (user.pfp_url) {
-
-        const pfpFile = await urlToFile(user.pfp_url, `${user.username || "profile_picture"}.jpg`);
+        const pfpFile = await urlToFile(
+          user.pfp_url,
+          `${user.username || "profile_picture"}.jpg`
+        );
         console.log("PFP FILE: ", pfpFile);
-        form.setValue("pfp", pfpFile); 
+        form.setValue("pfp", pfpFile);
 
         console.log("FORM: ", form.getValues());
       }
     };
-  
+
     processImages();
-  }, [user.pfp_url, form]);  
-  
+  }, [user.pfp_url, form]);
 
   const onSubmit = form.handleSubmit((data) => {
     const formData: EditUserFormData = {
       username: data.username,
-      pfp: data.pfp, 
+      pfp: data.pfp,
     };
-    updateUser({ id: user.userId, data: formData }, {onSuccess: () => setOpen(false)});
+    updateUser(
+      { id: user.userId, data: formData },
+      { onSuccess: () => setOpen(false) }
+    );
   });
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -90,34 +92,45 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
         <EditButton onClick={() => {}} />
       </DialogTrigger>
       <DialogContent
-        className="overflow-y-auto w-3/6 max-h-[80vh] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
+        className="w-5/6 min-h-[100px] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
       dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-      dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar]:w-2 gap-2"
+      dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar]:w-2 gap-2 rounded-xl overflow-x-hidden overflow-y-auto flex flex-col items-center justify-center"
       >
-        <DialogTitle className="text-center font-bold">Edit Profile</DialogTitle>
+        <DialogTitle className="text-center font-bold">
+          Edit Profile
+        </DialogTitle>
         <span className="border-b border-muted mb-2" />
         <Form {...form}>
-          <form noValidate onSubmit={onSubmit} className="flex flex-col gap-3">
+          <form
+            noValidate
+            onSubmit={onSubmit}
+            className="flex flex-col gap-3 w-full"
+          >
             <FormField
               control={form.control}
               name="pfp"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg">
+                    <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg flex items-center justify-center">
                       <FileUpload
                         multiple={false}
-                        initialFiles={field.value ? [field.value] :  []}  
+                        initialFiles={field.value ? [field.value] : []}
                         onFileChange={(files: (File | RecipeImage)[]) => {
                           const file = files[0];
-                          field.onChange(file);   
+                          field.onChange(file);
                         }}
                         onBlur={field.onBlur}
                         name={field.name}
                         ref={field.ref}
+                        className="w-full"
                         id="pfp"
                         type="file"
                         fileType="file"
+                        forProfile
+                        forProfileMess={[
+                          "Drag or drop your profile picture to upload",
+                        ]}
                       />
                     </div>
                   </FormControl>
@@ -133,7 +146,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
                 <FormItem>
                   <Input
                     placeholder="Enter username here..."
-                    className="py-5"
+                    className="py-5 text-xs sm:text-sm w-full"
                     id="username"
                     type="text"
                     {...field}
@@ -143,8 +156,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
               )}
             />
 
-           
-            <Button type="submit" disabled={isPending}>
+            <Button type="submit" disabled={isPending} className="w-full">
               Submit
             </Button>
           </form>
