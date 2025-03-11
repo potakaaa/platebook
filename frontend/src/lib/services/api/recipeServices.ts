@@ -287,6 +287,10 @@ export async function fetchPostByID(id: string) {
       `${process.env.NEXT_PUBLIC_DJANGO_API_URL}recipes/${id}/`,
       {
         cache: "no-store",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
       }
     );
 
