@@ -143,7 +143,7 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:3000",
                         "https://platebook.vercel.app", 
                         "http://44.199.101.231", 
                         "https://a4a6-44-199-101-231.ngrok-free.app", 
-                        "a4a6-44-199-101-231.ngrok-free.app"]  
+                       ]  
 
 
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
