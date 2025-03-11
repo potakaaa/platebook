@@ -16,14 +16,14 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "PlateBook - Share & Discover Delicious Recipes",
   description:
-    "Eat. Cook. PlateBook. Repeat. Join PlateBook, the ultimate social platform for food lovers. Share, save, and explore recipes, engage with a community of home cooks and foodies, and get AI-powered meal suggestions.",
+    "Eat. Cook. PlateBook. Repeat. Join PlateBook, the ultimate social platform for food lovers. Share, save, and explore recipes, engage with a community of home cooks and foodies, and get AI-powered help in navigating through Platebook.",
   keywords: [
     "recipes",
     "food",
     "cooking",
     "PlateBook",
     "meal ideas",
-    "AI meal suggestions",
+    "AI Chatbot Assistant",
     "recipe sharing",
     "food lovers",
     "home cooking",
