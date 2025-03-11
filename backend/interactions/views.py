@@ -9,6 +9,7 @@ from recipes.models import Recipe
 from .serializers import LikeSerializer, ShareSerializer, CommentSerializer, FollowSerializer
 from rest_framework.views import APIView
 from rest_framework.decorators import action
+from django.core.cache import cache
 
 # Create your views here.
 class LikeViewSet(viewsets.ModelViewSet):
@@ -139,6 +140,10 @@ class FollowViewSet(viewsets.ModelViewSet):
             return Response({"error": "You are not following this user."}, status=status.HTTP_400_BAD_REQUEST)
 
         follow.delete()
+        
+        cache_key = f'following_feed_{request.user.userId}'
+        cache.delete(cache_key)
+        
         return Response({"message": "User unfollowed successfully."}, status=status.HTTP_200_OK)
         
 
