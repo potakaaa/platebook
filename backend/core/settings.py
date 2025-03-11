@@ -43,7 +43,7 @@ SECURE_HSTS_PRELOAD = True  # Allow browsers to preload HTTPS enforcement
 
 ALLOWED_HOSTS = [os.getenv("ELASTIC_IP"), 
                  "localhost", "127.0.0.1", 
-                 "https://a4a6-44-199-101-231.ngrok-free.app"]
+                 "a4a6-44-199-101-231.ngrok-free.app"]
 
 CALLBACK_URL = "https://platebook.vercel.app"
 
