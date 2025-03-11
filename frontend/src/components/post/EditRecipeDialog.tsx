@@ -329,6 +329,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                     onClick={() => {
                       if (stepFields.length > 1) removeIngredient(index);
                     }}
+                    disabled={ingredientFields.length === 1}
                   />
 
                   <ToolTipButton
@@ -408,6 +409,7 @@ const EditRecipeDialog: React.FC<EditRecipeDialogProps> = ({ recipe, id }) => {
                     onClick={() => {
                       if (stepFields.length > 1) removeStep(index);
                     }}
+                    disabled={stepFields.length === 1}
                   />
 
                   <ToolTipButton
