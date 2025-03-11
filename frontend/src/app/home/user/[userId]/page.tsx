@@ -10,6 +10,8 @@ import React, { useEffect } from "react";
 import { useUserStore } from "@/store/user/UserStore";
 import FollowButton from "@/components/userPage/FollowButton";
 import EditUserDialog from "@/components/userPage/EditUserDialog";
+import { useProfileShare } from "@/store/profile/useProfileShare";
+import ProfileShareDialog from "@/components/userPage/ProfileShareDialog";
 
 const page = (props: { params: Promise<{ userId: string }> }) => {
   const params = React.use(props.params);
@@ -17,6 +19,7 @@ const page = (props: { params: Promise<{ userId: string }> }) => {
   const { data: user, isPending, error } = useQueryGetUserbyID(params.userId);
   const { user: client } = useUserStore();
   const [isOwner, setIsOwner] = React.useState(false);
+  const { isShareOpen, setOpenShare } = useProfileShare();
 
   useEffect(() => {
     if (
@@ -49,6 +52,7 @@ const page = (props: { params: Promise<{ userId: string }> }) => {
 
   return (
     <div className="flex flex-col w-full min-h-screen justify-start items-center py-10 gap-0 sm:gap-3 md:gap-5">
+      <ProfileShareDialog user={user} />
       <section
         id="user-info"
         className="flex flex-col w-full py-3 gap-5 sm:max-w-sm bg-background  dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative "
@@ -99,7 +103,7 @@ const page = (props: { params: Promise<{ userId: string }> }) => {
           id="action-buttons"
           className="w-full flex items-center justify-center gap-2 my-2 z-30"
         >
-          <Button variant={"default"}>
+          <Button variant={"default"} onClick={() => setOpenShare(true)}>
             Share Profile
             <UserPlus className="size-6" />
           </Button>

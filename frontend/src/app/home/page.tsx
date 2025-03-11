@@ -1,20 +1,11 @@
-import PostCard, { PostCardProps } from "@/components/cards/PostCard";
 import FeedChoice from "@/components/home/feed/FeedChoice";
 import HomeImageSlider from "@/components/home/feed/HomeImageSlider";
-import InfiniteScrollComp from "@/components/home/feed/InfiniteScroll";
-import SearchBar from "@/components/home/search/SearchBar";
 import FloatingNavbar from "@/components/navbar/FloatingNav";
-import UserNav from "@/components/navbar/UserNav";
-import { Button } from "@/components/ui/button";
-import { SpotlightNew } from "@/components/ui/spotlight-new";
 
 const page = () => {
   return (
     <div className="flex flex-row w-full justify-center items-center bg-background dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative">
       <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
-
-      {/* <UserNav /> */}
-
       <div className="flex flex-row w-full justify-center items-start min-h-screen overflow-y-auto">
         <section
           id="feed"
