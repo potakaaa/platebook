@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 DEBUG = True
 
 # Enforce HTTPS in Production
-SECURE_SSL_REDIRECT = False  # Redirect all HTTP traffic to HTTPS
+SECURE_SSL_REDIRECT = False 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Trust proxy headers
 
 # Cookie Security
@@ -40,7 +40,9 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply to subdomains
 SECURE_HSTS_PRELOAD = True  # Allow browsers to preload HTTPS enforcement
 
 
-ALLOWED_HOSTS = [os.getenv("ELASTIC_IP"), "localhost", "127.0.0.1", "a4a6-44-199-101-231.ngrok-free.app"]
+ALLOWED_HOSTS = [os.getenv("ELASTIC_IP"), 
+                 "localhost", "127.0.0.1", 
+                 "a4a6-44-199-101-231.ngrok-free.app"]
 
 CALLBACK_URL = "https://platebook.vercel.app"
 
@@ -135,7 +137,15 @@ JWT_AUTH_COOKIE = "access"
 JWT_REFRESH_COOKIE = "refresh"
 
 CORS_ALLOW_CREDENTIALS = True  
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app", "http://44.199.101.231", "https://a4a6-44-199-101-231.ngrok-free.app", "a4a6-44-199-101-231.ngrok-free.app"]  
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", 
+                        "http://127.0.0.1:8000", 
+                        "http://127.0.0.1:3000", 
+                        "https://platebook.vercel.app", 
+                        "http://44.199.101.231", 
+                        "https://a4a6-44-199-101-231.ngrok-free.app", 
+                        "a4a6-44-199-101-231.ngrok-free.app"]  
+
+
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 CORS_ALLOW_HEADERS = ['*']  
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] 
