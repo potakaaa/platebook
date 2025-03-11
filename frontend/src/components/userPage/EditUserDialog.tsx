@@ -33,6 +33,7 @@ import { urlToFile } from "@/lib/utils/urlToFile";
 import { profile } from "console";
 import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
 import { EditUserFormData } from "@/lib/types/authTypes";
+import { toast } from "sonner";
 
 const editUserSchema = z.object({
   username: z.string().nonempty(),
@@ -81,10 +82,25 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
       username: data.username,
       pfp: data.pfp,
     };
-    updateUser(
-      { id: user.userId, data: formData },
-      { onSuccess: () => setOpen(false) }
-    );
+    const updatePromise = new Promise<void>((resolve) => {
+      updateUser(
+        { id: user.userId, data: formData },
+        {
+          onSuccess: () => {
+            setOpen(false);
+            resolve();
+          },
+        }
+      );
+
+      toast.promise(updatePromise, {
+        loading: "Updating profile...",
+        success: "Profile updated!",
+        error: "Error updating profile!",
+      });
+
+      return updatePromise;
+    });
   });
   return (
     <Dialog open={open} onOpenChange={setOpen}>
