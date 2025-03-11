@@ -22,6 +22,8 @@ import {
 } from "../ui/form";
 import { SignUpFormData } from "@/lib/types/authTypes";
 import { signUp } from "@/lib/services/api/accountServices";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const signUpSchema = z
   .object({
@@ -53,8 +55,10 @@ export function SignUpForm({
   });
 
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: SignUpFormData) => {
+    setIsLoading(true);
     try {
       const response = await signUp(data);
 
@@ -77,6 +81,8 @@ export function SignUpForm({
           message: error.non_field_errors.join(" • "),
         });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -190,7 +196,11 @@ export function SignUpForm({
                   )}
                 />
 
-                <Button type="submit" className="w-full relative group/btn">
+                <Button
+                  type="submit"
+                  className="w-full relative group/btn"
+                  disabled={isLoading}
+                >
                   Sign Up
                 </Button>
 
