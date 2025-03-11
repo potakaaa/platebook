@@ -25,14 +25,27 @@ const DeleteButton = ({ id }: { id: string }) => {
   const { data: recipe, isPending, error } = useQueryFetchRecipe(id);
 
   const handleRecipeDelete = () => {
-    deleteRecipe(recipe?.id, {
-      onSuccess: () => {
-        router.push("/home");
-      },
-      onError: (error) => {
-        console.error("Error deleting recipe:", error);
-      },
+    const deletePromise = new Promise<void>((resolve, reject) => {
+      deleteRecipe(recipe?.id, {
+        onSuccess: () => {
+          router.push("/home");
+          window.location.reload();
+          resolve();
+        },
+        onError: (error) => {
+          console.error("Error deleting recipe:", error);
+          reject(error);
+        },
+      });
     });
+
+    toast.promise(deletePromise, {
+      loading: "Deleting recipe...",
+      success: "Recipe deleted!",
+      error: "Error deleting recipe!",
+    });
+
+    return deletePromise;
   };
 
   return (
