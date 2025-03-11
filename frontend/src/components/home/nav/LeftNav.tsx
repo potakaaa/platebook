@@ -30,13 +30,7 @@ const LeftNav = () => {
           className="w-full border border-muted rounded-xl p-2 px-3 hover:bg-muted/80 transition duration-300 overflow-hidden cursor-pointer"
           onClick={() => {
             if (status === "loading" || !session) {
-              toast("Login to view profile", {
-                description: "You need to login to view your profile",
-                action: {
-                  label: "Login",
-                  onClick: () => router.push("/login"),
-                },
-              });
+              router.push("/login");
             } else {
               router.push(`/home/user/${user?.id}`);
               console.log(user?.id);
