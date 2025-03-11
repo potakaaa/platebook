@@ -13,18 +13,31 @@ export const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   async (config) => {
-    const { accessToken } = useUserStore.getState();
+    let { accessToken } = useUserStore.getState();
+
+    if (!accessToken) {
+      console.warn("Access token missing, attempting to retrieve session...");
+      const session = await getSession();
+
+      if (session?.accessToken) {
+        console.log("Retrieved token from session:", session.accessToken);
+        accessToken = session.accessToken;
+        useUserStore.getState().setAccessToken(accessToken);
+      }
+    }
 
     if (accessToken) {
+      console.log("✅ Setting access token:", accessToken);
       config.headers.Authorization = `Bearer ${accessToken}`;
+    } else {
+      console.warn("⚠️ No access token found, request may be unauthenticated.");
     }
 
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
+
 
 axiosClient.interceptors.response.use(
   (response) => response,
