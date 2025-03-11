@@ -32,71 +32,31 @@ class RecipeImageSerializer(serializers.ModelSerializer):
         
     def get_image_url(self, obj):
         return obj.image.url if obj.image else None
-
 class RecipeListSerializer(serializers.ModelSerializer):
-    chef = serializers.SerializerMethodField() 
-    images = RecipeImageSerializer(many=True, read_only=True, source='recipeimage_set')
-    likes = serializers.SerializerMethodField()
-    shares = serializers.SerializerMethodField()
-    comments = serializers.SerializerMethodField()
-    isPlateListed = serializers.SerializerMethodField()
-    isLiked = serializers.SerializerMethodField()
-    isShared = serializers.SerializerMethodField()
-    
-   
+    chef = serializers.SerializerMethodField()
+    images = RecipeImageSerializer(many=True, read_only=True, source="recipeimage_set")
 
-    
-    def get_likes(self, obj):
-        return obj.like_set.count()
-    
-    
-    def get_shares(self, obj):
-        return obj.share_set.count()
+    # Use precomputed values from queryset
+    likes = serializers.IntegerField(source="likes_count", read_only=True)
+    shares = serializers.IntegerField(source="shares_count", read_only=True)
+    comments = serializers.IntegerField(source="comments_count", read_only=True)
+
+    isPlateListed = serializers.BooleanField(source="is_plated", read_only=True)
+    isLiked = serializers.BooleanField(source="is_liked", read_only=True)
+    isShared = serializers.BooleanField(source="is_shared", read_only=True)
 
     class Meta:
         model = Recipe
-        fields = ["id", "title","description", "chef", "origin_country", "created_at", "images", "likes", "shares", "comments", "isPlateListed", "isLiked", "isShared"]
+        fields = ["id", "title", "description", "chef", "origin_country", "created_at",
+                  "images", "likes", "shares", "comments", "isPlateListed", "isLiked", "isShared"]
 
     def get_chef(self, obj):
         return {
             "id": obj.chef.userId,
             "username": obj.chef.username,
-            "pfp_url": getattr(obj.chef.pfp, 'url', None)
+            "pfp_url": getattr(obj.chef.pfp, "url", None),
         }
-        
-    def get_pfp_url(self, obj):
-        if hasattr(obj, "pfp") and obj.pfp:  
-            return obj.pfp.url
-        return None
-    
-    def get_comments(self, obj):
-        return obj.comment_set.count()
-    
-    def get_isPlateListed(self, obj):
-        request = self.context.get('request')  
 
-        if not request or not hasattr(request, "user") or request.user.is_anonymous:
-            return False
-
-        return CooklistItem.objects.filter(cooklist__owner=request.user, recipe=obj).exists()
-    
-    def get_isLiked(self, obj):
-        request = self.context.get('request') 
-
-        if not request or not hasattr(request, "user") or request.user.is_anonymous:
-            return False 
-        
-        return obj.like_set.filter(user=request.user).exists()
-
-    def get_isShared(self, obj):
-        request = self.context.get('request') 
-
-        if not request or not hasattr(request, "user") or request.user.is_anonymous:
-            return False 
-        
-        return obj.share_set.filter(user=request.user).exists()
-
-    
         
 class SharedRecipeListSerializer(RecipeListSerializer):
     sharedBy = serializers.SerializerMethodField()

@@ -11,7 +11,6 @@ const FeedChoice = () => {
 
   const toggleFeed = () => {
     setFeed((prevFeed) => (prevFeed === "for-you" ? "following" : "for-you"));
-    console.log(feed);
   };
 
   return (

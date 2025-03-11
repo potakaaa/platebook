@@ -12,9 +12,11 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import api_view
 from rest_framework.filters import OrderingFilter
 from django.http import JsonResponse
+from django.core.cache import cache
 from rest_framework.generics import ListAPIView
-from django.db.models import Q, Case, When, Value, IntegerField, UUIDField
-from interactions.models import Follow, Share
+from django.db.models import Q, Case, When, Value, IntegerField, UUIDField, Count, Exists, OuterRef
+from interactions.models import Follow, Share, Like
+from cook_list.models import CooklistItem
 
 # Create your views here.
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -137,19 +139,31 @@ class RecipeFeedView(ListAPIView):
     pagination_class = RecipePagination
     permission_classes = [AllowAny]
     filter_backends = [OrderingFilter]
-    ordering_fields = ["created_at"]  
-    
+    ordering_fields = ["created_at"]
+
     def get_queryset(self):
-        queryset = Recipe.objects.all()
-
-        filter_type = self.request.query_params.get("filter", None)
+        user = self.request.user
         sort_order = self.request.query_params.get("sort", "newest")
+        cache_key = f"recipe_feed_{user.userId if user.is_authenticated else 'anon'}_{sort_order}"
+        
+        queryset = cache.get(cache_key)
 
-        if sort_order == "oldest":
-            queryset = queryset.order_by("created_at")  
-        else:
-            queryset = queryset.order_by("-created_at")
+        if not queryset:
+            queryset = Recipe.objects.annotate(
+                likes_count=Count("like", distinct=True),
+                shares_count=Count("share", distinct=True),
+                comments_count=Count("comment", distinct=True),
+            ).select_related("chef").prefetch_related("recipeimage_set")
 
+            if user.is_authenticated:
+                queryset = queryset.annotate(
+                    is_liked=Exists(Like.objects.filter(recipe=OuterRef("pk"), user=user)),
+                    is_shared=Exists(Share.objects.filter(recipe=OuterRef("pk"), user=user)),
+                    is_plated=Exists(CooklistItem.objects.filter(cooklist__owner=user, recipe=OuterRef("pk"))),
+                )
+
+            queryset = queryset.order_by("-created_at" if sort_order == "newest" else "created_at")
+            cache.set(cache_key, queryset, timeout=60)  
         return queryset
 
 @api_view(["GET"])
