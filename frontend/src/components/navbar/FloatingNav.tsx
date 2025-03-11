@@ -95,7 +95,7 @@ const FloatingNavbar = () => {
             },
           });
         } else {
-          router.push("/home/user/${user?.id}");
+          router.push(`/home/user/${user?.id}`);
         }
       },
     },

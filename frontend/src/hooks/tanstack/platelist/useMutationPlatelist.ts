@@ -8,20 +8,20 @@ import {
   addRecipeToPlatelist,
   removeRecipeFromPlatelist,
 } from "@/lib/services/api/platelistServices";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { use } from "react";
 import useQueryPlatelist from "./useQueryPlatelist";
 import { useUserStore } from "@/store/user/UserStore";
 
 const useMutationPlatelist = () => {
-  const { fetchPlateList } = useUserStore();
+  const queryClient = useQueryClient();
 
   const useMutationPostPlatelist = () => {
     return useMutation({
       mutationFn: (recipe_id: string) => addRecipeToPlatelist(recipe_id),
       onSuccess(data) {
         console.log("Platelsit add Success:", data);
-        fetchPlateList();
+        queryClient.invalidateQueries({ queryKey: ["platelist"] });
       },
       onError(error) {
         console.error("Platelist add Error:", error);
@@ -34,7 +34,7 @@ const useMutationPlatelist = () => {
       mutationFn: (recipe_id: string) => removeRecipeFromPlatelist(recipe_id),
       onSuccess(data) {
         console.log("Platelsit delete Success:", data);
-        fetchPlateList();
+        queryClient.invalidateQueries({ queryKey: ["platelist"] });
       },
       onError(error) {
         console.error("Platelist delete Error:", error);

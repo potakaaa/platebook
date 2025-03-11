@@ -11,10 +11,9 @@ type storedUser = {
 
 type UserStore = {
   user: storedUser | null;
-  plateList: PlatelistItem[];
-  isFetchingPlateList: boolean;
+  platelist: PlatelistItem[];
+  setPlateList: (platelist: PlatelistItem[]) => void;
   setSession: (user: storedUser | null) => void;
-  fetchPlateList: () => Promise<void>;
   resetStore: () => void;
   accessToken: string | null;
   setAccessToken: (accessToken: string | null) => void;
@@ -22,7 +21,7 @@ type UserStore = {
 
 export const useUserStore = create<UserStore>((set) => ({
   user: null,
-  plateList: [],
+  platelist: [],
   isFetchingPlateList: false,
   accessToken: null,
 
@@ -34,22 +33,14 @@ export const useUserStore = create<UserStore>((set) => ({
     set({ user });
   },
 
-  fetchPlateList: async () => {
-    set({ isFetchingPlateList: true });
-    try {
-      const response = await getPlatelist();
-      const cooklistItems = response[0]?.cooklist_items || [];
-      set({ plateList: cooklistItems, isFetchingPlateList: false });
-    } catch (error) {
-      set({ isFetchingPlateList: false });
-    }
+  setPlateList: (platelist) => {
+    set({ platelist });
   },
 
   resetStore: () => {
     set({
       user: null,
-      plateList: [],
-      isFetchingPlateList: false,
+      platelist: [],
     });
   },
 }));

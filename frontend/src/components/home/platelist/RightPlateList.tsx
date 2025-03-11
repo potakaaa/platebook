@@ -4,16 +4,14 @@ import PlateDialog from "../../PlateDialog";
 import { useUserStore } from "@/store/user/UserStore";
 import { Disc, Loader2 } from "lucide-react";
 import Link from "next/link";
+import useQueryPlatelist from "@/hooks/tanstack/platelist/useQueryPlatelist";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
-  const { user, plateList, fetchPlateList, isFetchingPlateList } =
-    useUserStore();
+  const { user, platelist } = useUserStore();
 
-  useEffect(() => {
-    if (plateList.length === 0 && user !== null) {
-      fetchPlateList();
-    }
-  }, [user]);
+  const { useQueryGetPlatelist } = useQueryPlatelist();
+  const { isFetching: isFetchingPlateList, error } = useQueryGetPlatelist();
 
   if (!user) {
     return (
@@ -26,7 +24,7 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
     );
   }
 
-  if (isFetchingPlateList && plateList.length === 0) {
+  if (isFetchingPlateList && platelist?.length === 0) {
     return (
       <span className="w-full flex items-center justify-center my-5 gap-3">
         <Loader2 className="animate-spin text-primary size-5" />
@@ -42,26 +40,30 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
         <span className="text-primary lg:text-2xl font-bold">Plate List</span>
       )}
       <div className="flex flex-col space-y-3">
-        {plateList.length === 0 && (
+        {platelist?.length === 0 && (
           <span className="w-full flex justify-center items-center text-xs sm:text-sm my-10 gap-2">
             <p>Add recipes to your Plate List!</p>
             <Disc className="text-primary size-5" />
           </span>
         )}
-        {plateList?.map((plate, index) => (
-          <PlateDialog
-            key={index}
-            postId={plate.recipe.id}
-            postName={plate.recipe.title}
-            postDesc={plate.recipe.description}
-            postImg={
-              plate.recipe.images?.map((img) => img.image_url) || [
-                plate.recipe.images?.[0].image_url,
-              ]
-            }
-            isMobile={isMobile}
-          />
-        ))}
+        <ScrollArea className="h-screen pb-10">
+          <div className="flex flex-col w-full gap-2">
+            {platelist?.map((plate, index) => (
+              <PlateDialog
+                key={index}
+                postId={plate.recipe.id}
+                postName={plate.recipe.title}
+                postDesc={plate.recipe.description}
+                postImg={
+                  plate.recipe.images?.map((img) => img.image_url) || [
+                    plate.recipe.images?.[0].image_url,
+                  ]
+                }
+                isMobile={isMobile}
+              />
+            ))}
+          </div>
+        </ScrollArea>
       </div>
     </div>
   );

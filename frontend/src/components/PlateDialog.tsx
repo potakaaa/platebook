@@ -46,8 +46,8 @@ const PlateDialog = ({
               src={postImg[0]}
               alt={postName}
               className="size-20 object-cover aspect-square "
-              width={200}
-              height={200}
+              width={500}
+              height={500}
             />
           </span>
           <section

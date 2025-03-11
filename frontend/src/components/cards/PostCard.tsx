@@ -138,7 +138,10 @@ const PostCard = (props: {
                   <Image
                     src={image}
                     alt={title}
-                    fill
+                    width={500}
+                    height={500}
+                    priority
+                    sizes={""}
                     className="size-full rounded-lg object-cover shadow-md"
                   />
                 </AspectRatio>
