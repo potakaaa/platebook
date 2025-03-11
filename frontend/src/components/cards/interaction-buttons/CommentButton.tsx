@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import Comments from "../Comments";
 import useQueryInteraction from "@/hooks/tanstack/interaction/useQueryInteractions";
 import useMutationInteraction from "@/hooks/tanstack/interaction/useMutationInteraction";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const CommentButton = ({
   id,
@@ -94,30 +95,32 @@ const CommentButton = ({
               </div>
             </DialogHeader>
             <div className="w-full h-full flex flex-col space-y-5">
-              <section id="comments" className="flex flex-col space-y-3">
-                {isLoading ? (
-                  <span className="text-center text-sm text-muted-foreground flex flex-row w-full items-center justify-center gap-1">
-                    <Loader2 className="size-5 animate-spin text-primary" />
-                    Loading comments
-                  </span>
-                ) : isError ? (
-                  <div>Error: {error.message}</div>
-                ) : data?.length > 0 ? (
-                  data.map((comment: any) => (
-                    <Comments
-                      key={comment.id}
-                      userId={comment.user.userId}
-                      userName={comment.user.username}
-                      userImg={comment.user.pfp_url}
-                      comment={comment.content}
-                    />
-                  ))
-                ) : (
-                  <div className="text-center text-sm text-muted-foreground">
-                    No comments yet.
-                  </div>
-                )}
-              </section>
+              <ScrollArea className="h-[400px]">
+                <section id="comments" className="flex flex-col space-y-3">
+                  {isLoading ? (
+                    <span className="text-center text-sm text-muted-foreground flex flex-row w-full items-center justify-center gap-1">
+                      <Loader2 className="size-5 animate-spin text-primary" />
+                      Loading comments
+                    </span>
+                  ) : isError ? (
+                    <div>Error: {error.message}</div>
+                  ) : data?.length > 0 ? (
+                    data.map((comment: any) => (
+                      <Comments
+                        key={comment.id}
+                        userId={comment.user.userId}
+                        userName={comment.user.username}
+                        userImg={comment.user.pfp_url}
+                        comment={comment.content}
+                      />
+                    ))
+                  ) : (
+                    <div className="text-center items-end justify-end h-full text-sm text-muted-foreground">
+                      No comments yet.
+                    </div>
+                  )}
+                </section>
+              </ScrollArea>
               <DialogFooter>
                 <form
                   className="flex flex-row w-full gap-2"
