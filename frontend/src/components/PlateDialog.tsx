@@ -16,6 +16,7 @@ import { ChevronDown, Trash2, View } from "lucide-react";
 import ToolTipButton from "./home/buttons/ToolTipButton";
 import { useRouter } from "next/navigation";
 import useMutationPlatelist from "@/hooks/tanstack/platelist/useMutationPlatelist";
+import { toast } from "sonner";
 
 const PlateDialog = ({
   postId,
@@ -36,6 +37,20 @@ const PlateDialog = ({
   const { useMutationDeletePlatelistItem } = useMutationPlatelist();
 
   const { mutate: deleteItem, isPending } = useMutationDeletePlatelistItem();
+
+  const handleDelete = () => {
+    const deletePromise = new Promise<void>((resolve) => {
+      deleteItem(String(postId));
+    });
+
+    toast.promise(deletePromise, {
+      loading: "Removing recipe...",
+      success: "Recipe removed!",
+      error: "Error removing recipe!",
+    });
+
+    return deletePromise;
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -99,7 +114,7 @@ const PlateDialog = ({
               btnType="button"
               btnVariant="destructive"
               btnClassName="text-xs lg:text-sm px-3"
-              onClick={() => deleteItem(String(postId))}
+              onClick={handleDelete}
               btnChildren={
                 <>
                   <Trash2 className="size-6" />
