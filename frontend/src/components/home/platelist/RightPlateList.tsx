@@ -42,6 +42,12 @@ const RightPlateList = ({ isMobile = false }: { isMobile?: boolean }) => {
         <span className="text-primary lg:text-2xl font-bold">Plate List</span>
       )}
       <div className="flex flex-col space-y-3">
+        {plateList.length === 0 && (
+          <span className="w-full flex justify-center items-center text-xs sm:text-sm my-10 gap-2">
+            <p>Add recipes to your Plate List!</p>
+            <Disc className="text-primary size-5" />
+          </span>
+        )}
         {plateList?.map((plate, index) => (
           <PlateDialog
             key={index}

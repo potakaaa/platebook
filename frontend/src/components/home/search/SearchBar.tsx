@@ -5,6 +5,7 @@ import { ArrowRightCircleIcon, SearchIcon } from "lucide-react";
 import useSearchStore from "@/store/search/useSearchStore";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useFocusStore } from "@/store/focus/useFocusStore";
+import { cn } from "@/lib/utils";
 
 const SearchBar = () => {
   const { searchQuery, setSearchQuery } = useSearchStore();
@@ -12,7 +13,8 @@ const SearchBar = () => {
   const debouncedValue = useDebounce(inputValue, 500);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const { focusComponentId, setFocusComponentId } = useFocusStore();
+  const { focusComponentId, setFocusComponentId, isFocused, setFocus } =
+    useFocusStore();
 
   useEffect(() => {
     if (debouncedValue === "" || debouncedValue === null) {
@@ -43,12 +45,21 @@ const SearchBar = () => {
 
   return (
     <div className="w-full flex items-center justify-center mt-1 sm:mt-0">
-      <form className="w-full flex flex-row border border-primary rounded-full px-2 items-center justify-center">
+      <form
+        className={cn(
+          "w-full flex flex-row border border-primary rounded-full px-2 items-center justify-center transition-all duration-300",
+          isFocused && "shadow-[0px_0px_45px_10px_rgba(255,147,46,0.2)]"
+        )}
+      >
         <Input
           type="search"
           onChange={handleChange}
           value={inputValue}
           ref={inputRef}
+          onBlur={() => {
+            setFocus(false);
+            setFocusComponentId(null);
+          }}
           placeholder="Search for recipes"
           className="h-8 sm:h-10 text-xs sm:text-sm w-full border-none text-ellipsis focus-visible:ring-none focus-visible:ring-0"
         />
