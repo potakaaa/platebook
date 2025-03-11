@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input-hero";
 import { useFocusStore } from "@/store/focus/useFocusStore";
+import useSearchStore from "@/store/search/useSearchStore";
+import { useRouter } from "next/navigation";
 
 const placeholders = [
   "Adobong Kare Kare Pinoy Style",
@@ -14,7 +16,16 @@ const placeholders = [
 
 const SearchInput = () => {
   const ref = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const { setSearchQuery } = useSearchStore();
   const { focusComponentId, setFocusComponentId } = useFocusStore();
+
+  const [localSearchQuery, setLocalSearchQuery] = useState<string>("");
+
+  const handleSearch = (query: string) => {
+    router.push("/home");
+    setSearchQuery(query);
+  };
 
   useEffect(() => {
     if (focusComponentId === "search-recipe" && ref.current) {
@@ -35,8 +46,13 @@ const SearchInput = () => {
     <div className="" ref={ref} tabIndex={-1}>
       <PlaceholdersAndVanishInput
         placeholders={placeholders}
-        onChange={() => {}}
-        onSubmit={() => {}}
+        onChange={(e) => {
+          const query = e.target.value;
+          setLocalSearchQuery(query);
+        }}
+        onSubmit={() => {
+          handleSearch(localSearchQuery);
+        }}
       />
     </div>
   );
