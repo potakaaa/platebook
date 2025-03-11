@@ -30,7 +30,17 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.getenv("ELASTIC_IP"), "localhost", ""]
+# Enforce HTTPS in Production
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP traffic to HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Trust proxy headers
+
+# Cookie Security
+SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for 1 year (HSTS)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply to subdomains
+SECURE_HSTS_PRELOAD = True  # Allow browsers to preload HTTPS enforcement
+
+
+ALLOWED_HOSTS = [os.getenv("ELASTIC_IP"), "localhost", "127.0.0.1", "https://a4a6-44-199-101-231.ngrok-free.app", "a4a6-44-199-101-231.ngrok-free.app"]
 
 CALLBACK_URL = "https://platebook.vercel.app"
 
@@ -115,7 +125,7 @@ DJ_REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_COOKIE": "access",
     "JWT_AUTH_REFRESH_COOKIE": "refresh",
-    "JWT_AUTH_SECURE": False, # true in prod
+    "JWT_AUTH_SECURE": True, # true in prod
     "JWT_AUTH_SAMESITE": "Lax",
     "SESSION_LOGIN": False,
 }
@@ -125,8 +135,8 @@ JWT_AUTH_COOKIE = "access"
 JWT_REFRESH_COOKIE = "refresh"
 
 CORS_ALLOW_CREDENTIALS = True  
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app", "http://44.199.101.231"]  
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app", "http://44.199.101.231"] 
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app", "http://44.199.101.231", "https://a4a6-44-199-101-231.ngrok-free.app", "a4a6-44-199-101-231.ngrok-free.app"]  
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app", "http://44.199.101.231", "https://a4a6-44-199-101-231.ngrok-free.app", "a4a6-44-199-101-231.ngrok-free.app" ] 
 
 CORS_ALLOW_HEADERS = ['*']  
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] 
