@@ -123,7 +123,7 @@ const ChatbotCard = ({ forHero }: { forHero?: boolean }) => {
                   Ask me anything about Platebook?
                 </CardDescription>
               </CardHeader>
-              <CardContent className="w-full p-3 pointer-events-none">
+              <CardContent className="w-full p-3 ">
                 {/* <span className="border-b border-muted border w-full" /> */}
                 <ScrollArea className="h-[350px] w-full">
                   {messages?.length === 0 && (
