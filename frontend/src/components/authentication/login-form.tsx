@@ -39,6 +39,7 @@ export function LoginForm({
   const router = useRouter();
 
   const [isForgetPass, setIsForgetPass] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
@@ -49,6 +50,7 @@ export function LoginForm({
   });
 
   const onSubmit = async (data: any) => {
+    setIsLoading(true);
     try {
       loginForm.clearErrors();
 
@@ -96,6 +98,8 @@ export function LoginForm({
         type: "server",
         message: "An unexpected error occurred. Please try again.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -176,7 +180,7 @@ export function LoginForm({
                     )}
                   />
 
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full" disabled={isLoading}>
                     Login
                   </Button>
                   <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
