@@ -209,4 +209,10 @@ class FollowingFeedView(ListAPIView):
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context["shared_recipe_map"] = self.shared_recipe_map
-        return context
+        return 
+    
+    
+@api_view(['GET'])
+def get_recipe_ids(request):
+    recipe_ids = Recipe.objects.values_list('id', flat=True)
+    return Response({"recipe_ids": list(recipe_ids)})
