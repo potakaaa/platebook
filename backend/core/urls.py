@@ -18,7 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from .api import urls 
 
+from django.http import JsonResponse
+
+def not_found_redirect(request):
+    return JsonResponse({"error": "Invalid endpoint"}, status=404)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('core.api.urls')),
+    path("", not_found_redirect), 
 ]

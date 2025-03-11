@@ -34,9 +34,16 @@ axiosClient.interceptors.response.use(
     const session = await getSession();
     console.log("Session:", session);
 
-    if (!session) {
-      console.warn("No session found, logging out");
-      return Promise.reject(error);
+    if (!session && !originalRequest._retried) {
+      console.warn(
+        "⚠️ No session found, retrying request without credentials..."
+      );
+      originalRequest._retried = true;
+
+      console.log("Original request:", originalRequest);
+      delete originalRequest.headers.Authorization;
+      originalRequest.withCredentials = false;
+      return axiosClient(originalRequest);
     }
 
     if (

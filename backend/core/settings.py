@@ -40,7 +40,7 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply to subdomains
 SECURE_HSTS_PRELOAD = True  # Allow browsers to preload HTTPS enforcement
 
 
-ALLOWED_HOSTS = [os.getenv("ELASTIC_IP"), "localhost", "127.0.0.1", "https://a4a6-44-199-101-231.ngrok-free.app", "a4a6-44-199-101-231.ngrok-free.app"]
+ALLOWED_HOSTS = [os.getenv("ELASTIC_IP"), "localhost", "127.0.0.1", "a4a6-44-199-101-231.ngrok-free.app"]
 
 CALLBACK_URL = "https://platebook.vercel.app"
 
@@ -136,15 +136,14 @@ JWT_REFRESH_COOKIE = "refresh"
 
 CORS_ALLOW_CREDENTIALS = True  
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app", "http://44.199.101.231", "https://a4a6-44-199-101-231.ngrok-free.app", "a4a6-44-199-101-231.ngrok-free.app"]  
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000", "http://127.0.0.1:3000", "https://platebook.vercel.app", "http://44.199.101.231", "https://a4a6-44-199-101-231.ngrok-free.app", "a4a6-44-199-101-231.ngrok-free.app" ] 
-
+CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 CORS_ALLOW_HEADERS = ['*']  
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] 
 
 SESSION_COOKIE_SAMESITE = "Lax"  
 CSRF_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SECURE = True  
-SESSION_COOKIE_SECURE = True  
+CSRF_COOKIE_SECURE = False  
+SESSION_COOKIE_SECURE = False  
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
