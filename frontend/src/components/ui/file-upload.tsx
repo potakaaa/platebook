@@ -36,6 +36,8 @@ export interface InputProps
   initialFiles?: (RecipeImage | File)[];
   fileType?: "image" | "file";
   multiple?: boolean;
+  forProfile?: boolean;
+  forProfileMess?: string[];
 }
 
 export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
@@ -48,6 +50,8 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
       initialFiles = [],
       fileType,
       multiple = true,
+      forProfile = false,
+      forProfileMess = [],
       ...props
     },
     ref
@@ -98,13 +102,13 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div
-        className="w-full max-w-md flex items-center justify-center"
+        className="w-full max-w-xl flex items-center justify-center"
         {...getRootProps()}
       >
         <motion.div
           onClick={handleClick}
           whileHover="animate"
-          className="p-10 group/file block rounded-lg cursor-pointer w-full relative overflow-hidden"
+          className="p-3 sm:p-5 lg:p-10 group/file block rounded-lg cursor-pointer w-full relative overflow-hidden"
         >
           <input
             ref={fileInputRef}
@@ -124,11 +128,13 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
             <GridPattern />
           </div>
           <div className="flex flex-col items-center justify-center">
-            <p className="relative z-20 font-semibold text-neutral-700 dark:text-neutral-300 text-base">
+            <p className="relative z-20 font-semibold text-neutral-700 dark:text-neutral-300 text-sm sm:text-base text-center">
               Upload file
             </p>
-            <p className="relative z-20 text-sm font-normal text-neutral-400 dark:text-neutral-400 mt-2">
-              Drag or drop your files here or click to upload
+            <p className="relative z-20 text-xs sm:text-sm font-normal text-neutral-400 dark:text-neutral-400 mt-2 text-center">
+              {forProfile
+                ? forProfileMess[0]
+                : "Drag or drop your files here or click to upload"}
             </p>
             <div className="relative w-full mt-10 max-w-xl mx-auto">
               {files.length > 0 &&
@@ -160,16 +166,16 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
                         idx === 0 ? "file-upload" : "file-upload-" + idx
                       }
                       className={cn(
-                        "relative overflow-hidden z-40 bg-white dark:bg-neutral-900 flex items-center justify-between p-4 mt-4 w-full mx-auto rounded-md",
+                        "relative overflow-hidden z-40 bg-white dark:bg-neutral-900 flex items-center justify-between p-4 mt-4 w-full max-w-[200px] sm:max-w-xl mx-auto rounded-md",
                         "shadow-sm gap-3"
                       )}
                     >
-                      <div className="flex flex-row gap-3 items-center mx-auto rounded-md relative overflow-hidden">
+                      <div className="flex flex-col gap-2 sm:gap-3 items-center mx-auto rounded-md relative overflow-hidden">
                         <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           layout
-                          className="size-24 rounded-md shadow-md w-40 max-w-40 flex-[1] overflow-hidden"
+                          className="size-24 rounded-md shadow-md w-40 min-w-5 max-w-40 flex-[2] overflow-hidden"
                         >
                           <Image
                             src={fileURL}
@@ -180,45 +186,47 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
                             }
                             width={500}
                             height={500}
-                            className="object-cover size-full"
+                            className="object-cover size-full aspect-[16/9]"
                             onLoad={() => URL.revokeObjectURL(fileURL)}
                           />
                         </motion.div>
-                        <div className="flex flex-col justify-start w-52 flex-[2]">
-                          <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            layout
-                            className="text-base text-neutral-700 dark:text-neutral-300 truncate max-w-xs"
+                        <div className="flex flex-row justify-between gap-2 w-full">
+                          <span className="w-full max-w-[150px] line-clamp-3">
+                            <motion.p
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              layout
+                              className="text-sm sm:text-base text-neutral-700 dark:text-neutral-300 truncate w-full"
+                            >
+                              {fileName}
+                            </motion.p>
+                            <motion.p
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              layout
+                              className="rounded-lg py-1 w-fit flex-shrink-0 text-xs sm:text-sm text-neutral-600 dark:bg-neutral-800 dark:text-white shadow-input"
+                            >
+                              {fileSize} MB
+                            </motion.p>
+                            <motion.p
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              layout
+                              className="px-1 py-0.5 rounded-md bg-gray-100 dark:bg-neutral-800 text-xs text-neutral-600 dark:text-neutral-400"
+                            >
+                              {fileTypeLabel}
+                            </motion.p>
+                          </span>
+                          <Button
+                            type="button"
+                            size="icon"
+                            variant={"ghost"}
+                            onClick={() => handleRemoveFile(file)}
                           >
-                            {fileName}
-                          </motion.p>
-                          <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            layout
-                            className="rounded-lg py-1 w-fit flex-shrink-0 text-sm text-neutral-600 dark:bg-neutral-800 dark:text-white shadow-input"
-                          >
-                            {fileSize} MB
-                          </motion.p>
-                          <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            layout
-                            className="px-1 py-0.5 rounded-md bg-gray-100 dark:bg-neutral-800 text-xs text-neutral-600 dark:text-neutral-400"
-                          >
-                            {fileTypeLabel}
-                          </motion.p>
+                            <Trash className="size-4 text-neutral-600 hover:text-destructive transition-colors duration-200 dark:text-neutral-400" />
+                          </Button>
                         </div>
                       </div>
-                      <Button
-                        type="button"
-                        size="icon"
-                        variant={"ghost"}
-                        onClick={() => handleRemoveFile(file)}
-                      >
-                        <Trash className="size-4 text-neutral-600 hover:text-destructive transition-colors duration-200 dark:text-neutral-400" />
-                      </Button>
                     </motion.div>
                   );
                 })}
