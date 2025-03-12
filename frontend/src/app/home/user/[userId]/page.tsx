@@ -89,10 +89,18 @@ const page = (props: { params: Promise<{ userId: string }> }) => {
           className="w-full flex flex-row justify-around sm:justify-evenly items-center text-center z-30"
         >
           <section id="following" className="flex flex-col">
-            <FollowLists count={user.following_count} userId={user.userId} type="Following"/>
+            <FollowLists
+              count={user.following_count}
+              userId={user.userId}
+              type="Following"
+            />
           </section>
           <section id="followers" className="flex flex-col">
-            <FollowLists count={user.follower_count} userId={user.userId} type="Followers"/>
+            <FollowLists
+              count={user.followers_count}
+              userId={user.userId}
+              type="Followers"
+            />
           </section>
           <section id="posts" className="flex flex-col">
             <p className="text-center font-bold sm:text-lg">
