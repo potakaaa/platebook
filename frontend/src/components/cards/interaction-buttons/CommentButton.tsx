@@ -79,7 +79,7 @@ const CommentButton = ({
             </Button>
           </DialogTrigger>
           <DialogContent
-            className="w-full max-w-xl rounded-xl min-h-[400px] max-h-[600px] flex flex-col justify-between overflow-y-auto pointer-events-auto"
+            className="w-full max-w-sm sm:max-w-xl rounded-xl min-h-[400px] max-h-[600px] flex flex-col justify-center self-center overflow-y-auto pointer-events-auto"
             style={{ overscrollBehavior: "contain" }}
           >
             <DialogHeader
@@ -95,8 +95,11 @@ const CommentButton = ({
               </div>
             </DialogHeader>
             <div className="w-full h-full flex flex-col space-y-5">
-              <ScrollArea className="h-[400px]">
-                <section id="comments" className="flex flex-col space-y-3">
+              <ScrollArea className="h-[400px] flex flex-col">
+                <section
+                  id="comments"
+                  className="flex flex-col justify-end space-y-3 h-[400px]"
+                >
                   {isLoading ? (
                     <span className="text-center text-sm text-muted-foreground flex flex-row w-full items-center justify-center gap-1">
                       <Loader2 className="size-5 animate-spin text-primary" />

@@ -8,7 +8,7 @@ import HomeLogo from "../../navbar/nav/HomeLogo";
 import PostRecipeDialog from "../../post/PostRecipeDialog";
 import { PlateListSidebarToggle } from "../platelist/PlateListSidebar";
 import { useUserStore } from "@/store/user/UserStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useFocusStore } from "@/store/focus/useFocusStore";
@@ -20,7 +20,24 @@ const LeftNav = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const { setFocus, setFocusComponentId } = useFocusStore();
+  const [loggingOut, setLoggingOut] = useState(false);
 
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    const logoutPromise = new Promise<void>(() => {
+      resetStore();
+      signOut({ callbackUrl: "/" });
+    });
+
+    toast.promise(logoutPromise, {
+      loading: "Logging out...",
+      success: "Logged out successfully",
+      error: "An error occurred while logging out",
+    });
+    setLoggingOut(false);
+
+    return logoutPromise;
+  };
 
   return (
     <div className="flex flex-col size-full">
@@ -80,11 +97,8 @@ const LeftNav = () => {
           status === "loading" || !session ? "hover:none" : ""
         }`}
         divCN={`${status === "loading" || !session ? "opacity-50" : ""}`}
-        onClick={() => {
-          resetStore();
-          signOut({ callbackUrl: "/" });
-        }}
-        disabled={status === "loading" || !session}
+        onClick={handleLogout}
+        disabled={status === "loading" || !session || loggingOut}
       />
     </div>
   );
