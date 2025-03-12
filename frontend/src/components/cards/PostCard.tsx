@@ -106,14 +106,16 @@ const PostCard = (props: {
           </div>
           <Button
             variant={"outline"}
-            className="px-2 sm:px-3"
+            className="p-1 sm:px-3"
             size={"sm"}
             onClick={() => {
               if (!forHero) handleRecipeClick();
             }}
           >
             <SquareArrowOutUpRight className="size-4 items-center" />
-            <p className="hidden sm:block text-sm 2xl:text-base">View Recipe</p>
+            <p className="hidden sm:block text-xs sm:text-sm 2xl:text-base">
+              View Recipe
+            </p>
           </Button>
         </CardItem>
         <div id="post" className="flex flex-col space-y-1">

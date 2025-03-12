@@ -5,6 +5,7 @@ import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input-
 import { useFocusStore } from "@/store/focus/useFocusStore";
 import useSearchStore from "@/store/search/useSearchStore";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const placeholders = [
   "Adobong Kare Kare Pinoy Style",
@@ -22,9 +23,19 @@ const SearchInput = () => {
 
   const [localSearchQuery, setLocalSearchQuery] = useState<string>("");
 
-  const handleSearch = (query: string) => {
-    router.push("/home");
-    setSearchQuery(query);
+  const handleSearch = async (query: string) => {
+    const searchPromise = new Promise<void>(() => {
+      router.push("/home");
+      setSearchQuery(query);
+    });
+
+    toast.promise(searchPromise, {
+      loading: "Searching...",
+      success: "Search results for " + query,
+      error: "An error occurred while searching",
+    });
+
+    return searchPromise;
   };
 
   useEffect(() => {

@@ -18,12 +18,14 @@ import {
   IconMessageChatbot,
 } from "@tabler/icons-react";
 import Image from "next/image";
+import { Toaster } from "sonner";
 
 const LandingPage = () => {
   return (
     <div className="w-full my-5 lg:my-20">
       <ChatbotCard forHero />
       <BuyCoffeeDialog />
+      <Toaster richColors expand={false} position="top-center" />
       <section className="absolute inset-0 w-full">
         <Navbar />
         <div className="flex-grow" />{" "}

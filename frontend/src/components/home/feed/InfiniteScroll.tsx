@@ -49,6 +49,7 @@ const InfiniteScrollComp = ({ userId }: { userId?: string }) => {
 
   return (
     <InfiniteScroll
+      className="w-full"
       dataLength={posts.length}
       next={fetchNextPage}
       hasMore={!!hasNextPage}
@@ -58,7 +59,7 @@ const InfiniteScrollComp = ({ userId }: { userId?: string }) => {
         </div>
       }
       endMessage={
-        <p className="text-center mt-20 text-foreground/60">
+        <p className="text-center text-sm sm:text-base mt-20 text-foreground/60">
           Come back for more recipes!
         </p>
       }
@@ -66,10 +67,14 @@ const InfiniteScrollComp = ({ userId }: { userId?: string }) => {
       pullDownToRefresh
       pullDownToRefreshThreshold={50}
       pullDownToRefreshContent={
-        <h3 className="text-center">&#8595; Pull down to refresh</h3>
+        <h3 className="text-sm sm:text-base text-center">
+          &#8595; Pull down to refresh
+        </h3>
       }
       releaseToRefreshContent={
-        <h3 className="text-center">&#8593; Release to refresh</h3>
+        <h3 className="text-sm sm:text-base text-center">
+          &#8593; Release to refresh
+        </h3>
       }
     >
       <div className="flex flex-col w-full space-y-5">
