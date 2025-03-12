@@ -12,6 +12,8 @@ const PostCarousel = ({ images }: { images: string[] }) => {
       className="w-full rounded-lg shadow-md"
       transition={{ duration: 1 }}
       placeholder=""
+      autoplay
+      autoplayDelay={4000}
       onPointerEnterCapture={() => {}}
       onPointerLeaveCapture={() => {}}
       prevArrow={({ handlePrev }) => (

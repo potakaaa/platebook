@@ -416,7 +416,7 @@ const PostRecipeDialog = () => {
                             multiple
                             id="images"
                             type="file"
-                            fileType="file"
+                            fileType="image"
                           />
                         </div>
                       </FormControl>

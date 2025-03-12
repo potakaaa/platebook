@@ -94,7 +94,10 @@ const page = async ({ params }: PageProps) => {
       <section id="carousel" className="w-full">
         <PostCarousel images={imageUrls} />
       </section>
-      <section id="description" className="gap-0 sm:gap-1 flex flex-col">
+      <section
+        id="description"
+        className="gap-0 sm:gap-1 w-full flex flex-col justify-start items-start"
+      >
         <p className="text-xs sm:text-sm text-muted-foreground font-semibold">
           Description
         </p>

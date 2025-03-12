@@ -122,6 +122,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
             }}
             className="hidden"
             accept="image/*"
+            multiple={multiple}
             {...props}
           />
           <div className="absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,white,transparent)]">
@@ -221,7 +222,11 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
                             type="button"
                             size="icon"
                             variant={"ghost"}
-                            onClick={() => handleRemoveFile(file)}
+                            className=""
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveFile(file);
+                            }}
                           >
                             <Trash className="size-4 text-neutral-600 hover:text-destructive transition-colors duration-200 dark:text-neutral-400" />
                           </Button>

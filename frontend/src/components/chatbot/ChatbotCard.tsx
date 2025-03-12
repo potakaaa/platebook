@@ -50,15 +50,13 @@ const ChatbotCard = ({ forHero }: { forHero?: boolean }) => {
 
   return (
     <>
-      {isChatOpen && (
+      {isChatOpen && !forHero && (
         <div
-          className={`fixed inset-0 h-screen w-full bg-black/60 z-40 transition duration-200 ${
-            forHero ? "hidden" : "block sm:hidden"
-          }`}
+          className={`fixed inset-0 h-screen w-full bg-black/60 z-40 transition duration-200 block sm:hidden $`}
         />
       )}
       <div
-        className={`fixed ${isChatOpen ? "block" : "hidden"} ${
+        className={`fixed ${!forHero && !isChatOpen && "hidden md:block"} ${
           forHero
             ? "bottom-5 right-7"
             : "sm:bottom-5 sm:right-12 md:right-7 sm:block sm:inset-auto flex inset-0 items-center justify-center"
@@ -69,7 +67,7 @@ const ChatbotCard = ({ forHero }: { forHero?: boolean }) => {
           {!isChatOpen ? (
             <motion.div
               className={`flex flex-row-reverse items-center space-x-2 z-40 ${
-                !forHero && "hidden md:block"
+                !forHero && "hidden md:flex"
               }`}
             >
               <motion.button
@@ -108,7 +106,7 @@ const ChatbotCard = ({ forHero }: { forHero?: boolean }) => {
               exit={{ scaleY: 0, opacity: 0 }}
               transition={{ ease: [0.25, 1, 0.5, 1], duration: 0.7 }}
               style={{ transformOrigin: "bottom" }}
-              className="pointer-events-auto"
+              className="pointer-events-auto relative"
             >
               <Card className="w-[300px] sm:w-[350px] xl:w-[450px] p-0 z-40">
                 <CardHeader className="py-3 xl:py-4 px-3 sm:px-4 xl:px-5 items-start space-y-1">

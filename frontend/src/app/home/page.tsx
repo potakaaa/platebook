@@ -1,6 +1,27 @@
 import FeedChoice from "@/components/home/feed/FeedChoice";
 import HomeImageSlider from "@/components/home/feed/HomeImageSlider";
 import FloatingNavbar from "@/components/navbar/FloatingNav";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Home - PlateBook",
+  description:
+    "Discover and share mouthwatering recipes on PlateBook's vibrant feed. Engage with a community of food lovers, save your favorite dishes, and get inspired by home cooks worldwide.",
+  keywords: [
+    "PlateBook",
+    "recipe feed",
+    "food community",
+    "cooking inspiration",
+    "home cooking",
+    "food lovers",
+    "recipe sharing",
+    "culinary creations",
+    "AI chatbot assistant",
+    "meal ideas",
+    "food photography",
+  ],
+  icons: "/favicon.ico",
+};
 
 const page = () => {
   return (
