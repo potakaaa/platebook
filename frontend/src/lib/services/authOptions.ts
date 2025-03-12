@@ -153,6 +153,7 @@ export const authOptions: NextAuthOptions = {
           const apiAccessToken = response.data.access_token;
           const apiRefreshToken = response.data.refresh_token;
           const id = response.data.user?.id;
+          const username = response.data.user?.username;
 
           if (!apiAccessToken) {
             console.error("No access token found in response");
@@ -162,6 +163,7 @@ export const authOptions: NextAuthOptions = {
           (user as AuthUser).id = id;
           (user as AuthUser).accessToken = apiAccessToken;
           (user as AuthUser).refreshToken = apiRefreshToken;
+          (user as AuthUser).name = username;
           return true;
         } catch (error) {
           console.error("Error signing in with Google", error);
@@ -186,6 +188,8 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.image = user.image || null;
 
+        token.name = (user as AuthUser).name || token.name;
+
         token.accessToken = (user as AuthUser).accessToken || token.accessToken;
         token.refreshToken =
           (user as AuthUser).refreshToken || token.refreshToken;
@@ -197,14 +201,31 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }: { session: Session; token: JWT }) {
       session.accessToken = token.accessToken as string;
       session.refreshToken = token.refreshToken as string;
-      session.user = {
-        id: (token.id ?? "") as string,
-        name: token.name ?? null,
-        email: token.email ?? null,
-        image: typeof token.image === "string" ? token.image : null,
-      };
 
-      const {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_DJANGO_API_URL}profile/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token.accessToken}`,
+            },
+          }
+        );
+      if (!response.ok) throw new Error("Failed to fetch user profile");
+
+      const updatedUser = await response.json();
+
+        console.log("Updated user:", updatedUser);
+
+        session.user = {
+          id: updatedUser.userId,
+          name: updatedUser.username,
+          email: updatedUser.email,
+          image: updatedUser.pfp_url,
+        };
+
+
+        const {
         setSession,
         user: storedSession,
         setAccessToken,
@@ -226,6 +247,11 @@ export const authOptions: NextAuthOptions = {
         });
 
         setAccessToken(session.accessToken);
+      }}
+
+      catch (error) {
+        console.error("Error fetching user profile", error
+        );
       }
 
       return session;

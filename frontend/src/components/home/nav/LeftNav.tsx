@@ -14,10 +14,13 @@ import { toast } from "sonner";
 import { useFocusStore } from "@/store/focus/useFocusStore";
 
 const LeftNav = () => {
-  const { user, resetStore } = useUserStore();
+  const user = useUserStore((state) => state.user);
+  const resetStore = useUserStore((state) => state.resetStore);
+
   const router = useRouter();
   const { data: session, status } = useSession();
   const { setFocus, setFocusComponentId } = useFocusStore();
+
 
   return (
     <div className="flex flex-col size-full">

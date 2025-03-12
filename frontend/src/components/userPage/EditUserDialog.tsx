@@ -34,6 +34,7 @@ import { profile } from "console";
 import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
 import { EditUserFormData } from "@/lib/types/authTypes";
 import { toast } from "sonner";
+import { storedUser, useUserStore } from "@/store/user/UserStore";
 
 const editUserSchema = z.object({
   username: z.string().nonempty(),
@@ -59,15 +60,12 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    console.log("user: ", user);
-
     const processImages = async () => {
       if (user.pfp_url) {
         const pfpFile = await urlToFile(
           user.pfp_url,
           `${user.username || "profile_picture"}.jpg`
         );
-        console.log("PFP FILE: ", pfpFile);
         form.setValue("pfp", pfpFile);
 
         console.log("FORM: ", form.getValues());
@@ -82,25 +80,29 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ user }) => {
       username: data.username,
       pfp: data.pfp,
     };
-    const updatePromise = new Promise<void>((resolve) => {
+    const updatePromise = new Promise<void>((resolve, reject) => {
       updateUser(
         { id: user.userId, data: formData },
         {
           onSuccess: () => {
             setOpen(false);
+
             resolve();
+          },
+          onError: (error) => {
+            reject(error);
           },
         }
       );
-
-      toast.promise(updatePromise, {
-        loading: "Updating profile...",
-        success: "Profile updated!",
-        error: "Error updating profile!",
-      });
-
-      return updatePromise;
     });
+
+    toast.promise(updatePromise, {
+      loading: "Updating profile...",
+      success: "Profile updated!",
+      error: "Error updating profile!",
+    });
+
+    return updatePromise;
   });
   return (
     <Dialog open={open} onOpenChange={setOpen}>

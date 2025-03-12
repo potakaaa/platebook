@@ -53,7 +53,7 @@ class GoogleLogin(SocialLoginView):
             profile_picture_url = social_data.extra_data.get("picture") if social_data else None
             
             
-            if profile_picture_url:
+            if profile_picture_url and not user.pfp:  
                 uploaded_pfp_url = self.upload_image_from_url(profile_picture_url)
                 if uploaded_pfp_url:
                     user.pfp = uploaded_pfp_url
@@ -113,7 +113,7 @@ class DiscordOAuthLogin(APIView):
             defaults={"username": username, "email": email}
         )
 
-        if avatar:
+        if avatar and not user.pfp:
             uploaded_pfp_url = self.upload_image_from_url(avatar)
             if uploaded_pfp_url:
                 user.pfp = uploaded_pfp_url
@@ -425,3 +425,20 @@ class GetUserRecipesView(ListAPIView):
 
 
         return recipes
+    
+    
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            user = request.user
+
+            return Response({
+                "userId": user.pk,
+                "email": user.email,
+                "username": user.username,
+                "pfp_url": get_pfp_url(user)
+            })
+        except Exception as e:
+            return Response({"error": "Could not retrieve user profile."}, status=500)
