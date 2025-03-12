@@ -158,6 +158,7 @@ export function LoginForm({
                           <div className="flex items-center">
                             <Label htmlFor="password">Password</Label>
                             <button
+                              type="button"
                               className="ml-auto text-[11px] underline-offset-2 hover:underline"
                               onClick={() => {
                                 setIsForgetPass(true);

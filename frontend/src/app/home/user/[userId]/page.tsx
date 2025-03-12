@@ -116,7 +116,7 @@ const page = (props: { params: Promise<{ userId: string }> }) => {
         </div>
       </section>
       <span className="w-full border-b border-muted" />
-      <div id="my-posts" className="w-full flex flex-col gap-5">
+      <div id="my-posts" className="w-full flex flex-col gap-5 mt-5">
         <InfiniteScrollComp userId={params.userId} />
       </div>
     </div>
