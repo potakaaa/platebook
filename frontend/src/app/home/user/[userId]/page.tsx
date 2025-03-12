@@ -12,6 +12,7 @@ import FollowButton from "@/components/userPage/FollowButton";
 import EditUserDialog from "@/components/userPage/EditUserDialog";
 import { useProfileShare } from "@/store/profile/useProfileShare";
 import ProfileShareDialog from "@/components/userPage/ProfileShareDialog";
+import FollowLists from "@/components/userPage/FollowLists";
 
 const page = (props: { params: Promise<{ userId: string }> }) => {
   const params = React.use(props.params);
@@ -88,16 +89,10 @@ const page = (props: { params: Promise<{ userId: string }> }) => {
           className="w-full flex flex-row justify-around sm:justify-evenly items-center text-center z-30"
         >
           <section id="following" className="flex flex-col">
-            <p className="text-center font-bold sm:text-lg">
-              {user.following_count}
-            </p>
-            <h1 className="font-medium text-xs sm:text-sm">Following</h1>
+            <FollowLists count={user.following_count} userId={user.userId} type="Following"/>
           </section>
           <section id="followers" className="flex flex-col">
-            <p className="text-center font-bold sm:text-lg">
-              {user.followers_count}
-            </p>
-            <h1 className="font-medium text-xs sm:text-sm">Followers</h1>
+            <FollowLists count={user.follower_count} userId={user.userId} type="Followers"/>
           </section>
           <section id="posts" className="flex flex-col">
             <p className="text-center font-bold sm:text-lg">

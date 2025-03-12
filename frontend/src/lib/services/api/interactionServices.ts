@@ -140,3 +140,25 @@ export const unfollowUser = async (id: string) => {
     throw new Error("An unknown error occurred.");
   }
 };
+
+export const getFollowersByID = async(id: string) => {
+  try{
+    const response = await axiosClient.get(`/users/${id}/followers/`)
+
+    return response.data
+  } catch (err){
+    console.error("ERROR FETCING FOLLOWERS" + err)
+  }
+}
+
+
+export const getFollowingByID = async(id: string) => {
+  try{
+    const response = await axiosClient.get(`/users/${id}/following/`)
+
+    return response.data
+  } catch (err){
+    console.error("ERROR FETCING FOLLOWERS" + err)
+  }
+}
+

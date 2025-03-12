@@ -1,4 +1,4 @@
-import { getRecipeComments } from "@/lib/services/api/interactionServices";
+import { getFollowersByID, getFollowingByID, getRecipeComments } from "@/lib/services/api/interactionServices";
 import { getPlatelist } from "@/lib/services/api/platelistServices";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
@@ -16,8 +16,28 @@ const useQueryInteraction = () => {
             refetch: query.refetch, 
           };
         };
+
+    const useQueryGetFollowers = (id: string) => {
+      const query = useQuery({
+        queryKey: ["followers", id],
+        queryFn: ()=> getFollowersByID(id)
+      })
+
+      return query;
+    }
+
+    const useQueryGetFollowing = (id: string) => {
+      const query = useQuery({
+        queryKey: ["following", id],
+        queryFn: ()=> getFollowingByID(id)
+      })
+
+      return query
+    }
     return {
-        useQueryGetComments
+        useQueryGetComments,
+        useQueryGetFollowers,
+        useQueryGetFollowing,
     }
 };
 
