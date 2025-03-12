@@ -1,5 +1,24 @@
 import { SignUpForm } from "@/components/authentication/signup-form";
 import HomeLogo from "@/components/navbar/nav/HomeLogo";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign Up - PlateBook",
+  description:
+    "Join PlateBook today and be part of a thriving community of food lovers. Sign up to share recipes, discover new dishes, and get AI-powered chatbot assistance.",
+  keywords: [
+    "sign up",
+    "PlateBook",
+    "create account",
+    "food community",
+    "recipe sharing",
+    "home cooking",
+    "culinary network",
+    "food lovers",
+    "meal ideas",
+  ],
+  icons: "/favicon.ico",
+};
 
 export default function SignupPage() {
   return (

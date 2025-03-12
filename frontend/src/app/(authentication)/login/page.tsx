@@ -1,5 +1,24 @@
 import { LoginForm } from "@/components/authentication/login-form";
 import HomeLogo from "@/components/navbar/nav/HomeLogo";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Login - Platebook",
+  description:
+    "Access your PlateBook account and connect with a vibrant community of food lovers. Log in to save recipes, share culinary creations, and explore AI-powered chatbot assistance.",
+  keywords: [
+    "login",
+    "PlateBook",
+    "food community",
+    "recipe sharing",
+    "cooking inspiration",
+    "home cooks",
+    "culinary network",
+    "food lovers",
+    "meal planning",
+  ],
+  icons: "/favicon.ico",
+};
 
 export default function LoginPage() {
   return (
