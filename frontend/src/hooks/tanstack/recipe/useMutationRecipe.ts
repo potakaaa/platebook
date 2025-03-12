@@ -14,7 +14,9 @@ const useMutationRecipe = () => {
     return useMutation({
       mutationFn: (data: SubmitRecipe) => postRecipe(data),
       onSuccess(data) {
-        console.log("Post Recipe Success:", data);
+        queryClient.invalidateQueries({
+          queryKey: ["feed"],
+        });
       },
       onError(error) {
         console.error("Post Recipe Error:", error);
@@ -26,7 +28,7 @@ const useMutationRecipe = () => {
     return useMutation({
       mutationFn: (id: string) => deleteRecipe(id),
       onSuccess(data) {
-        console.log("Delete Recipe Success:", data);
+        queryClient.invalidateQueries({ queryKey: ["feed"] });
       },
       onError(error) {
         console.error("Delete Recipe Error:", error);

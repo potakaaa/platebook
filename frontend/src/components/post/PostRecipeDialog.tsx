@@ -402,13 +402,15 @@ const PostRecipeDialog = () => {
                       <FormControl>
                         <div className="w-full max-w-xl mx-auto min-h-32 border border-dashed bg-transparent border-secondary rounded-lg flex justify-center items-center">
                           <FileUpload
-                            onFileChange={(files: (RecipeImage | File)[]) =>
-                              field.onChange(
-                                files.filter(
-                                  (file): file is File => file instanceof File
-                                )
-                              )
-                            }
+                            onFileChange={(files: (RecipeImage | File)[]) => {
+                              console.log("Files received:", files);
+                              const validFiles = files.filter(
+                                (file) =>
+                                  file instanceof File || file instanceof Blob
+                              );
+                              console.log("Valid files:", validFiles);
+                              field.onChange(validFiles);
+                            }}
                             onBlur={field.onBlur}
                             name={field.name}
                             ref={field.ref}
@@ -416,7 +418,7 @@ const PostRecipeDialog = () => {
                             multiple
                             id="images"
                             type="file"
-                            fileType="image"
+                            fileType="file"
                           />
                         </div>
                       </FormControl>

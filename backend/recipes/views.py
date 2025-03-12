@@ -29,6 +29,17 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(chef=self.request.user)
+        
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        
+        user = instance.chef  
+
+        self.perform_destroy(instance) 
+
+        clear_feed_cache(user)
+
+        return Response({"message": "Recipe deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
@@ -270,5 +281,17 @@ class UploadRecipeView(APIView):
             if images_data:
                 recipe_images = [RecipeImage(recipe=recipe, image=image) for image in images_data]
                 RecipeImage.objects.bulk_create(recipe_images)
+                
+            clear_feed_cache(request.user)  
 
             return Response({"message": "Recipe uploaded successfully!", "recipe_id": recipe.id}, status=status.HTTP_201_CREATED)
+        
+def clear_feed_cache(user):
+        """Clears only the current user's recipe feed cache"""
+        sort_orders = ["newest", "oldest"]  # Handle both sorting options
+
+        user_id = str(user.userId) if user.is_authenticated else "anon"  # Handle anonymous users
+
+        for sort in sort_orders:
+            cache_key = f"recipe_feed_{user_id}_{sort}"
+            cache.delete(cache_key)  # Delete only this user's cache

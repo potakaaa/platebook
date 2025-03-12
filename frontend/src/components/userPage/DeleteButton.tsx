@@ -29,7 +29,6 @@ const DeleteButton = ({ id }: { id: string }) => {
       deleteRecipe(recipe?.id, {
         onSuccess: () => {
           router.push("/home");
-          window.location.reload();
           resolve();
         },
         onError: (error) => {

@@ -70,8 +70,6 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
 
       setFiles((prevFiles) => [...prevFiles, ...filesArray]);
       onFileChange && onFileChange([...files, ...filesArray]);
-
-      console.log("Files:", files);
     };
 
     const handleRemoveFile = (fileToRemove: RecipeImage | File) => {
@@ -89,11 +87,15 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
       multiple: multiple,
       noClick: true,
       onDrop: (acceptedFiles) => {
-        const newFiles = acceptedFiles.map((file) => ({
-          id: undefined,
-          image: file,
-        }));
-        handleFileChange(newFiles);
+        if (fileType === "image") {
+          const newFiles = acceptedFiles.map((file) => ({
+            id: undefined,
+            image: file,
+          }));
+          handleFileChange(newFiles);
+        } else {
+          handleFileChange(acceptedFiles);
+        }
       },
       onDropRejected: (error) => {
         console.log(error);
