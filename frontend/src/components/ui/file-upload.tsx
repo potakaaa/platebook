@@ -122,6 +122,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
             }}
             className="hidden"
             accept="image/*"
+            multiple={multiple}
             {...props}
           />
           <div className="absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,white,transparent)]">

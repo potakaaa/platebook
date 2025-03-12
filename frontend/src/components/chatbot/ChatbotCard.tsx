@@ -56,7 +56,7 @@ const ChatbotCard = ({ forHero }: { forHero?: boolean }) => {
         />
       )}
       <div
-        className={`fixed ${
+        className={`fixed ${!forHero && !isChatOpen && "hidden md:block"} ${
           forHero
             ? "bottom-5 right-7"
             : "sm:bottom-5 sm:right-12 md:right-7 sm:block sm:inset-auto flex inset-0 items-center justify-center"
