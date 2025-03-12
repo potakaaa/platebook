@@ -221,7 +221,11 @@ export const FileUpload = React.forwardRef<HTMLInputElement, InputProps>(
                             type="button"
                             size="icon"
                             variant={"ghost"}
-                            onClick={() => handleRemoveFile(file)}
+                            className=""
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveFile(file);
+                            }}
                           >
                             <Trash className="size-4 text-neutral-600 hover:text-destructive transition-colors duration-200 dark:text-neutral-400" />
                           </Button>
