@@ -52,17 +52,17 @@ const ChatbotCard = ({ forHero }: { forHero?: boolean }) => {
     <>
       {isChatOpen && (
         <div
-          className={`fixed inset-0 h-screen w-full bg-foreground/60 z-40 transition duration-200 ${
+          className={`fixed inset-0 h-screen w-full bg-black/60 z-40 transition duration-200 ${
             forHero ? "hidden" : "block sm:hidden"
           }`}
         />
       )}
       <div
-        className={`fixed ${
+        className={`fixed ${isChatOpen ? "block" : "hidden"} ${
           forHero
             ? "bottom-5 right-7"
             : "sm:bottom-5 sm:right-12 md:right-7 sm:block sm:inset-auto flex inset-0 items-center justify-center"
-        } z-50 pointer-events-auto`}
+        } z-50`}
         style={{ overscrollBehavior: "contain" }}
       >
         <AnimatePresence>
@@ -108,6 +108,7 @@ const ChatbotCard = ({ forHero }: { forHero?: boolean }) => {
               exit={{ scaleY: 0, opacity: 0 }}
               transition={{ ease: [0.25, 1, 0.5, 1], duration: 0.7 }}
               style={{ transformOrigin: "bottom" }}
+              className="pointer-events-auto"
             >
               <Card className="w-[300px] sm:w-[350px] xl:w-[450px] p-0 z-40">
                 <CardHeader className="py-3 xl:py-4 px-3 sm:px-4 xl:px-5 items-start space-y-1">

@@ -113,9 +113,7 @@ const PostCard = (props: {
             }}
           >
             <SquareArrowOutUpRight className="size-4 items-center" />
-            <p className="hidden sm:block text-xs sm:text-sm 2xl:text-base">
-              View Recipe
-            </p>
+            <p className="hidden sm:block text-xs sm:text-sm">View Recipe</p>
           </Button>
         </CardItem>
         <div id="post" className="flex flex-col space-y-1">
@@ -129,26 +127,68 @@ const PostCard = (props: {
             {description}
           </CardItem>
           <div className="w-full py-2 grid grid-cols-2 gap-2">
-            {images.slice(0, 2).map((image, index) => (
-              <CardItem
-                key={index}
-                className="w-full"
-                translateX={index % 2 === 0 ? -5 : 5}
-                translateZ={40}
-              >
-                <AspectRatio ratio={1 / 1}>
-                  <Image
-                    src={image}
-                    alt={title}
-                    width={500}
-                    height={500}
-                    priority
-                    sizes={""}
-                    className="size-full rounded-lg object-cover shadow-md"
-                  />
-                </AspectRatio>
-              </CardItem>
-            ))}
+            {images.length === 1 && (
+              <>
+                <CardItem
+                  key={0}
+                  className="w-full"
+                  translateX={0 % 2 === 0 ? -5 : 5}
+                  translateZ={40}
+                >
+                  <AspectRatio ratio={1 / 1}>
+                    <Image
+                      src={images[0]}
+                      alt={title}
+                      width={500}
+                      height={500}
+                      priority
+                      sizes={""}
+                      className="size-full rounded-lg object-cover shadow-md"
+                    />
+                  </AspectRatio>
+                </CardItem>
+                <CardItem
+                  key={1}
+                  className="w-full"
+                  translateX={1 % 2 === 0 ? -5 : 5}
+                  translateZ={40}
+                >
+                  <AspectRatio ratio={1 / 1}>
+                    <Image
+                      src={images[0]}
+                      alt={title}
+                      width={500}
+                      height={500}
+                      priority
+                      sizes={""}
+                      className="size-full rounded-lg object-cover shadow-md"
+                    />
+                  </AspectRatio>
+                </CardItem>
+              </>
+            )}
+
+            {images.length > 1 &&
+              images.slice(0, 2).map((image, index) => (
+                <CardItem
+                  key={index}
+                  className="w-full"
+                  translateX={index % 2 === 0 ? -5 : 5}
+                  translateZ={40}
+                >
+                  <AspectRatio ratio={1 / 1}>
+                    <Image
+                      src={image}
+                      alt={title}
+                      width={500}
+                      height={500}
+                      priority
+                      sizes={""}
+                      className="size-full rounded-lg object-cover shadow-md"
+                    />
+                  </AspectRatio>
+                </CardItem>
+              ))}
           </div>
         </div>
         <CardItem
