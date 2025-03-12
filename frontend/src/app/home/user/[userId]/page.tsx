@@ -20,8 +20,15 @@ const page = (props: { params: Promise<{ userId: string }> }) => {
   const { user: client } = useUserStore();
   const [isOwner, setIsOwner] = React.useState(false);
   const { isShareOpen, setOpenShare } = useProfileShare();
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   useEffect(() => {
+    if (client?.id) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+
     if (
       user?.userId &&
       client?.id &&
@@ -111,7 +118,9 @@ const page = (props: { params: Promise<{ userId: string }> }) => {
           {isOwner ? (
             <EditUserDialog user={user} />
           ) : (
-            <FollowButton id={params.userId} isFollowing={user.isFollowing} />
+            isLoggedIn && (
+              <FollowButton id={params.userId} isFollowing={user.isFollowing} />
+            )
           )}
         </div>
       </section>
