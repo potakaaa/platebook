@@ -42,36 +42,38 @@ const FollowingTab = () => {
   }
 
   return (
-    <InfiniteScroll
-      dataLength={posts.length}
-      next={fetchNextPage}
-      hasMore={!!hasNextPage}
-      loader={
-        <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden min-w-screen-md lg:min-w-2xl px-5 2xl:min-w-2xl">
-          <Spinner />
+    <div className="w-full">
+      <InfiniteScroll
+        dataLength={posts.length}
+        next={fetchNextPage}
+        hasMore={!!hasNextPage}
+        loader={
+          <div className="w-full h-full items-center justify-center flex mt-10 overflow-hidden min-w-screen-md lg:min-w-2xl px-5 2xl:min-w-2xl">
+            <Spinner />
+          </div>
+        }
+        endMessage={
+          <p className="text-center mt-20 text-foreground/60">
+            Come back for more recipes!
+          </p>
+        }
+        refreshFunction={refetch}
+        pullDownToRefresh
+        pullDownToRefreshThreshold={50}
+        pullDownToRefreshContent={
+          <h3 className="text-center">&#8595; Pull down to refresh</h3>
+        }
+        releaseToRefreshContent={
+          <h3 className="text-center">&#8593; Release to refresh</h3>
+        }
+      >
+        <div className="flex flex-col w-full space-y-5">
+          {posts.map((post, index) => (
+            <PostCard key={index} postItems={post} />
+          ))}
         </div>
-      }
-      endMessage={
-        <p className="text-center mt-20 text-foreground/60">
-          Come back for more recipes!
-        </p>
-      }
-      refreshFunction={refetch}
-      pullDownToRefresh
-      pullDownToRefreshThreshold={50}
-      pullDownToRefreshContent={
-        <h3 className="text-center">&#8595; Pull down to refresh</h3>
-      }
-      releaseToRefreshContent={
-        <h3 className="text-center">&#8593; Release to refresh</h3>
-      }
-    >
-      <div className="flex flex-col w-full space-y-5">
-        {posts.map((post, index) => (
-          <PostCard key={index} postItems={post} />
-        ))}
-      </div>
-    </InfiniteScroll>
+      </InfiniteScroll>
+    </div>
   );
 };
 
