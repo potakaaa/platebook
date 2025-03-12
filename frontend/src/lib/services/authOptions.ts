@@ -215,8 +215,6 @@ export const authOptions: NextAuthOptions = {
 
       const updatedUser = await response.json();
 
-        console.log("Updated user:", updatedUser);
-
         session.user = {
           id: updatedUser.userId,
           name: updatedUser.username,

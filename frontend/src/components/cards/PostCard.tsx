@@ -56,19 +56,19 @@ const PostCard = (props: {
   } = postItems;
   const router = useRouter();
 
-  const handleAvatarClick = () => {
+  const handleAvatarClick = async () => {
     if (onAvatarClick) {
+      await router.push(`/home/user/${userId}`);
       onAvatarClick();
-      setTimeout(() => router.push(`/home/user/${userId}`), 0);
     } else {
       router.push(`/home/user/${userId}`);
     }
   };
 
-  const handleRecipeClick = () => {
+  const handleRecipeClick = async () => {
     if (onRecipeClick) {
+      await router.push(`/home/post/${id}`);
       onRecipeClick();
-      setTimeout(() => router.push(`/home/post/${id}`), 0);
     } else {
       router.push(`/home/post/${id}`);
     }
