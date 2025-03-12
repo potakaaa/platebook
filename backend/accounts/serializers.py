@@ -193,14 +193,23 @@ class OTPSerializer(serializers.Serializer):
 class SimpleUserSerializer(serializers.ModelSerializer):
     
     pfp_url = serializers.SerializerMethodField()
+    isFollowing = serializers.SerializerMethodField()
     class Meta:
         model = CustomUserModel
-        fields = ['userId', 'username', 'pfp', "pfp_url"]  
+        fields = ['userId', 'username', 'pfp', "pfp_url", "isFollowing"]  
 
     def get_pfp_url(self, obj):
       if hasattr(obj, "pfp") and obj.pfp:  
           return obj.pfp.url
       return None
+    
+    def get_isFollowing(self, obj):
+        request = self.context.get("request")
+        user = request.user
+        if user.is_authenticated:
+            return Follow.objects.filter(user=user, followed_user=obj).exists()
+        return False
+    
 
    
 

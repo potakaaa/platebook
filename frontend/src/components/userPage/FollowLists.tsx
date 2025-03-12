@@ -47,10 +47,11 @@ interface FollowListsProps{
 
 
 type simpleUser = {
-  pfp_url: string,
-  userId: string,
-  username: string
-}
+  pfp_url: string;
+  userId: string;
+  username: string;
+  isFollowing: boolean;
+};
 const FollowLists:React.FC<FollowListsProps> = ({userId, type, count = 0}) => {
   
   const [open, setOpen] = useState(false);
