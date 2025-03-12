@@ -4,6 +4,7 @@ import {
   IconDisc,
   IconHome,
   IconLogout,
+  IconMessageChatbot,
   IconMoon,
   IconSearch,
   IconSquareRoundedPlus,
@@ -20,6 +21,7 @@ import { signOut, useSession } from "next-auth/react";
 import { usePlatelistDrawer } from "@/store/platelist/usePlatelistStore";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useChatbot } from "@/store/chatbot/useChatbotStore";
 
 const FloatingNavbar = () => {
   const { theme, setTheme } = useTheme();
@@ -28,6 +30,8 @@ const FloatingNavbar = () => {
   const { setPlateOpen } = usePlatelistDrawer();
   const { data: session, status } = useSession();
   const router = useRouter();
+
+  const { setIsChatOpen } = useChatbot();
 
   const links = [
     {
@@ -43,20 +47,6 @@ const FloatingNavbar = () => {
         setOpen(true);
       },
     },
-    {
-      title: "Toggle Theme",
-      icon:
-        theme === "dark" ? (
-          <IconSun className="h-full w-full text-primary" />
-        ) : (
-          <IconMoon className="h-full w-full text-primary" />
-        ),
-      onClick: (e: any) => {
-        setTheme(theme === "dark" ? "light" : "dark");
-      },
-      href: "",
-    },
-
     {
       title: "Platebook",
       icon: (
@@ -100,9 +90,30 @@ const FloatingNavbar = () => {
       },
     },
     {
+      title: "Ask Platebot",
+      icon: <IconMessageChatbot className="h-full w-full text-primary" />,
+      href: "",
+      onClick: () => {
+        setIsChatOpen(true);
+      },
+    },
+    {
+      title: "Toggle Theme",
+      icon:
+        theme === "dark" ? (
+          <IconSun className="h-full w-full text-primary" />
+        ) : (
+          <IconMoon className="h-full w-full text-primary" />
+        ),
+      onClick: () => {
+        setTheme(theme === "dark" ? "light" : "dark");
+      },
+      href: "",
+    },
+    {
       title: "Log Out",
       icon: <IconLogout className="h-full w-full text-primary" />,
-      onClick: (e: any) => {
+      onClick: () => {
         if (status === "loading" || !session) {
           toast.error("Not Logged In", {
             description: "You are currently not logged in.",
