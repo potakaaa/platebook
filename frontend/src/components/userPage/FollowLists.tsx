@@ -9,6 +9,7 @@ import CustomAvatar from "../user/CustomAvatar";
 import { useRouter } from "next/navigation";
 import { ScrollArea } from "../ui/scroll-area";
 import useMutationInteraction from "@/hooks/tanstack/interaction/useMutationInteraction";
+import { Users } from "lucide-react";
 
 interface FollowListsProps {
   userId: string;
@@ -44,6 +45,41 @@ const FollowLists: React.FC<FollowListsProps> = ({
     useQueryGetFollowing(userId);
 
   const router = useRouter();
+  const [userFollow, setUserFollow] = useState(list);
+  const [isFollowing, setIsFollowing] = useState();
+
+  const handleFollowToggle = async (userId: string) => {
+    // Optimistically update the UI
+    setList((prevUsers) =>
+      prevUsers.map((user) =>
+        user.userId === userId
+          ? { ...user, isFollowing: !user.isFollowing }
+          : user
+      )
+    );
+
+    try {
+      const isCurrentlyFollowing = list.find(
+        (user) => user.userId === userId
+      )?.isFollowing;
+
+      if (isCurrentlyFollowing) {
+        await unfollow(userId);
+      } else {
+        await follow(userId);
+      }
+    } catch (error) {
+      console.error("Error toggling follow state:", error);
+      // Revert changes on error
+      setList((prevUsers) =>
+        prevUsers.map((user) =>
+          user.userId === userId
+            ? { ...user, isFollowing: !user.isFollowing }
+            : user
+        )
+      );
+    }
+  };
 
   useEffect(() => {
     if (type === "Following" && followingData) {
@@ -79,16 +115,16 @@ const FollowLists: React.FC<FollowListsProps> = ({
                         userImage={item.pfp_url}
                         onClick={() => router.push(`/home/user/${item.userId}`)}
                       />
-                      <p className="text-xs sm:text-sm lg:text-base font-semibold">
+                      <p className="text-xs sm:text-sm lg:text-base font-semibold w-full max-w-36 sm:max-w-none text-ellipsis truncate whitespace-nowrap">
                         {item.username}
                       </p>
                     </section>
                     <Button
-                      variant={"outline"}
+                      variant={item.isFollowing ? "outline" : "default"}
                       className="text-xs sm:text-sm p-2 py-1 sm:p-3"
-                      onClick={() => {}}
+                      onClick={() => handleFollowToggle(item.userId)}
                     >
-                      Follow
+                      {item.isFollowing ? "Unfollow" : "Follow"}
                     </Button>
                   </div>
                   <span className="w-full border-b border-muted" />
