@@ -21,7 +21,9 @@ const fetchRecipeIds = async () => {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const nextUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const { recipe_ids } = await fetchRecipeIds();
+  const res = await fetchRecipeIds();
+
+  const recipe_ids = res?.recipe_ids ?? [];
 
   const postEntries: MetadataRoute.Sitemap = recipe_ids.map((id: number) => ({
     url: `${nextUrl}/post/${id}`,
