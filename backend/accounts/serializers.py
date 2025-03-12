@@ -190,6 +190,20 @@ class OTPSerializer(serializers.Serializer):
       return value
    
 
+class SimpleUserSerializer(serializers.ModelSerializer):
+    
+    pfp_url = serializers.SerializerMethodField()
+    class Meta:
+        model = CustomUserModel
+        fields = ['userId', 'username', 'pfp', "pfp_url"]  
+
+    def get_pfp_url(self, obj):
+      if hasattr(obj, "pfp") and obj.pfp:  
+          return obj.pfp.url
+      return None
+
+   
+
 class CustomEmailDevice (EmailDevice):
    def generate_challenge(self, extra_context=None):
     try:

@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from .models import Like, Share, Comment, Follow
-from accounts.serializers import CustomUserModelSerializer 
+from accounts.serializers import CustomUserModelSerializer , SimpleUserSerializer
 
 class LikeSerializer(ModelSerializer):
     class Meta:
@@ -31,10 +31,9 @@ class CommentSerializer(ModelSerializer):
         
 
 class FollowSerializer(ModelSerializer):
+    user = SimpleUserSerializer()
+    followed_user = SimpleUserSerializer()
+
     class Meta:
         model = Follow
-        fields = "__all__"
-        extra_kwargs = {
-            "user": {"read_only": True},
-        }
-        
+        fields = ["user", "followed_user"]

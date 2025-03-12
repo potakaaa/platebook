@@ -147,24 +147,33 @@ class FollowViewSet(viewsets.ModelViewSet):
         return Response({"message": "User unfollowed successfully."}, status=status.HTTP_200_OK)
         
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import CustomUserModel, Follow
+from .serializers import FollowSerializer
+from django.shortcuts import get_object_or_404
+
 class FollowingView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request, user_pk):  
-        user = get_object_or_404(CustomUserModel, pk=user_pk)  
-        following = Follow.objects.filter(follower=user).select_related("followed")
+        following = Follow.objects.filter(user__pk=user_pk).select_related("followed_user")
+        
         serializer = FollowSerializer(following, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class FollowersView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request, user_pk):  
         user = get_object_or_404(CustomUserModel, pk=user_pk)  
-        followers = Follow.objects.filter(followed=user).select_related("follower")
+
+        followers = Follow.objects.filter(followed_user=user).select_related("user")
         serializer = FollowSerializer(followers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
     
 class UserLikesView(APIView):
     permission_classes = [permissions.IsAuthenticated]
