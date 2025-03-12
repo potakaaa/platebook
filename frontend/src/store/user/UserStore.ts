@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { getPlatelist } from "@/lib/services/api/platelistServices";
 import { PlatelistItem } from "@/lib/types/platelistTypes";
 
-type storedUser = {
+export type storedUser = {
   id: string | null;
   name: string | null | undefined;
   email: string | null | undefined;

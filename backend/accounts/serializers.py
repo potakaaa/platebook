@@ -220,6 +220,3 @@ class CustomEmailDevice (EmailDevice):
         print(f"Error generating OTP email: {e}")
         raise serializers.ValidationError(f"An error occurred while sending the OTP: {str(e)}")
 
-
-    
-    
