@@ -3,38 +3,7 @@
 import { Dialog, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { IconSquareRoundedPlus } from "@tabler/icons-react";
 import { DialogContent } from "../ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../ui/form";
-import { z } from "zod";
-import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  EditRecipe,
-  RecipeImage,
-  SubmitEditRecipe,
-  SubmitRecipe,
-} from "@/lib/types/recipeTypes";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { Trash } from "lucide-react";
-import ToolTipButton from "../home/buttons/ToolTipButton";
-import { FileUpload } from "../ui/file-upload";
-import useMutationRecipe from "@/hooks/tanstack/recipe/useMutationRecipe";
-import { useQueryClient } from "@tanstack/react-query";
-import EditButton from "./EditButton";
-import { urlToFile } from "@/lib/utils/urlToFile";
-import { profile } from "console";
-import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
-import { EditUserFormData } from "@/lib/types/authTypes";
-import { toast } from "sonner";
-import { storedUser, useUserStore } from "@/store/user/UserStore";
 import useQueryInteraction from "@/hooks/tanstack/interaction/useQueryInteractions";
 import CustomAvatar from "../user/CustomAvatar";
 import { useRouter } from "next/navigation";
@@ -51,6 +20,7 @@ type simpleUser = {
   pfp_url: string;
   userId: string;
   username: string;
+  isFollowing: boolean;
 };
 const FollowLists: React.FC<FollowListsProps> = ({
   userId,
