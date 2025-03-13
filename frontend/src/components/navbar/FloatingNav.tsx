@@ -22,6 +22,7 @@ import { usePlatelistDrawer } from "@/store/platelist/usePlatelistStore";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useChatbot } from "@/store/chatbot/useChatbotStore";
+import useSearchStore from "@/store/search/useSearchStore";
 
 const FloatingNavbar = () => {
   const { theme, setTheme } = useTheme();
@@ -32,6 +33,7 @@ const FloatingNavbar = () => {
   const router = useRouter();
 
   const { setIsChatOpen } = useChatbot();
+  const { clearSearch } = useSearchStore();
 
   const links = [
     {
@@ -47,6 +49,15 @@ const FloatingNavbar = () => {
         setOpen(true);
       },
     },
+
+    {
+      title: "Plate List",
+      icon: <IconDisc className="h-full w-full text-primary" />,
+      onClick: (e: any) => {
+        setPlateOpen(true);
+      },
+      href: "",
+    },
     {
       title: "Platebook",
       icon: (
@@ -61,14 +72,6 @@ const FloatingNavbar = () => {
         </div>
       ),
       href: "/",
-    },
-    {
-      title: "Plate List",
-      icon: <IconDisc className="h-full w-full text-primary" />,
-      onClick: (e: any) => {
-        setPlateOpen(true);
-      },
-      href: "",
     },
 
     {
@@ -86,6 +89,7 @@ const FloatingNavbar = () => {
           });
         } else {
           router.push(`/home/user/${user?.id}`);
+          clearSearch();
         }
       },
     },
