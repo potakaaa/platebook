@@ -12,12 +12,15 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useFocusStore } from "@/store/focus/useFocusStore";
+import useSearchStore from "@/store/search/useSearchStore";
 
 const LeftNav = () => {
   const user = useUserStore((state) => state.user);
   const resetStore = useUserStore((state) => state.resetStore);
 
   const router = useRouter();
+
+  const { clearSearch } = useSearchStore();
   const { data: session, status } = useSession();
   const { setFocus, setFocusComponentId } = useFocusStore();
   const [loggingOut, setLoggingOut] = useState(false);
@@ -25,6 +28,7 @@ const LeftNav = () => {
   const handleLogout = async () => {
     setLoggingOut(true);
     const logoutPromise = new Promise<void>(() => {
+      clearSearch();
       resetStore();
       signOut({ callbackUrl: "/" });
     });
@@ -39,6 +43,16 @@ const LeftNav = () => {
     return logoutPromise;
   };
 
+  const handleUserPageClick = () => {
+    router.push(`/home/user/${user?.id}`);
+    clearSearch();
+  };
+
+  const handleHomeClick = () => {
+    router.push("/home");
+    clearSearch();
+  };
+
   return (
     <div className="flex flex-col size-full">
       <div className="flex flex-col w-full space-y-3">
@@ -51,9 +65,9 @@ const LeftNav = () => {
           onClick={() => {
             if (status === "loading" || !session) {
               router.push("/login");
+              clearSearch();
             } else {
-              router.push(`/home/user/${user?.id}`);
-              console.log(user?.id);
+              handleUserPageClick();
             }
           }}
         >
@@ -76,7 +90,7 @@ const LeftNav = () => {
         <NavButtonLeft
           name="Home"
           icon={IconHome}
-          onClick={() => router.push("/home")}
+          onClick={() => handleHomeClick()}
         />
         <PostRecipeDialog />
         <NavButtonLeft

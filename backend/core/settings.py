@@ -43,7 +43,7 @@ SECURE_HSTS_PRELOAD = True  # Allow browsers to preload HTTPS enforcement
 
 ALLOWED_HOSTS = [os.getenv("ELASTIC_IP"), 
                  "localhost", "127.0.0.1", 
-                 "a4a6-44-199-101-231.ngrok-free.app"]
+                 "smooth-manatee-immortal.ngrok-free.app"]
 
 CALLBACK_URL = "https://platebook.vercel.app"
 
@@ -143,7 +143,7 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:3000",
                         "http://127.0.0.1:3000", 
                         "https://platebook.vercel.app", 
                         "http://44.199.101.231", 
-                        "https://a4a6-44-199-101-231.ngrok-free.app", 
+                        "https://smooth-manatee-immortal.ngrok-free.app", 
                        ]  
 
 
