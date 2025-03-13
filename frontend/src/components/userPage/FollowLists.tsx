@@ -3,48 +3,19 @@
 import { Dialog, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { IconSquareRoundedPlus } from "@tabler/icons-react";
 import { DialogContent } from "../ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../ui/form";
-import { z } from "zod";
-import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  EditRecipe,
-  RecipeImage,
-  SubmitEditRecipe,
-  SubmitRecipe,
-} from "@/lib/types/recipeTypes";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { Trash } from "lucide-react";
-import ToolTipButton from "../home/buttons/ToolTipButton";
-import { FileUpload } from "../ui/file-upload";
-import useMutationRecipe from "@/hooks/tanstack/recipe/useMutationRecipe";
-import { useQueryClient } from "@tanstack/react-query";
-import EditButton from "./EditButton";
-import { urlToFile } from "@/lib/utils/urlToFile";
-import { profile } from "console";
-import useMutationAuth from "@/hooks/tanstack/auth/useMutationAuth";
-import { EditUserFormData } from "@/lib/types/authTypes";
-import { toast } from "sonner";
-import { storedUser, useUserStore } from "@/store/user/UserStore";
 import useQueryInteraction from "@/hooks/tanstack/interaction/useQueryInteractions";
 import CustomAvatar from "../user/CustomAvatar";
 import { useRouter } from "next/navigation";
+import { ScrollArea } from "../ui/scroll-area";
+import useMutationInteraction from "@/hooks/tanstack/interaction/useMutationInteraction";
+import { Users } from "lucide-react";
 
-interface FollowListsProps{
-  userId: string,
-  count: number,
+interface FollowListsProps {
+  userId: string;
+  count: number;
   type: "Followers" | "Following";
 }
-
 
 type simpleUser = {
   pfp_url: string;
@@ -52,58 +23,116 @@ type simpleUser = {
   username: string;
   isFollowing: boolean;
 };
-const FollowLists:React.FC<FollowListsProps> = ({userId, type, count = 0}) => {
-  
+const FollowLists: React.FC<FollowListsProps> = ({
+  userId,
+  type,
+  count = 0,
+}) => {
   const [open, setOpen] = useState(false);
-  const [list, setList]= useState<simpleUser[]>([]);
+  const [list, setList] = useState<simpleUser[]>([]);
 
-  const {useQueryGetFollowers, useQueryGetFollowing} = useQueryInteraction();
+  const { useQueryGetFollowers, useQueryGetFollowing } = useQueryInteraction();
+  const { useMutationFollowUser, useMutationUnfollowUser } =
+    useMutationInteraction();
 
-  const {data: followersData, isLoading: followersLoading} = useQueryGetFollowers(userId);
-  const {data: followingData, isLoading: followingLoading} = useQueryGetFollowing(userId);
+  const { mutate: follow, isPending: FollowPending } = useMutationFollowUser();
+  const { mutate: unfollow, isPending: UnfollowPending } =
+    useMutationUnfollowUser();
+
+  const { data: followersData, isLoading: followersLoading } =
+    useQueryGetFollowers(userId);
+  const { data: followingData, isLoading: followingLoading } =
+    useQueryGetFollowing(userId);
 
   const router = useRouter();
+  const [userFollow, setUserFollow] = useState(list);
+  const [isFollowing, setIsFollowing] = useState();
+
+  const handleFollowToggle = async (userId: string) => {
+    // Optimistically update the UI
+    setList((prevUsers) =>
+      prevUsers.map((user) =>
+        user.userId === userId
+          ? { ...user, isFollowing: !user.isFollowing }
+          : user
+      )
+    );
+
+    try {
+      const isCurrentlyFollowing = list.find(
+        (user) => user.userId === userId
+      )?.isFollowing;
+
+      if (isCurrentlyFollowing) {
+        await unfollow(userId);
+      } else {
+        await follow(userId);
+      }
+    } catch (error) {
+      console.error("Error toggling follow state:", error);
+      // Revert changes on error
+      setList((prevUsers) =>
+        prevUsers.map((user) =>
+          user.userId === userId
+            ? { ...user, isFollowing: !user.isFollowing }
+            : user
+        )
+      );
+    }
+  };
 
   useEffect(() => {
     if (type === "Following" && followingData) {
-      setList(followingData.map((user: any)=> user.followed_user) || []); 
+      setList(followingData.map((user: any) => user.followed_user) || []);
     } else if (type === "Followers" && followersData) {
-      setList(followersData.map((user: any)=> user.user) || []); 
+      setList(followersData.map((user: any) => user.user) || []);
     }
   }, [followingData, followersData, type]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div>
-          <p className="text-center font-bold sm:text-lg">
-              {count}
-          </p>
+        <div className="cursor-pointer">
+          <p className="text-center font-bold sm:text-lg">{count}</p>
           <h1 className="font-medium text-xs sm:text-sm">{type}</h1>
         </div>
       </DialogTrigger>
-      <DialogContent
-        className="w-5/6 min-h-[100px] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
-      dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-      dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar]:w-2 gap-2 rounded-xl overflow-x-hidden overflow-y-auto flex flex-col items-center justify-center"
-      >
-        <DialogTitle className="text-center font-bold">
-          {type}
-        </DialogTitle>
-        {list !== undefined && list.map((item: simpleUser)=>(
-           <div className="w-full flex flex-row space-x-2 items-center" key={item.userId}>
+      <DialogContent className="w-5/6 min-h-[100px] gap-2 rounded-xl overflow-x-hidden overflow-y-auto flex flex-col items-center justify-center">
+        <DialogTitle className="text-center font-bold">{type}</DialogTitle>
+        <span className="w-full border-b border-muted" />
+        <ScrollArea className="h-[300px] w-full">
+          <div className="flex flex-col space-y-3 w-full">
+            {list !== undefined &&
+              list.map((item: simpleUser) => (
+                <>
+                  <div
+                    className="w-full flex flex-row space-x-2 items-center justify-between pr-5"
+                    key={item.userId}
+                  >
+                    <section className="w-full flex flex-row space-x-2 items-center">
                       <CustomAvatar
                         userName={item.username}
                         userImage={item.pfp_url}
-                        onClick={()=>router.push(`/home/user/${item.userId}`)}
+                        onClick={() => router.push(`/home/user/${item.userId}`)}
                       />
-                      <p className="text-xs sm:text-sm lg:text-base font-semibold">
+                      <p className="text-xs sm:text-sm lg:text-base font-semibold w-full max-w-36 sm:max-w-none text-ellipsis truncate whitespace-nowrap">
                         {item.username}
                       </p>
-                    </div>
-        ))}
+                    </section>
+                    <Button
+                      variant={item.isFollowing ? "outline" : "default"}
+                      className="text-xs sm:text-sm p-2 py-1 sm:p-3"
+                      onClick={() => handleFollowToggle(item.userId)}
+                    >
+                      {item.isFollowing ? "Unfollow" : "Follow"}
+                    </Button>
+                  </div>
+                  <span className="w-full border-b border-muted" />
+                </>
+              ))}
+          </div>
+        </ScrollArea>
         <span className="border-b border-muted mb-2" />
-     
       </DialogContent>
     </Dialog>
   );

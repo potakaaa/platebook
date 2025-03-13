@@ -13,25 +13,6 @@ const poppins = Poppins({
   weight: ["100", "200", "400", "600", "800"],
   style: ["normal", "italic"],
 });
-export const metadata: Metadata = {
-  title: "PlateBook - Share & Discover Delicious Recipes",
-  description:
-    "Eat. Cook. PlateBook. Repeat. Join PlateBook, the ultimate social platform for food lovers. Share, save, and explore recipes, engage with a community of home cooks and foodies, and get AI-powered help in navigating through Platebook.",
-  keywords: [
-    "recipes",
-    "food",
-    "cooking",
-    "PlateBook",
-    "meal ideas",
-    "AI Chatbot Assistant",
-    "recipe sharing",
-    "food lovers",
-    "home cooking",
-    "culinary community",
-    "Eat Cook PlateBook Repeat",
-  ],
-  icons: "/favicon.ico",
-};
 
 export default function RootLayout({
   children,

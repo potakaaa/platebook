@@ -7,10 +7,12 @@ import {
   unlikeRecipe,
   unshareRecipe,
 } from "@/lib/services/api/interactionServices";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { use } from "react";
 
 const useMutationInteraction = () => {
+  const queryClient = useQueryClient();
+
   const useMutationLike = () => {
     return useMutation({
       mutationFn: (id: string) => likeRecipe(id),
@@ -63,8 +65,9 @@ const useMutationInteraction = () => {
     return useMutation({
       mutationFn: ({ id, data }: { id: string; data: string }) =>
         postRecipeComment(id, data),
-      onSuccess(data) {
+      onSuccess(id, data) {
         console.log("Post Comment Success:", data);
+        queryClient.invalidateQueries({ queryKey: ["followers", id] });
       },
       onError(error) {
         console.error("Post Comment Error:", error);
@@ -75,8 +78,9 @@ const useMutationInteraction = () => {
   const useMutationFollowUser = () => {
     return useMutation({
       mutationFn: (id: string) => followUser(id),
-      onSuccess(data) {
+      onSuccess(id, data) {
         console.log("Follow Success:", data);
+        queryClient.invalidateQueries({ queryKey: ["following", id] });
       },
       onError(error) {
         console.error("Follow Error:", error);
