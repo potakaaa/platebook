@@ -26,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const recipe_ids = res?.recipe_ids ?? [];
 
   const postEntries: MetadataRoute.Sitemap = recipe_ids.map((id: number) => ({
-    url: `${nextUrl}/post/${id}`,
+    url: `${nextUrl}/home/post/${id}`,
   }));
 
   return [
