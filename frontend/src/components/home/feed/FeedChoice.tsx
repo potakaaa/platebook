@@ -4,12 +4,17 @@ import { Button } from "../../ui/button";
 import InfiniteScrollComp from "./InfiniteScroll";
 import FollowingTab from "./FollowingTab";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 const FeedChoice = () => {
   const [feed, setFeed] = useState<"for-you" | "following">("for-you");
   const { data: session, status } = useSession();
 
   const toggleFeed = () => {
+    if (!session) {
+      toast.error("You need to be logged in to switch feed!");
+      return;
+    }
     setFeed((prevFeed) => (prevFeed === "for-you" ? "following" : "for-you"));
   };
 

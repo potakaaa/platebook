@@ -16,6 +16,8 @@ import Comments from "../Comments";
 import useQueryInteraction from "@/hooks/tanstack/interaction/useQueryInteractions";
 import useMutationInteraction from "@/hooks/tanstack/interaction/useMutationInteraction";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 const CommentButton = ({
   id,
@@ -39,6 +41,7 @@ const CommentButton = ({
     id,
     isDialogOpen
   );
+  const { data: session, status } = useSession();
 
   const { mutate: postComment, isPending: isPosting } =
     useMutationPostComment();
@@ -136,7 +139,7 @@ const CommentButton = ({
                     placeholder="Enter comment here..."
                     className="p-3 text-sm"
                     value={commentInput}
-                    disabled={isLoading}
+                    disabled={isLoading || !session}
                     onChange={(e) => setCommentInput(e.target.value)}
                   ></Input>
                   <Button
@@ -144,6 +147,12 @@ const CommentButton = ({
                     variant="ghost"
                     size="icon"
                     disabled={isPosting || isLoading}
+                    onClick={() => {
+                      if (!session) {
+                        toast.error("Login to comment post!");
+                        return;
+                      }
+                    }}
                   >
                     {isPosting || isLoading ? (
                       <Loader2 className="animate-spin size-5 text-primary" />

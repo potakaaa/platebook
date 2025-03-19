@@ -5,6 +5,8 @@ import { Heart } from "lucide-react";
 import React, { useState } from "react";
 import useMutationInteraction from "@/hooks/tanstack/interaction/useMutationInteraction";
 import { set } from "zod";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 interface LikeButtonProps {
   isLiked?: boolean;
@@ -26,10 +28,15 @@ const LikeButton: React.FC<LikeButtonProps> = ({
   const [liked, setLiked] = useState<boolean | undefined>(initialLiked);
   const [likeCount, setLikeCount] = useState(initialLikedCount ?? 0);
   const [heroLike, setHeroLike] = useState(143);
+  const { data: session, status } = useSession();
 
   const handleLike = () => {
     if (likeIsPending) return;
     if (unlikeIsPending) return;
+    if (!session) {
+      toast.error("Login to like post!");
+      return;
+    }
 
     if (forHero) {
       setLiked((prev: boolean | undefined) => !prev);

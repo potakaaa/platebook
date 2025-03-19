@@ -107,9 +107,7 @@ const LeftNav = () => {
       <NavButtonLeft
         name="Log Out"
         icon={IconLogout}
-        parentCN={`mt-auto ${
-          status === "loading" || !session ? "hover:none" : ""
-        }`}
+        parentCN={`mt-auto ${status === "loading" || (!session && "hidden")}`}
         divCN={`${status === "loading" || !session ? "opacity-50" : ""}`}
         onClick={handleLogout}
         disabled={status === "loading" || !session || loggingOut}

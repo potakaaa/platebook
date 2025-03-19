@@ -12,6 +12,7 @@ import PlatelistButton from "./interaction-buttons/PlatelistButton";
 import CommentButton from "./interaction-buttons/CommentButton";
 import { useRouter } from "next/navigation";
 import { on } from "events";
+import { useSession } from "next-auth/react";
 
 export type PostCardProps = {
   id: string;

@@ -3,7 +3,9 @@
 import { Button } from "@/components/ui/button";
 import useMutationInteraction from "@/hooks/tanstack/interaction/useMutationInteraction";
 import { Share } from "lucide-react";
+import { useSession } from "next-auth/react";
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { set } from "zod";
 
 interface ShareButtonProps {
@@ -26,9 +28,14 @@ const ShareButton: React.FC<ShareButtonProps> = ({
   const [shared, setShared] = useState<boolean | undefined>(initialShared);
   const [shareCount, setShareCount] = useState(initiakShareCount ?? 0);
   const [heroShare, setHeroShare] = useState(250);
+  const { data: session, status } = useSession();
 
   const handleShare = () => {
     if (shareIsPending || unshareIsPending) return;
+    if (!session) {
+      toast.error("Login to share a post!");
+      return;
+    }
 
     if (forHero) {
       setShared((prev: boolean | undefined) => !prev);

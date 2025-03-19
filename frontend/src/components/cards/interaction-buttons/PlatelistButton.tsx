@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Disc } from "lucide-react";
 import React, { useState } from "react";
 import useMutationPlatelist from "@/hooks/tanstack/platelist/useMutationPlatelist";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 interface PlatelistButtonProps {
   atPlateList?: boolean;
@@ -24,8 +26,14 @@ const PlatelistButton: React.FC<PlatelistButtonProps> = ({
     useMutationPostPlatelist();
   const { mutate: removeFromPlate, isPending: removeIsPending } =
     useMutationDeletePlatelistItem();
+  const { data: session, status } = useSession();
+
   const handleAddToPlate = () => {
     if (addIsPending || removeIsPending) return;
+    if (!session) {
+      toast.error("Login to add to plate!");
+      return;
+    }
 
     if (forHero) {
       setAtPlateList((prev: boolean | undefined) => !prev);
